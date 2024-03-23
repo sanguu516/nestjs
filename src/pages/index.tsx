@@ -1,11 +1,11 @@
-import Head from "next/head";
-import Link from "next/link";
+import Head from 'next/head'
+import Link from 'next/link'
 
-import { api } from "@/utils/api";
-import styles from "./index.module.css";
+import { api } from '@/utils/api'
+import styles from './index.module.css'
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const hello = api.post.hello.useQuery({ text: 'from tRPC' })
 
   return (
     <>
@@ -27,8 +27,8 @@ export default function Home() {
             >
               <h3 className={styles.cardTitle}>First Steps →</h3>
               <div className={styles.cardText}>
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
+                Just the basics - Everything you need to know to set up your database and
+                authentication.
               </div>
             </Link>
             <Link
@@ -38,16 +38,15 @@ export default function Home() {
             >
               <h3 className={styles.cardTitle}>Documentation →</h3>
               <div className={styles.cardText}>
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
+                Learn more about Create T3 App, the libraries it uses, and how to deploy it.
               </div>
             </Link>
           </div>
           <p className={styles.showcaseText}>
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
           </p>
         </div>
       </main>
     </>
-  );
+  )
 }
