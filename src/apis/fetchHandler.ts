@@ -2,10 +2,10 @@ import { StorageKey } from '@/utils/localStorageUtil'
 const baseUrl = 'http://223.130.138.37/api/v1/' // TODO: Move to env
 
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
-  const input = baseUrl + pathname
+  const url = baseUrl + pathname
   const accessToken = localStorage.getItem('accessToken')
 
-  const result = await fetch(input, {
+  const result = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -39,8 +39,8 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
       localStorage.setItem(StorageKey.refreshToken, refresh)
       return fetchApi(pathname, requestInit)
     } else {
-      localStorage.delete(StorageKey.aceessToken)
-      localStorage.delete(StorageKey.refreshToken)
+      localStorage.removeItem(StorageKey.aceessToken)
+      localStorage.removeItem(StorageKey.refreshToken)
       location.href = '/auth/login'
     }
   }
