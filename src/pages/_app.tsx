@@ -5,17 +5,15 @@ import { api } from '@/utils/api'
 
 import '@/styles/globals.css'
 import { ChakraProvider } from '@chakra-ui/react'
-
-const inter = Inter({
-  subsets: ['latin'],
-})
+import reaTheme from '@/styles/theme'
+import { spoqaHanSans } from '@/styles/font'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ChakraProvider resetCSS>
+    <ChakraProvider resetCSS theme={reaTheme}>
       <main
         style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}
-        className={inter.className}
+        className={spoqaHanSans.className}
       >
         <Component {...pageProps} />
       </main>
