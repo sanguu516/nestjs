@@ -1,5 +1,5 @@
 import { Colors } from '@/styles/colors'
-import { Box } from '@chakra-ui/react'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 
 export default function UISamples() {
   const colorBlocks = Object.entries(Colors)
@@ -34,5 +34,15 @@ export default function UISamples() {
       )
     })
 
-  return <Box>{colorBlocks}</Box>
+  return (
+    <VStack gap={3}>
+      {colorBlocks}
+      <HStack gap={1}>
+        <Button variant="filled">Filled</Button>
+        <Button variant="filled" isDisabled>
+          disabled
+        </Button>
+      </HStack>
+    </VStack>
+  )
 }
