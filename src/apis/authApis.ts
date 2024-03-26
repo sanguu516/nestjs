@@ -56,7 +56,7 @@ export function changePassword({
 }: {
   newPassword: string
   newPasswordConfirm: string
-}): Promise<SignInResponse> {
+}) {
   return fetchHandler('auth/password/change/', {
     method: 'POST',
     body: JSON.stringify({
