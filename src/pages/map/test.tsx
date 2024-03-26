@@ -20,6 +20,7 @@ function MapTest({ kakaoMapSdkSrc }: InferGetStaticPropsType<typeof getStaticPro
 
   return (
     <Box sx={{ position: 'relative', width: '100dvw', height: '100dvh' }}>
+      {/* TODO: Consider moving it to document */}
       <Script src={kakaoMapSdkSrc} strategy="beforeInteractive" />
       <Box
         sx={{
