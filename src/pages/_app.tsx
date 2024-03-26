@@ -13,7 +13,10 @@ const inter = Inter({
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ChakraProvider resetCSS>
-      <main className={inter.className}>
+      <main
+        style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}
+        className={inter.className}
+      >
         <Component {...pageProps} />
       </main>
     </ChakraProvider>
