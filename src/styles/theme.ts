@@ -1,5 +1,10 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme } from '@chakra-ui/react'
+import { Colors } from './colors'
 
-const theme = extendTheme({
-  
+const reaTheme = extendTheme({
+  colors: {
+    ...Colors,
+  },
 })
+
+export default reaTheme

@@ -1,5 +1,5 @@
 export const Colors = {
-  primary: {
+  indigo: {
     25: '#F5F8FF',
     50: '#EEF4FF',
     100: '#E0EAFF',
@@ -38,7 +38,7 @@ export const Colors = {
     600: '#dc6803',
     700: '#b54708',
     800: '#93370d',
-    900: '#792eod',
+    900: '#792e0d',
     950: '#4e1d09',
   },
   green: {
@@ -85,4 +85,4 @@ export const Colors = {
   },
   black: '#000000',
   white: '#ffffff',
-}
+} as const

@@ -5,6 +5,7 @@ import { api } from '@/utils/api'
 
 import '@/styles/globals.css'
 import { ChakraProvider } from '@chakra-ui/react'
+import reaTheme from '@/styles/theme'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -12,7 +13,7 @@ const inter = Inter({
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ChakraProvider resetCSS>
+    <ChakraProvider resetCSS theme={reaTheme}>
       <main className={inter.className}>
         <Component {...pageProps} />
       </main>
