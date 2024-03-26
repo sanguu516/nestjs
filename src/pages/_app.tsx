@@ -12,7 +12,7 @@ const inter = Inter({
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ChakraProvider>
+    <ChakraProvider resetCSS>
       <main className={inter.className}>
         <Component {...pageProps} />
       </main>

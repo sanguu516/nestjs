@@ -1,5 +1,3 @@
-function Login() {
-  return <h3>This will be login page</h3>
+export default function Signin() {
+  return <div>signin</div>
 }
-
-export default Login
