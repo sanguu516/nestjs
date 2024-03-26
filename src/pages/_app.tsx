@@ -11,7 +11,10 @@ import { spoqaHanSans } from '@/styles/font'
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ChakraProvider resetCSS theme={reaTheme}>
-      <main className={spoqaHanSans.className}>
+      <main
+        style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}
+        className={spoqaHanSans.className}
+      >
         <Component {...pageProps} />
       </main>
     </ChakraProvider>
