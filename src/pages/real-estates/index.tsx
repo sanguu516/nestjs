@@ -1,21 +1,21 @@
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
 import KakaoMap from '@/components/map/KakaoMap'
 import { Coordinates } from '@/types'
+import { DefaultCenter, defaultZoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-// 좌표값 없이 접근하면 메인페이지로 이동
 export default function RealEstate() {
-  const [center, setCenter] = useState<Coordinates>()
-  const [zoom, setZoom] = useState<number>()
+  const [center, setCenter] = useState(DefaultCenter.coordinates)
+  const [zoom, setZoom] = useState(defaultZoom)
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
   // TODO: pagination 해야댐. ㅠㅠ
   const { data: agenciesResponse } = useQuery({
     queryKey: QueryKeys.agenciesByAddress(
-      center ?? { latitude: -1, longitude: -1 },
-      (zoom ?? 1) * 200 // TODO: level에 따른 적절한 반경 찾기
+      center,
+      zoom * 200 // TODO: level에 따른 적절한 반경 찾기
     ),
     queryFn: () => {
       if (!center || !zoom) {
@@ -24,7 +24,6 @@ export default function RealEstate() {
 
       return searchAgenciesByAddress({ center, radiusInMeter: zoom * 200 })
     },
-    enabled: !!center && !!zoom,
   })
 
   const handleCenterChange = useCallback((center: Coordinates) => {

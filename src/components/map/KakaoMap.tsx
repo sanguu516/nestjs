@@ -7,6 +7,7 @@ import {
   convertCoordinatesToLatLng,
   convertLatLngToCoordinates,
   DefaultCenter,
+  defaultZoom,
 } from '../../utils/mapUtil'
 
 const QueryDebounceDelay = 300
@@ -21,7 +22,7 @@ function KakaoMap(props: Props) {
   const { mapRef, markerPositions, onZoomChange, onCenterChange } = props
 
   return (
-    <Box sx={{ position: 'relative', width: '100dvw', height: '100dvh' }}>
+    <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
       <Box
         sx={{
           position: 'absolute',
@@ -37,6 +38,7 @@ function KakaoMap(props: Props) {
             onZoomChange(map.getLevel())
             onCenterChange(convertLatLngToCoordinates(map.getCenter()))
           }}
+          level={defaultZoom}
           minLevel={6}
           ref={mapRef}
           onCenterChanged={debounce((target: kakao.maps.Map) => {

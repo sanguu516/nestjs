@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse
 }
 
 export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-const { name } = agency
+  const { name } = agency
 
   return (
     <>

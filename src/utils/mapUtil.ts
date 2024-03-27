@@ -21,3 +21,5 @@ export const DefaultCenter = {
     lng: 127.029286360295,
   },
 }
+
+export const defaultZoom = 3

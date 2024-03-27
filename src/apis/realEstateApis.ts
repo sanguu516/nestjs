@@ -1,6 +1,5 @@
 import fetchApi from './fetchHandler'
 import { PageParams, PaginatedResponse } from './../types'
-import { Coordinates } from '@/types'
 import { objectToQueryString } from '@/utils/queryStringUtil'
 import fetchHandler from './fetchHandler'
 
