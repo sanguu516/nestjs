@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
-import Header from '../../components/Header'
-import { blurDataURL } from '@/constants'
-import { Box, Flex, Text } from '@chakra-ui/react'
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
+import { blurDataURL } from '@/constants'
+import { Flex, Text } from '@chakra-ui/react'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
 
@@ -35,8 +34,7 @@ export default function Detail() {
 
   return (
     <>
-      <Header />
-      <article style={{ padding: '24px', position: 'relative' }}>
+      <article style={{ position: 'relative' }}>
         <Image
           style={{ minWidth: '100%' }}
           src={'https://dummyimage.com/300x150/000/fff'}
@@ -73,7 +71,6 @@ export default function Detail() {
             })}
         </address>
       </article>
-      <Box flex={1} bg="tomato"></Box>
       {/* <Reviews/> */}
     </>
   )
