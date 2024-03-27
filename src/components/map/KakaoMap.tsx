@@ -1,27 +1,12 @@
 import { Box, Button, Slide } from '@chakra-ui/react'
-import { type InferGetStaticPropsType } from 'next'
-import Script from 'next/script'
-import { useRef, useState } from 'react'
+import { MutableRefObject, useState } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
-export function getStaticProps() {
-  const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_API_KEY!}&autoload=false`
-  return {
-    props: {
-      kakaoMapSdkSrc,
-    },
-  }
-}
-
-function MapTest({ kakaoMapSdkSrc }: InferGetStaticPropsType<typeof getStaticProps>) {
+function KakaoMap({ mapRef }: { mapRef: MutableRefObject<kakao.maps.Map | null> }) {
   const [isDrawerOpen, setDrawerOpen] = useState(false)
-
-  const mapRef = useRef<kakao.maps.Map | null>(null)
 
   return (
     <Box sx={{ position: 'relative', width: '100dvw', height: '100dvh' }}>
-      {/* TODO: Consider moving it to document */}
-      <Script src={kakaoMapSdkSrc} strategy="beforeInteractive" />
       <Box
         sx={{
           position: 'absolute',
@@ -85,4 +70,4 @@ function MapTest({ kakaoMapSdkSrc }: InferGetStaticPropsType<typeof getStaticPro
   )
 }
 
-export default MapTest
+export default KakaoMap
