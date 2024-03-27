@@ -11,6 +11,7 @@ export default function RealEstate() {
   const [zoom, setZoom] = useState<number>()
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
+  // TODO: pagination 해야댐. ㅠㅠ
   const { data: agenciesResponse } = useQuery({
     queryKey: QueryKeys.agenciesByAddress(
       center ?? { latitude: -1, longitude: -1 },
