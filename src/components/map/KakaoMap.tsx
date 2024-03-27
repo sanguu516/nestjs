@@ -1,9 +1,24 @@
-import { Box, Button, Slide } from '@chakra-ui/react'
-import { MutableRefObject, useState } from 'react'
+import { Coordinates } from '@/types'
+import { Box } from '@chakra-ui/react'
+import { debounce } from 'lodash-es'
+import { memo, MutableRefObject } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import {
+  convertCoordinatesToLatLng,
+  convertLatLngToCoordinates,
+  DefaultCenter,
+} from '../../utils/mapUtil'
 
-function KakaoMap({ mapRef }: { mapRef: MutableRefObject<kakao.maps.Map | null> }) {
-  const [isDrawerOpen, setDrawerOpen] = useState(false)
+const QueryDebounceDelay = 300
+interface Props {
+  mapRef: MutableRefObject<kakao.maps.Map | null>
+  markerPositions: Coordinates[]
+  onZoomChange: (zoom: number) => void
+  onCenterChange: (center: Coordinates) => void
+}
+
+function KakaoMap(props: Props) {
+  const { mapRef, markerPositions, onZoomChange, onCenterChange } = props
 
   return (
     <Box sx={{ position: 'relative', width: '100dvw', height: '100dvh' }}>
@@ -18,56 +33,28 @@ function KakaoMap({ mapRef }: { mapRef: MutableRefObject<kakao.maps.Map | null> 
         }}
       >
         <Map
-          ref={mapRef}
-          onZoomChanged={(target) => {
-            console.log('current Zoom: ', target.getLevel())
+          onCreate={(map) => {
+            onZoomChange(map.getLevel())
+            onCenterChange(convertLatLngToCoordinates(map.getCenter()))
           }}
-          center={{ lat: 33.5563, lng: 126.79581 }}
+          minLevel={6}
+          ref={mapRef}
+          onCenterChanged={debounce((target: kakao.maps.Map) => {
+            onCenterChange(convertLatLngToCoordinates(target.getCenter()))
+          }, QueryDebounceDelay)}
+          onZoomChanged={debounce((target: kakao.maps.Map) => {
+            onZoomChange(target.getLevel())
+          }, QueryDebounceDelay)}
+          center={DefaultCenter.latLng}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         >
-          <MapMarker
-            onClick={() => {
-              mapRef.current?.setLevel(mapRef.current?.getLevel() + 1)
-            }}
-            position={{ lat: 33.55635, lng: 126.795841 }}
-          ></MapMarker>
+          {markerPositions.map((position, index) => (
+            <MapMarker key={index} position={convertCoordinatesToLatLng(position)}></MapMarker>
+          ))}
         </Map>
-      </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          top: 0,
-        }}
-      >
-        <Button
-          sx={{ position: 'absolute', top: 40, left: 0, width: 100, height: 100, zIndex: 2 }}
-          onClick={() => {
-            setDrawerOpen((prev) => !prev)
-          }}
-        >
-          Floating
-        </Button>
-        <Slide
-          in={isDrawerOpen}
-          direction="bottom"
-          style={{
-            position: 'absolute',
-            zIndex: 2,
-          }}
-        >
-          <Box
-            sx={{
-              height: 400,
-              bgColor: 'lightgray',
-            }}
-          ></Box>
-        </Slide>
       </Box>
     </Box>
   )
 }
 
-export default KakaoMap
+export default memo(KakaoMap)

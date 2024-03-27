@@ -1,18 +1,7 @@
-// fetchHandler
-const BASE_URL = 'http://localhost:3000/api'
-export const fetchApi = async <T>(path: string, init?: RequestInit): Promise<T> => {
-  const url = BASE_URL + path
-  const res = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    ...init,
-  })
-  if (res.ok) {
-    return res.json() as Promise<T>
-  }
-  throw new Error('Request failed')
-}
+import fetchApi from './fetchHandler'
+import { PageParams, PaginatedResponse } from './../types'
+import { Coordinates } from '@/types'
+import { objectToQueryString } from '@/utils/queryStringUtil'
 
 export interface RealEstateResponse {
   id: number
@@ -33,5 +22,44 @@ export interface RealEstateResponse {
 export async function getRealEstateData(id: number): Promise<RealEstateResponse> {
   return fetchApi(`/real-estate/${id}`, {
     method: 'GET',
+  })
+}
+
+interface SearchAgenciesParams {
+  name_in?: string
+  address_point_by?: string // ,를 이용해 세 값을 붙여보냅니다 (중심좌표lat,중심좌표log,반경meter)
+  page?: number
+  page_size?: number
+}
+
+type SearchAgenciesResult = {
+  id: number
+  name: string
+  representative_name: string
+  address_short: string
+  address_point: {
+    lon: number
+    lat: number
+  }
+  average_rating: number
+}
+
+export type SearchAgenciesResponse = PaginatedResponse<SearchAgenciesResult>
+
+async function searchAgencies(params: SearchAgenciesParams): Promise<SearchAgenciesResponse> {
+  return fetchApi(`agency/agency/?${objectToQueryString(params)}`, {
+    method: 'GET',
+  })
+}
+
+export async function searchAgenciesByAddress(params: {
+  center: Coordinates
+  radiusInMeter: number
+  pageParams?: PageParams
+}): Promise<SearchAgenciesResponse> {
+  const { center, radiusInMeter, pageParams } = params
+  return searchAgencies({
+    address_point_by: `${center.latitude},${center.longitude},${radiusInMeter}`,
+    ...(pageParams ?? {}),
   })
 }

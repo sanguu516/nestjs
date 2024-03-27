@@ -3,8 +3,8 @@ const baseUrl = 'http://223.130.138.37/api/v1/' // TODO: Move to env
 
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
   const url = baseUrl + pathname
-  const accessToken = localStorage.getItem('accessToken')
 
+  const accessToken = localStorage.getItem('accessToken')
   const result = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
