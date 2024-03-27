@@ -1,15 +1,16 @@
 import { type AppType } from 'next/app'
 
-import { api } from '@/utils/api'
-
-import Header from '@/components/Header'
-import BottomTab from '@/components/BottomTab'
-
-import '@/styles/globals.css'
-import { Box, ChakraProvider } from '@chakra-ui/react'
-import reaTheme from '@/styles/theme'
 import { spoqaHanSans } from '@/styles/font'
+import '@/styles/globals.css'
+import reaTheme from '@/styles/theme'
+import { ChakraProvider } from '@chakra-ui/react'
+
+import BottomTab from '@/components/BottomTab'
+import Header from '@/components/Header'
+
 import { Colors } from '@/styles/colors'
+import '@/styles/globals.css'
+import { Box } from '@chakra-ui/react'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -31,4 +32,4 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   )
 }
 
-export default api.withTRPC(MyApp)
+export default MyApp

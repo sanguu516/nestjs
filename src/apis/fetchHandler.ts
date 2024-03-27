@@ -2,8 +2,10 @@ import { StorageKey } from '@/utils/localStorageUtil'
 const baseUrl = 'http://223.130.138.37/api/v1/' // TODO: Move to env
 
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
+  const isBrowser = typeof window !== 'undefined'
+
   const url = baseUrl + pathname
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = isBrowser ? localStorage.getItem('accessToken') : null
 
   const result = await fetch(url, {
     headers: {
@@ -19,6 +21,10 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
   }
 
   if (result.status === 401) {
+    if (!isBrowser) {
+      throw new Error('Unauthorized')
+    }
+
     const refreshToken = localStorage.getItem('refreshToken')
     if (!accessToken || !refreshToken) {
       location.href = '/auth/login'

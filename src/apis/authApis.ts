@@ -21,7 +21,7 @@ export async function signIn({
 }): Promise<SignInResponse> {
   return fetchHandler('auth/login/', {
     method: 'POST',
-  body: JSON.stringify({
+    body: JSON.stringify({
       email,
       password,
     }),

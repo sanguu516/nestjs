@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import Image from 'next/image'
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { blurDataURL } from '@/constants'
 import { Flex, Text } from '@chakra-ui/react'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Image from 'next/image'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
 
@@ -15,22 +14,21 @@ const INFO_KEY: InfoKey = {
   agency_number: '등록번호',
 }
 
-export default function Detail() {
-  const [data, setData] = useState<RealEstateResponse>()
-  const params = useParams<{ id: string }>()
+export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse }> = async (
+  context
+) => {
+  const id = Number(context?.params?.id?.[0])
+  const data = await getRealEstateData(id)
 
-  useEffect(() => {
-    const id = Number(params?.id?.[0])
+  return {
+    props: {
+      agency: data,
+    },
+  }
+}
 
-    const fetchData = async () => {
-      const data = await getRealEstateData(id)
-      setData(data)
-    }
-
-    if (params?.id?.[0]) {
-      void fetchData()
-    }
-  }, [params?.id])
+export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { name } = agency
 
   return (
     <>
@@ -47,7 +45,7 @@ export default function Detail() {
         />
         <address>
           <Flex justify={'space-between'}>
-            <h3>{data?.name}</h3>
+            <h3>{name}</h3>
             <Flex align={'center'}>
               <Image
                 src={'https://dummyimage.com/16x16/000/fff'}
@@ -58,17 +56,16 @@ export default function Detail() {
               <Text>{'3.5'}</Text>
             </Flex>
           </Flex>
-          {data &&
-            Object.keys(INFO_KEY).map((e) => {
-              const type = INFO_KEY[e as keyof typeof INFO_KEY]
-              const value = data[e as keyof RealEstateResponse]
-              return (
-                <Flex justify={'space-between'} key={e}>
-                  <Text minW={200}>{type}</Text>
-                  <Text>{value}</Text>
-                </Flex>
-              )
-            })}
+          {Object.keys(INFO_KEY).map((e) => {
+            const type = INFO_KEY[e as keyof typeof INFO_KEY]
+            const value = agency[e as keyof RealEstateResponse]
+            return (
+              <Flex justify={'space-between'} key={e}>
+                <Text minW={200}>{type}</Text>
+                <Text>{value?.toString()}</Text>
+              </Flex>
+            )
+          })}
         </address>
       </article>
       {/* <Reviews/> */}
