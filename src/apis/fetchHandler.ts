@@ -6,7 +6,6 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
 
   const url = baseUrl + pathname
   const accessToken = isBrowser ? localStorage.getItem('accessToken') : null
-
   const result = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
