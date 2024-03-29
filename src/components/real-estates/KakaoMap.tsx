@@ -6,13 +6,19 @@ import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
 import { memo, type MutableRefObject, useMemo } from 'react'
 import { Circle, Map, MarkerClusterer } from 'react-kakao-maps-sdk'
-import { convertLatLngToCoordinates, DefaultCenter, Zoom } from '../../utils/mapUtil'
+import {
+  convertCoordinatesToLatLng,
+  convertLatLngToCoordinates,
+  DefaultCenter,
+  Zoom,
+} from '../../utils/mapUtil'
 import AgencyMarker from './AgencyMarker'
 
 const QueryDebounceDelay = 300
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
   agencies: SearchAgenciesResult[]
+  initialCenter: Coordinates
   onZoomChange: (zoom: number) => void
   selectedAgencyId?: number
   onSelectAgency: (id?: number) => void
@@ -20,7 +26,15 @@ interface Props {
 }
 
 function KakaoMap(props: Props) {
-  const { selectedAgencyId, mapRef, agencies, onZoomChange, onCenterChange, onSelectAgency } = props
+  const {
+    selectedAgencyId,
+    mapRef,
+    agencies,
+    onZoomChange,
+    onCenterChange,
+    onSelectAgency,
+    initialCenter,
+  } = props
 
   const markerPositions = useMemo(
     () =>
@@ -56,8 +70,8 @@ function KakaoMap(props: Props) {
       <Box
         sx={{
           position: 'absolute',
-          left: -4,
-          right: -4,
+          left: 0,
+          right: 0,
           bottom: 0,
           top: 0,
         }}
@@ -77,7 +91,7 @@ function KakaoMap(props: Props) {
           onZoomChanged={debounce((target: kakao.maps.Map) => {
             onZoomChange(target.getLevel())
           }, QueryDebounceDelay)}
-          center={DefaultCenter.latLng}
+          center={convertCoordinatesToLatLng(initialCenter)}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         >
           {zoom < Zoom.clusterStart ? (

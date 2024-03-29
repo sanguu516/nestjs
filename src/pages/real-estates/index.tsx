@@ -10,6 +10,7 @@ import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 export function getRadiusInMeter(zoom: number) {
@@ -22,6 +23,13 @@ export default function RealEstate() {
 
   const [center, setCenter] = useState(DefaultCenter.coordinates)
   const [zoom, setZoom] = useState(Zoom.default)
+
+  const { query } = useRouter()
+  const initialCenter = useMemo(() => {
+    const lat = Number(query.lat)
+    const lon = Number(query.lon)
+    return lat && lon ? { lat, lon } : DefaultCenter.coordinates
+  }, [query.lat, query.lon])
 
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
@@ -65,6 +73,7 @@ export default function RealEstate() {
           selectedAgencyId={selectedAgencyId}
           onSelectAgency={setSelectedAgencyId}
           mapRef={mapRef}
+          initialCenter={initialCenter}
           onCenterChange={handleCenterChange}
           onZoomChange={handleZoomChange}
         />

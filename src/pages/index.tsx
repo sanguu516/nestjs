@@ -1,7 +1,4 @@
-import SearchBar from '@/components/search/SearchBar'
-import { VStack } from '@chakra-ui/react'
 import Head from 'next/head'
-import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -12,13 +9,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <SearchBar />
-        <VStack gap={5} mt={5} fontSize={20}>
-          <Link href="/real-estate/34474">윈윈공인중개사 가기</Link>
-          <Link href="/ui-samples">UI sample page 가기</Link>
-          <Link href="/auth/test">Auth test page 가기</Link>
-          <Link href="/map/test">KakaoMap test page 가기</Link>
-        </VStack>
+        <h1>Will be implemented</h1>
       </main>
     </>
   )

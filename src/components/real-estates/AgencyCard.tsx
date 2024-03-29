@@ -1,13 +1,12 @@
 import type { SearchAgenciesResult } from '@/apis/realEstateApis'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { Box, Flex, type SpaceProps, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, type SpaceProps } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 interface Props extends SpaceProps {
   agency: SearchAgenciesResult
-  needBoxShadow?: boolean
 }
 
 export default function AgencyCard({ agency, ...rest }: Props) {

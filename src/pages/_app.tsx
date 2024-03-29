@@ -22,16 +22,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <QueryClientProvider client={queryClient}>
         <Box className={spoqaHanSans.className}>
           <Box display="grid" minH="100vh" bg={Colors.white} maxW={480} margin="0 auto">
-            {/* <Header /> */}
-            {/* pt={16} pb={20} px={4}borderColor={Colors.gray[300]}border="1px solid" */}
-            <Box flex={1} as="main">
+            <Header />
+            <Box flex={1} as="main" pt={16} pb={20}>
               <Component {...pageProps} />
             </Box>
-            {/* <BottomTab
+            <BottomTab
               backgroundColor={Colors.indigo[600]}
               activeColor={Colors.white}
               inActiveColor={Colors.indigo[300]}
-            /> */}
+            />
           </Box>
         </Box>
       </QueryClientProvider>

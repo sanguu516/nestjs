@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import NextLink from 'next/link'
-import CustomButton from '@/components/CustomButton'
 import { type ISigninForm, type SignInResponse, signIn } from '@/apis/authApis'
+import CustomButton from '@/components/CustomButton'
+import { Colors } from '@/styles/colors'
+import { fontStyles } from '@/styles/font'
+import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { validateAuth } from '@/utils/validate'
 import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
-import { fontStyles } from '@/styles/font'
-import { Colors } from '@/styles/colors'
-import { SIGNIN_FORM } from '@/utils/inputFormUtil'
-import { SignupForm } from './signup'
 import { useMutation } from '@tanstack/react-query'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { SignupForm } from './signup'
 
 const LOGIN_TITLE = '나만의 솔직한 리뷰를\n작성해보세요!'
 
@@ -58,7 +58,7 @@ export default function Signin() {
   })
 
   return (
-    <Box display="grid" alignItems="center" h="100%">
+    <Box display="grid" alignItems="center" h="100%" px={4}>
       <Heading
         as="h1"
         style={{ fontWeight: 800, fontSize: 24 }}

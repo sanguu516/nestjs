@@ -1,9 +1,9 @@
-import { cloneElement } from 'react'
+import { IconHome, IconLocation, IconProfile } from '@/assets/icons'
+import { fontStyles } from '@/styles/font'
+import { Flex, Link, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Flex, Link, Text } from '@chakra-ui/react'
-import { fontStyles } from '@/styles/font'
-import { IconHome, IconLocation, IconProfile } from '@/assets/icons'
+import { cloneElement } from 'react'
 
 const TAB_LIST = [
   {
@@ -44,6 +44,7 @@ export default function BottomTab({ ...props }: BottomTabProps) {
       maxW="inherit"
       p="8px 0"
       bg={props.backgroundColor}
+      zIndex={100}
     >
       {TAB_LIST.map(({ Icon, label, link }) => {
         const isActive = pathname === link
