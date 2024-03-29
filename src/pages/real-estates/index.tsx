@@ -48,16 +48,7 @@ export default function RealEstate() {
     setZoom(zoom)
   }, [])
 
-  const agencies = useMemo(
-    () =>
-      agenciesResponse?.results?.filter((agency) => {
-        if (agency.id === undefined) {
-          console.log(agency)
-        }
-        return agency.id !== undefined
-      }) ?? [],
-    [agenciesResponse]
-  )
+  const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse])
 
   const selectedAgency = useMemo(
     () => agencies.find((agency) => agency.id === selectedAgencyId),

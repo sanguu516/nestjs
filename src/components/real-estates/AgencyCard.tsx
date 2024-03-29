@@ -12,7 +12,6 @@ interface Props extends SpaceProps {
 
 export default function AgencyCard({ agency, ...rest }: Props) {
   const { name, id, representative_name, address_short, average_rating } = agency
-  console.log(agency)
 
   return (
     <Box as={Link} href={`/real-estate/${id}`} width="100%" {...rest}>
