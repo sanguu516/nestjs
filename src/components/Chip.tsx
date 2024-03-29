@@ -1,21 +1,21 @@
 import { fontStyles } from '@/styles/font'
 import { type ChipVariant, chipTheme } from '@/styles/theme/Chip'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, type BoxProps } from '@chakra-ui/react'
 import { cloneElement } from 'react'
 
-interface ChipProps {
+interface ChipProps extends BoxProps {
   variant: ChipVariant
   icon?: React.ReactElement
   isDisabled?: boolean
-  children: React.ReactNode
 }
 
-export default function Chip({ variant, icon, isDisabled, children }: ChipProps) {
+export default function Chip({ variant, icon, isDisabled, ...rest }: ChipProps) {
   const variantStyle = chipTheme.variants[variant]
   const disableStyle = isDisabled && variantStyle?.disabled
 
   return (
     <Box
+      {...rest}
       display="flex"
       justifyContent="center"
       alignItems="center"
@@ -28,7 +28,7 @@ export default function Chip({ variant, icon, isDisabled, children }: ChipProps)
     >
       <Flex>
         {icon && cloneElement(icon, { width: '16px', height: '16px' })}
-        {children}
+        {rest.children}
       </Flex>
     </Box>
   )

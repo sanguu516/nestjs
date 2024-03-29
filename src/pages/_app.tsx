@@ -21,9 +21,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <ChakraProvider resetCSS theme={reaTheme}>
       <QueryClientProvider client={queryClient}>
         <Box className={spoqaHanSans.className}>
-          <Box minH="100vh" bg={Colors.white} maxW={480} margin="0 auto" display="flex">
+          <Box display="grid" minH="100vh" bg={Colors.white} maxW={480} margin="0 auto">
             <Header />
-            <Box flexGrow={1} as="main" pt={16} pb={20}>
+            <Box flex={1} as="main" pt={16} pb={20} px={4}>
               <Component {...pageProps} />
             </Box>
             <BottomTab

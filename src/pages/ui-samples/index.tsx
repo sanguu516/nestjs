@@ -1,7 +1,7 @@
 import { IconArrowLeft, IconHeart, IconLocation, IconSend } from '@/assets/icons'
 import Chip from '@/components/Chip'
 import Button from '@/components/CustomButton'
-import IConButton from '@/components/CustomIconButton'
+import IconButton from '@/components/CustomIconButton'
 import Input from '@/components/CustomInput'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
@@ -81,25 +81,16 @@ const iconButtonBlocks = Object.keys(iconButtonTheme.variants).map((variant) => 
         const s = size as Size
         return (
           <Flex key={`${size}+${variant}`} gap={5} my={3}>
-            {v === 'floating' ? (
-              <>
-                <IConButton
-                  size={s}
-                  variant={v}
-                  aria-label="location-icon"
-                  icon={<IconLocation />}
-                />
-                <IConButton
-                  size={s}
-                  variant={v}
-                  aria-label="location-icon"
-                  icon={<IconLocation />}
-                  isDisabled
-                />
-              </>
-            ) : (
-              <IConButton size={s} variant={v} aria-label="location-icon" icon={<IconLocation />} />
+            {v === 'floating' && (
+              <IconButton size={s} variant={v} aria-label="location-icon" icon={<IconLocation />} />
             )}
+            <IconButton
+              size={s}
+              variant={v}
+              aria-label="location-icon"
+              icon={<IconLocation />}
+              isDisabled
+            />
           </Flex>
         )
       })}
@@ -148,16 +139,18 @@ export default function UISamples() {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in ex eleifend, faucibus libero ac, lobortis leo.'
         }
       ></Textarea>
-
+      <Button size="lg" variant="filled">
+        ??
+      </Button>
       <Input type="text" placeholder="Label" />
-      <Input type="text" placeholder="Label" disabled />
+      <Input type="text" placeholder="Label" isDisabled />
       <Input
         type="password"
         placeholder="Label"
         supportingText="8자 이상 입력해주세요."
         isSensitive
       />
-      <Input isError type="text" placeholder="Label" defaultValue="Label" />
+      <Input type="text" placeholder="Label" defaultValue="Label" isInvalid />
     </VStack>
   )
 }

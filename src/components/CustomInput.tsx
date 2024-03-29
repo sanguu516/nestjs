@@ -1,19 +1,18 @@
-import React, { cloneElement, useEffect, useRef, useState } from 'react'
-import { Box, Flex, Input, TagLabel, Text } from '@chakra-ui/react'
-import debounce from '@/utils/debounce'
+import React, { cloneElement, useCallback, useEffect, useRef, useState } from 'react'
+import { Box, Flex, Input, Text, type InputProps } from '@chakra-ui/react'
+import debounce, { DEBOUNCE_DELAY } from '@/utils/debounce'
 import { Colors } from '@/styles/colors'
 import { IconDangerCircle, IconDeleteCircle, IconHide, IconShow } from '@/assets/icons'
 import CustomIConButton from './CustomIconButton'
 import { fontStyles } from '@/styles/font'
 
-interface CustomInputProps {
-  type?: 'text' | 'password' | 'email' | 'tel'
-  placeholder?: string
+interface CustomInputProps extends InputProps {
   supportingText?: string
-  defaultValue?: string
-  disabled?: boolean
   isSensitive?: boolean
-  isError?: boolean
+  isInvalid?: boolean
+  isDisabled?: boolean
+  initializeValue?: () => void
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
 interface OnClicks {
@@ -22,16 +21,16 @@ interface OnClicks {
 }
 
 interface IconProps {
-  isError: boolean
+  isInvalid: boolean
   isSensitive: boolean
   isShow: boolean
   onClicks: OnClicks
 }
 
-function Icons({ isError, isSensitive, isShow, onClicks }: IconProps) {
+function Icons({ isInvalid, isSensitive, isShow, onClicks }: IconProps) {
   let icon, handleOnClick
 
-  if (isError) {
+  if (isInvalid) {
     icon = <IconDangerCircle />
   } else if (isSensitive) {
     icon = isShow ? <IconShow /> : <IconHide />
@@ -47,30 +46,32 @@ function Icons({ isError, isSensitive, isShow, onClicks }: IconProps) {
       icon={cloneElement(icon, {
         width: '1.5rem',
         height: '1.5rem',
-        color: isError ? Colors.red[600] : Colors.gray[400],
+        color: isInvalid ? Colors.red[600] : Colors.gray[400],
       })}
       variant="tertiary"
-      isDisabled={isError}
+      isDisabled={isInvalid}
       onClick={handleOnClick}
+      cursor={isInvalid ? 'default' : 'pointer'}
     ></CustomIConButton>
   )
 }
 
 export default function CustomInput({
-  type,
-  placeholder,
   supportingText,
-  defaultValue,
   isSensitive,
-  isError,
-  disabled,
+  initializeValue,
+  isInvalid,
+  isDisabled,
+  onChange,
+  ...rest
 }: CustomInputProps) {
   const [value, setValue] = useState<string>('')
-  const [isShow, setIsShow] = useState<boolean>(true)
+  const [isShow, setIsShow] = useState<boolean>(false)
+  const [onFocus, setOnFocus] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (!inputRef.current) return
+    if (!(isSensitive && inputRef.current)) return
     if (isShow) {
       inputRef.current.type = 'text'
     } else {
@@ -82,8 +83,17 @@ export default function CustomInput({
     setValue(e.target.value)
   }
 
+  const handleInput: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    handleTyping(e)
+    onChange?.(e)
+  }, [])
+
   const handleShowHide = () => {
     setIsShow((prev) => !prev)
+  }
+
+  const handleFocus = () => {
+    setOnFocus((prev) => !prev)
   }
 
   const handleDelete = () => {
@@ -91,65 +101,78 @@ export default function CustomInput({
     if (inputRef.current) {
       inputRef.current.value = ''
     }
+    initializeValue?.()
   }
 
   const handleIconClicks = { handleShowHide, handleDelete }
 
   return (
-    <Box>
+    <Box position="relative">
       <Flex
         align="center"
-        w={328}
-        h={12}
-        px={3}
-        py={2.875}
-        bg={disabled ? Colors.gray[25] : Colors.white}
+        {...rest}
+        w={rest.w ?? 328}
+        h={rest.h ?? 12}
+        px={rest.px ?? 3}
+        py={rest.py ?? 2.875}
+        bg={isDisabled ? Colors.gray[25] : Colors.white}
         border="1px solid"
         borderRadius={8}
-        borderColor={isError ? Colors.red[600] : Colors.gray[300]}
+        borderColor={isInvalid ? Colors.red[600] : Colors.gray[300]}
         gap={4}
       >
         <Box as="label" w="100%">
-          {value && (
+          {onFocus && value && (
             <Text
-              color={isError ? Colors.red[600] : Colors.indigo[600]}
+              color={isInvalid ? Colors.red[600] : Colors.indigo[600]}
               sx={{ ...fontStyles.BodySm }}
             >
-              {placeholder}
+              {rest.placeholder}
             </Text>
           )}
           <Input
             ref={inputRef}
-            type={type}
-            defaultValue={defaultValue}
-            placeholder={placeholder}
-            onChange={debounce(handleTyping, 50)}
-            disabled={disabled}
+            id={rest.id}
+            type={rest.type}
+            name={rest.name}
+            defaultValue={rest.defaultValue}
+            placeholder={rest.placeholder}
+            onChange={debounce(handleInput, DEBOUNCE_DELAY)}
+            onFocus={handleFocus}
+            onBlur={handleFocus}
+            isInvalid={isInvalid}
+            isDisabled={isDisabled ?? false}
             h="100%"
             p={0}
             border="none"
             style={{ caretColor: Colors.indigo[600] }}
-            color={isError ? Colors.red[600] : Colors.gray[800]}
+            bg={isDisabled ? Colors.gray[25] : Colors.white}
+            color={isInvalid ? Colors.red[600] : Colors.gray[800]}
             _placeholder={{ color: Colors.gray[300] }}
             _disabled={{ color: Colors.gray[300] }}
             _focusVisible={{
               borderColor: 'none',
             }}
+            _invalid={{
+              boxShadow: 'none',
+            }}
           />
         </Box>
         <Icons
-          isError={isError ?? false}
+          isInvalid={isInvalid ?? false}
           isSensitive={isSensitive ?? false}
           isShow={isShow}
           onClicks={handleIconClicks}
         />
       </Flex>
-      {supportingText && (
+      {isInvalid && (
         <Text
-          px={4}
           width="100%"
+          position="absolute"
+          mt={1}
+          px={4}
+          color={isInvalid ? Colors.red[600] : isDisabled ? Colors.gray[300] : Colors.gray[400]}
           sx={{ ...fontStyles.Caption }}
-          color={isError ? Colors.red[600] : disabled ? Colors.gray[300] : Colors.gray[400]}
         >
           {supportingText}
         </Text>

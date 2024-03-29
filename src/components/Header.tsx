@@ -19,18 +19,11 @@ export default function Header() {
       p={4}
       bg={Colors.white}
     >
-      <Link
-        as={NextLink}
-        href="/"
-        display="flex"
-        alignItems="center"
-        w={135}
-        _hover={{ textDecoration: 'none' }}
-      >
+      <Link as={NextLink} href="/" display="flex" alignItems="center" w={135}>
         <IconLogo width={36} height={36} />
         <IconTitle width={80} height={16} />
       </Link>
-      <Link as={NextLink} href="/auth/login" _hover={{ textDecoration: 'none' }}>
+      <Link as={NextLink} href="/auth/signin">
         <Text sx={{ ...fontStyles.LabelMd }} color={Colors.indigo[600]}>
           로그인
         </Text>

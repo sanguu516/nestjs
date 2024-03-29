@@ -3,6 +3,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { Colors } from '../colors'
 import { textareaTheme } from './Textarea'
 import { inputTheme } from './Input'
+import { linkTheme } from './Link'
 
 const reaTheme = extendTheme({
   styles: {
@@ -19,6 +20,7 @@ const reaTheme = extendTheme({
     Button: buttonTheme,
     Textarea: textareaTheme,
     Input: inputTheme,
+    Link: linkTheme,
   },
 })
 

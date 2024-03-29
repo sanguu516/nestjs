@@ -6,19 +6,27 @@ interface User {
   username: string
 }
 
-interface SignInResponse {
+export interface SignInResponse {
   access: string
   refresh: string
   user: User
 }
 
-export async function signIn({
-  email,
-  password,
-}: {
+export interface ISigninForm {
   email: string
   password: string
-}): Promise<SignInResponse> {
+}
+
+// 전화번호 관련 코드 주석 처리
+export type ISignupForm = {
+  username: string
+  email: string
+  password: string
+  passwordConfirm: string
+  // tel:string
+}
+
+export async function signIn({ email, password }: ISigninForm): Promise<SignInResponse> {
   return fetchHandler('auth/login/', {
     method: 'POST',
     body: JSON.stringify({
@@ -33,12 +41,7 @@ export async function signUp({
   email,
   password,
   passwordConfirm,
-}: {
-  username: string
-  email: string
-  password: string
-  passwordConfirm: string
-}): Promise<SignInResponse> {
+}: ISignupForm): Promise<SignInResponse> {
   return fetchHandler('auth/registration/', {
     method: 'POST',
     body: JSON.stringify({

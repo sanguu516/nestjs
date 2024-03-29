@@ -1,6 +1,5 @@
-// import { iconSizes } from '@/styles/theme/Button'
 import { type ButtonVariant, type Size } from '@/styles/theme/Button'
-import { Button } from '@chakra-ui/react'
+import { Button, type ButtonProps } from '@chakra-ui/react'
 
 import { cloneElement } from 'react'
 
@@ -24,25 +23,17 @@ export const iconSizes: Record<string, SizeProperty> = {
   },
 }
 
-interface CustomButtonProps {
+interface CustomButtonProps extends ButtonProps {
   size: Size
   variant: ButtonVariant
   icon?: React.ReactElement
-  isDisabled?: boolean
-  children?: string
 }
 
-export default function CustomButton({
-  size,
-  variant,
-  icon,
-  isDisabled,
-  children,
-}: CustomButtonProps) {
+export default function CustomButton({ size, variant, icon, ...rest }: CustomButtonProps) {
   return (
-    <Button size={size} variant={variant} isDisabled={isDisabled}>
+    <Button {...rest} size={size} variant={variant}>
       {icon && cloneElement(icon, { ...iconSizes[size] })}
-      {children}
+      {rest.children}
     </Button>
   )
 }

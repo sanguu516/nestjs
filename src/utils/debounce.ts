@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const debounce = (callback: (...args: any[]) => void, delay: number) => {
-  let timerId: number
+export const DEBOUNCE_DELAY = 100
 
+const debounce = (callback: (...args: any[]) => void, delay: number) => {
+  let timerId: NodeJS.Timeout
   return (...args: any[]) => {
     if (timerId) clearTimeout(timerId)
-    timerId = setTimeout(
-      () => {
-        callback(...args)
-      },
-      delay,
-      event
-    )
+    timerId = setTimeout(() => {
+      callback(...args)
+    }, delay)
   }
 }
 

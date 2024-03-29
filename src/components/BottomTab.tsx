@@ -59,7 +59,6 @@ export default function BottomTab({ ...props }: BottomTabProps) {
             mb={30}
             display={'grid'}
             placeItems={'center'}
-            _hover={{ textDecoration: 'none' }}
           >
             {cloneElement(Icon, { color, width: 24, height: 24 })}
             <Text sx={{ ...fontStyles.LabelSm }} color={color}>

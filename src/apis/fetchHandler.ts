@@ -26,7 +26,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
 
     const refreshToken = localStorage.getItem('refreshToken')
     if (!accessToken || !refreshToken) {
-      location.href = '/auth/login'
+      location.href = '/auth/signin'
       return
     }
 
@@ -46,7 +46,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
     } else {
       localStorage.removeItem(StorageKey.aceessToken)
       localStorage.removeItem(StorageKey.refreshToken)
-      location.href = '/auth/login'
+      location.href = '/auth/signin'
     }
   }
 
