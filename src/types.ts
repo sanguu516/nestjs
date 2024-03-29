@@ -5,7 +5,7 @@ export interface Coordinates {
 
 export interface PageParams {
   page: number
-  pageSize: number
+  page_size: number
 }
 
 export interface PaginatedResponse<T> {
