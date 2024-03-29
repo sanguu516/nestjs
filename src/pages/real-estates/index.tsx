@@ -1,8 +1,13 @@
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
-import KakaoMap from '@/components/map/KakaoMap'
-import { Coordinates } from '@/types'
+import { IconCategory, IconLocation } from '@/assets/icons'
+import CustomIConButton from '@/components/CustomIconButton'
+import AgencyListView from '@/components/real-estates/AgencyListView'
+import KakaoMap from '@/components/real-estates/KakaoMap'
+import { Colors } from '@/styles/colors'
+import type { Coordinates } from '@/types'
 import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
+import { Box, Flex } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
@@ -11,11 +16,12 @@ export function getRadiusInMeter(zoom: number) {
 }
 
 export default function RealEstate() {
+  const [isMapMode, setIsMapMode] = useState(true)
   const [center, setCenter] = useState(DefaultCenter.coordinates)
   const [zoom, setZoom] = useState(Zoom.default)
+
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
-  const radiusInMeter = getRadiusInMeter(zoom)
   const { data: agenciesResponse } = useQuery({
     queryKey: QueryKeys.agenciesByAddress(
       center,
@@ -39,29 +45,49 @@ export default function RealEstate() {
     setZoom(zoom)
   }, [])
 
-  const markerPositions = useMemo(
+  const agencies = useMemo(
     () =>
-      agenciesResponse?.results
-        ?.filter((agency) => {
-          if (agency.id === undefined) {
-            console.log(agency)
-          }
-          return agency.id !== undefined
-        })
-        .map((agency) => ({
-          latitude: agency.address_point.lat,
-          longitude: agency.address_point.lon,
-          id: agency.id,
-        })) ?? [],
+      agenciesResponse?.results?.filter((agency) => {
+        if (agency.id === undefined) {
+          console.log(agency)
+        }
+        return agency.id !== undefined
+      }) ?? [],
     [agenciesResponse]
   )
 
+  const FabIcon = isMapMode ? IconCategory : IconLocation
+
   return (
-    <KakaoMap
-      markerPositions={markerPositions}
-      mapRef={mapRef}
-      onCenterChange={handleCenterChange}
-      onZoomChange={handleZoomChange}
-    />
+    <>
+      {isMapMode ? (
+        <KakaoMap
+          agencies={agencies}
+          mapRef={mapRef}
+          onCenterChange={handleCenterChange}
+          onZoomChange={handleZoomChange}
+        />
+      ) : (
+        <AgencyListView agencies={agencies} />
+      )}
+      <Box position="fixed" left={0} bottom="80px" width="100%" zIndex={200}>
+        <Flex justifyContent="flex-end">
+          <CustomIConButton
+            sx={{
+              background: Colors.white,
+              width: '56px',
+              height: '56px',
+              mr: 4,
+              mb: 10,
+              boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.35)',
+            }}
+            size="lg"
+            variant="primary"
+            icon={<FabIcon width={24} height={24} color={Colors.indigo[600]} />}
+            onClick={() => setIsMapMode((prev) => !prev)}
+          />
+        </Flex>
+      </Box>
+    </>
   )
 }

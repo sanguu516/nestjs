@@ -1,4 +1,4 @@
-import { type Size, type IconButtonVariant, iconButtonTheme } from '@/styles/theme/IconButton'
+import { type IconButtonVariant, type Size, iconButtonTheme } from '@/styles/theme/IconButton'
 import { Button, type ButtonProps } from '@chakra-ui/react'
 import { cloneElement } from 'react'
 
@@ -8,7 +8,13 @@ interface CustomIconButtonProps extends ButtonProps {
   icon: React.ReactElement
 }
 
-export default function CustomIConButton({ size, variant, icon, ...rest }: CustomIconButtonProps) {
+export default function CustomIConButton({
+  size,
+  variant,
+  icon,
+  sx,
+  ...rest
+}: CustomIconButtonProps) {
   const { sizes, floatSizes, variants } = iconButtonTheme
   const iconSize = size !== undefined && variant === 'floating' ? floatSizes[size] : sizes[size]
 
@@ -18,7 +24,7 @@ export default function CustomIConButton({ size, variant, icon, ...rest }: Custo
       w="auto"
       variant={variant}
       _disabled={{ opacity: 1 }}
-      sx={{ ...variants[variant] }}
+      sx={{ ...variants[variant], ...sx }}
       borderRadius="50%"
       p={0}
     >

@@ -34,7 +34,7 @@ interface SearchAgenciesParams {
   page_size?: number
 }
 
-type SearchAgenciesResult = {
+export type SearchAgenciesResult = {
   id: number
   name: string
   representative_name: string

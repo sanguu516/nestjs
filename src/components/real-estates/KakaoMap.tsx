@@ -1,9 +1,10 @@
+import { SearchAgenciesResult } from '@/apis/realEstateApis'
 import { getRadiusInMeter } from '@/pages/real-estates'
 import { Colors } from '@/styles/colors'
 import { Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, MutableRefObject } from 'react'
+import { memo, MutableRefObject, useMemo } from 'react'
 import { Circle, Map, MapMarker, MarkerClusterer } from 'react-kakao-maps-sdk'
 import {
   convertCoordinatesToLatLng,
@@ -12,20 +13,26 @@ import {
   Zoom,
 } from '../../utils/mapUtil'
 
-interface Marker extends Coordinates {
-  id: number
-}
-
 const QueryDebounceDelay = 300
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
-  markerPositions: Marker[]
+  agencies: SearchAgenciesResult[]
   onZoomChange: (zoom: number) => void
   onCenterChange: (center: Coordinates) => void
 }
 
 function KakaoMap(props: Props) {
-  const { mapRef, markerPositions, onZoomChange, onCenterChange } = props
+  const { mapRef, agencies, onZoomChange, onCenterChange } = props
+
+  const markerPositions = useMemo(
+    () =>
+      agencies.map((agency) => ({
+        latitude: agency.address_point.lat,
+        longitude: agency.address_point.lon,
+        id: agency.id,
+      })),
+    [agencies]
+  )
 
   const center = mapRef.current?.getCenter()
   const centerLatLng = center
