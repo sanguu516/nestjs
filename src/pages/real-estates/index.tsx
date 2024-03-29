@@ -37,8 +37,8 @@ export default function RealEstate() {
   const markerPositions = useMemo(
     () =>
       agenciesResponse?.results?.map((agency) => ({
-        latitude: agency.address_point.lat,
-        longitude: agency.address_point.lon,
+        lat: agency.address_point.lat,
+        lon: agency.address_point.lon,
       })) ?? [],
     [agenciesResponse]
   )

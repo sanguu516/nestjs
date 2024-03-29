@@ -1,5 +1,5 @@
 import { StorageKey } from '@/utils/localStorageUtil'
-const baseUrl = 'http://223.130.138.37/api/v1/' // TODO: Move to env
+const baseUrl = 'https://starstaragent.com/api/v1/' // TODO: Move to env
 
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
   const isBrowser = typeof window !== 'undefined'

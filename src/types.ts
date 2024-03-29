@@ -1,11 +1,11 @@
 export interface Coordinates {
-  latitude: number
-  longitude: number
+  lat: number
+  lon: number
 }
 
 export interface PageParams {
   page: number
-  pageSize: number
+  page_size: number
 }
 
 export interface PaginatedResponse<T> {

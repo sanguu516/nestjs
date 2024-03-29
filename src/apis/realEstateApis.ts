@@ -1,7 +1,6 @@
-import fetchApi from './fetchHandler'
-import { PageParams, PaginatedResponse } from './../types'
 import { objectToQueryString } from '@/utils/queryStringUtil'
-import fetchHandler from './fetchHandler'
+import { PageParams, PaginatedResponse } from './../types'
+import { default as fetchApi, default as fetchHandler } from './fetchHandler'
 
 interface Coordinates {
   lat: number
@@ -74,6 +73,7 @@ export async function searchAgenciesByName(params: {
   pageParams?: PageParams
 }): Promise<SearchAgenciesResponse> {
   const { name, pageParams } = params
+
   return searchAgencies({
     name_in: name,
     ...(pageParams ?? {}),
@@ -85,6 +85,7 @@ export async function searchLocation(params: {
   pageParams?: PageParams
 }): Promise<SearchAgenciesResponse> {
   const { query, pageParams } = params
+
   return fetchApi(
     `agency/location-point/?${objectToQueryString({ name_in: query, ...pageParams })}`
   )
