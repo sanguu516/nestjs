@@ -39,8 +39,11 @@ export type SearchAgenciesResult = {
   name: string
   representative_name: string
   address_short: string
-  address_point: Coordinates
-  average_rating: number
+  address_point: {
+    lon: number
+    lat: number
+  }
+  average_rating: number | null
 }
 
 export type SearchAgenciesResponse = PaginatedResponse<SearchAgenciesResult>
