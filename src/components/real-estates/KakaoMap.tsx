@@ -17,12 +17,13 @@ const QueryDebounceDelay = 300
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
   agencies: SearchAgenciesResult[]
+  initialCenter: Coordinates
   onZoomChange: (zoom: number) => void
   onCenterChange: (center: Coordinates) => void
 }
 
 function KakaoMap(props: Props) {
-  const { mapRef, agencies, onZoomChange, onCenterChange } = props
+  const { mapRef, agencies, onZoomChange, onCenterChange, initialCenter } = props
 
   const markerPositions = useMemo(
     () =>
@@ -67,7 +68,7 @@ function KakaoMap(props: Props) {
           onZoomChanged={debounce((target: kakao.maps.Map) => {
             onZoomChange(target.getLevel())
           }, QueryDebounceDelay)}
-          center={DefaultCenter.latLng}
+          center={convertCoordinatesToLatLng(initialCenter)}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         >
           {zoom < Zoom.clusterStart ? (

@@ -13,9 +13,11 @@ import Header from '@/components/Header'
 import { Colors } from '@/styles/colors'
 import '@/styles/globals.css'
 import { Box } from '@chakra-ui/react'
+import { usePathname } from 'next/navigation'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [queryClient] = useState(() => new QueryClient())
+  const pathname = usePathname()
 
   return (
     <ChakraProvider resetCSS theme={reaTheme}>

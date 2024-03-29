@@ -5,6 +5,7 @@ import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Button, Divider, Flex, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 import { useDeferredValue, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
 import AgencyCard from '../real-estates/AgencyCard'
@@ -46,7 +47,9 @@ function SearchBar() {
             setIsFocused(true)
           }}
           onBlur={() => {
-            setIsFocused(false)
+            setTimeout(() => {
+              setIsFocused(false)
+            }, 50)
           }}
           placeholder="지역, 중개인명, 중개사무소명"
           value={query}
@@ -85,7 +88,16 @@ function SearchBar() {
                     height={10}
                   >{`지역정보 ${locationData?.total_count}`}</Text>
                   {locationData?.results.map((result) => (
-                    <Flex key={result.id} height={10} alignContent="center">
+                    <Flex
+                      as={Link}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                      href={`/real-estates?lat=${result.address_point.lat}&lon=${result.address_point.lon}`}
+                      key={result.id}
+                      height={10}
+                      alignContent="center"
+                    >
                       <Text {...fontStyles.BodyMd} color={Colors.gray[800]}>
                         {result.name}
                       </Text>

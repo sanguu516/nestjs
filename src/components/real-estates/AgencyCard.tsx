@@ -12,7 +12,10 @@ export default function AgencyCard({ agency, ...rest }: Props) {
 
   return (
     <Button
-      onClick={() => router.push(`/real-estate/${id}`)}
+      onClick={(e) => {
+        e.stopPropagation()
+        void router.push(`/real-estate/${id}`)
+      }}
       sx={{ width: '100%', height: 98 }}
       {...rest}
     >

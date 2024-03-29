@@ -1,4 +1,3 @@
-import SearchBar from '@/components/search/SearchBar'
 import Head from 'next/head'
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <SearchBar />
         <h1>Will be implemented</h1>
       </main>
     </>
