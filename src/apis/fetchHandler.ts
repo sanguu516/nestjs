@@ -1,5 +1,5 @@
 import { StorageKey } from '@/utils/localStorageUtil'
-const baseUrl = 'http://223.130.138.37/api/v1/' // TODO: Move to env
+const baseUrl = process.env.NEXT_PUBLIC_REA_API_URL // TODO: Move to env
 
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
   const isBrowser = typeof window !== 'undefined'
