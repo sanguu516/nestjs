@@ -1,4 +1,5 @@
 import type { SearchAgenciesResult } from '@/apis/realEstateApis'
+import { VStack } from '@chakra-ui/react'
 import AgencyCard from './AgencyCard'
 
 interface Props {
@@ -8,11 +9,11 @@ interface Props {
 function AgencyListView({ agencies }: Props) {
   // Consider infinite scroll here
   return (
-    <div>
+    <VStack width="100%" gap={8} mt={4}>
       {agencies.map((agency) => (
-        <AgencyCard key={agency.id} agency={agency} mx={3} />
+        <AgencyCard key={agency.id} agency={agency} />
       ))}
-    </div>
+    </VStack>
   )
 }
 
