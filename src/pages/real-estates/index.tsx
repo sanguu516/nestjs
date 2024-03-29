@@ -45,16 +45,7 @@ export default function RealEstate() {
     setZoom(zoom)
   }, [])
 
-  const agencies = useMemo(
-    () =>
-      agenciesResponse?.results?.filter((agency) => {
-        if (agency.id === undefined) {
-          console.log(agency)
-        }
-        return agency.id !== undefined
-      }) ?? [],
-    [agenciesResponse]
-  )
+  const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse])
 
   const FabIcon = isMapMode ? IconCategory : IconLocation
 

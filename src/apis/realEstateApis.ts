@@ -1,10 +1,10 @@
 import { objectToQueryString } from '@/utils/queryStringUtil'
-import { PageParams, PaginatedResponse } from './../types'
+import { type PageParams, type PaginatedResponse } from './../types'
 import { default as fetchApi, default as fetchHandler } from './fetchHandler'
 
 interface Coordinates {
-  latitude: number
-  longitude: number
+  lat: number
+  lon: number
 }
 export interface RealEstateResponse {
   id: number
@@ -39,14 +39,16 @@ export type SearchAgenciesResult = {
   name: string
   representative_name: string
   address_short: string
-  address_point: {
-    lon: number
-    lat: number
-  }
+  address_point: Coordinates
   average_rating: number
 }
 
 export type SearchAgenciesResponse = PaginatedResponse<SearchAgenciesResult>
+export interface SearchLocationResult {
+  id: number
+  name: string
+  address_point: Coordinates
+}
 
 async function searchAgencies(params: SearchAgenciesParams): Promise<SearchAgenciesResponse> {
   return fetchApi(`agency/agency/?${objectToQueryString(params)}`, {
@@ -61,7 +63,30 @@ export async function searchAgenciesByAddress(params: {
 }): Promise<SearchAgenciesResponse> {
   const { center, radiusInMeter, pageParams } = params
   return searchAgencies({
-    address_point_by: `${center.latitude},${center.longitude},${radiusInMeter}`,
+    address_point_by: `${center.lat},${center.lon},${radiusInMeter}`,
     ...(pageParams ?? {}),
   })
+}
+
+export async function searchAgenciesByName(params: {
+  name: string
+  pageParams?: PageParams
+}): Promise<SearchAgenciesResponse> {
+  const { name, pageParams } = params
+
+  return searchAgencies({
+    name_in: name,
+    ...(pageParams ?? {}),
+  })
+}
+
+export async function searchLocation(params: {
+  query: string
+  pageParams?: PageParams
+}): Promise<SearchAgenciesResponse> {
+  const { query, pageParams } = params
+
+  return fetchApi(
+    `agency/location-point/?${objectToQueryString({ name_in: query, ...pageParams })}`
+  )
 }

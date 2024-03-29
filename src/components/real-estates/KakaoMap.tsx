@@ -1,10 +1,10 @@
-import { SearchAgenciesResult } from '@/apis/realEstateApis'
+import { type SearchAgenciesResult } from '@/apis/realEstateApis'
 import { getRadiusInMeter } from '@/pages/real-estates'
 import { Colors } from '@/styles/colors'
-import { Coordinates } from '@/types'
+import { type Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, MutableRefObject, useMemo } from 'react'
+import { memo, type MutableRefObject, useMemo } from 'react'
 import { Circle, Map, MapMarker, MarkerClusterer } from 'react-kakao-maps-sdk'
 import {
   convertCoordinatesToLatLng,
@@ -27,8 +27,8 @@ function KakaoMap(props: Props) {
   const markerPositions = useMemo(
     () =>
       agencies.map((agency) => ({
-        latitude: agency.address_point.lat,
-        longitude: agency.address_point.lon,
+        lat: agency.address_point.lat,
+        lon: agency.address_point.lon,
         id: agency.id,
       })),
     [agencies]

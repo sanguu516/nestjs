@@ -1,5 +1,5 @@
-import { SearchAgenciesResult } from '@/apis/realEstateApis'
-import { Button, SpaceProps } from '@chakra-ui/react'
+import { type SearchAgenciesResult } from '@/apis/realEstateApis'
+import { Button, type SpaceProps } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 interface Props extends SpaceProps {

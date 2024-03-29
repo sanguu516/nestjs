@@ -1,7 +1,7 @@
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { blurDataURL } from '@/constants'
 import { Flex, Text } from '@chakra-ui/react'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
