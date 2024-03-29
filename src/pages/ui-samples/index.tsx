@@ -104,16 +104,18 @@ const chipBlocks = Object.keys(chipTheme.variants).map((variant) => {
     <Box key={variant} gap={3}>
       <Flex gap={5}>
         <Flex gap={3} my={3}>
-          <Chip variant={v}>Label</Chip>
-          <Chip variant={v} isDisabled>
+          <Chip size="sm" variant={v}>
+            Label
+          </Chip>
+          <Chip size="sm" variant={v}>
             Label
           </Chip>
         </Flex>
         <Flex gap={3} my={3}>
-          <Chip icon={<IconSend />} variant={v}>
+          <Chip size="lg" icon={<IconSend />} variant={v}>
             Label
           </Chip>
-          <Chip icon={<IconSend />} variant={v} isDisabled>
+          <Chip size="lg" icon={<IconSend />} variant={v}>
             Label
           </Chip>
         </Flex>

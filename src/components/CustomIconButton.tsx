@@ -16,12 +16,13 @@ export default function CustomIConButton({
   ...rest
 }: CustomIconButtonProps) {
   const { sizes, floatSizes, variants } = iconButtonTheme
-  const iconSize = size !== undefined && variant === 'floating' ? floatSizes[size] : sizes[size]
+  const propSize = size !== undefined && variant === 'floating' ? floatSizes[size] : sizes[size]
+  const { icon: iconSize, button: buttonSize } = propSize
 
   return (
     <Button
       {...rest}
-      w="auto"
+      {...buttonSize}
       variant={variant}
       _disabled={{ opacity: 1 }}
       sx={{ ...variants[variant], ...sx }}

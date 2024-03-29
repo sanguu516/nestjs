@@ -11,6 +11,9 @@ const reaTheme = extendTheme({
       body: {
         bg: '#f5f5f5',
       },
+      address: {
+        fontStyle: 'normal',
+      },
     }),
   },
   colors: {

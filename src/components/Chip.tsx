@@ -1,35 +1,50 @@
+import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { type ChipVariant, chipTheme } from '@/styles/theme/Chip'
-import { Box, Flex, type BoxProps } from '@chakra-ui/react'
-import { cloneElement } from 'react'
+import { type ChipVariant, type ChipSize, chipTheme } from '@/styles/theme/Chip'
+import { Text, Flex, type BoxProps } from '@chakra-ui/react'
+import { cloneElement, useState } from 'react'
 
 interface ChipProps extends BoxProps {
   variant: ChipVariant
+  size: ChipSize
   icon?: React.ReactElement
-  isDisabled?: boolean
+  unicode?: string
+  handleClick?: (id: number) => void
 }
 
-export default function Chip({ variant, icon, isDisabled, ...rest }: ChipProps) {
+export default function Chip({ size, variant, icon, unicode, handleClick, ...rest }: ChipProps) {
+  const isClikable = handleClick !== undefined
+  const [isOff, setIsOff] = useState<boolean>(isClikable)
+
+  const sizeStyle = chipTheme.sizes[size]
   const variantStyle = chipTheme.variants[variant]
-  const disableStyle = isDisabled && variantStyle?.disabled
+  const disableStyle = isOff && variantStyle?.disabled
+
+  const handleChipClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const target = e.target as HTMLDivElement
+    if (target.dataset.id) {
+      handleClick?.(+target.dataset.id)
+      setIsOff((prev) => !prev)
+    }
+  }
 
   return (
-    <Box
+    <Flex
+      {...sizeStyle}
       {...rest}
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      w={icon ? 90 : 70}
-      h={8}
-      px={2}
-      py={4}
+      justify="start"
+      align="center"
+      gap={size === 'sm' ? 1 : 2}
       borderRadius={8}
-      sx={{ ...fontStyles.LabelMd, ...variantStyle, ...disableStyle }}
+      color={Colors.gray[500]}
+      sx={{ ...variantStyle, ...disableStyle, ...fontStyles.Caption }}
+      onClick={handleClick ? handleChipClick : undefined}
     >
-      <Flex>
+      <Text>
         {icon && cloneElement(icon, { width: '16px', height: '16px' })}
-        {rest.children}
-      </Flex>
-    </Box>
+        {unicode}
+      </Text>
+      {rest.children}
+    </Flex>
   )
 }
