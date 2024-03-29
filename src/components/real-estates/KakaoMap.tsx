@@ -27,8 +27,8 @@ function KakaoMap(props: Props) {
   const markerPositions = useMemo(
     () =>
       agencies.map((agency) => ({
-        latitude: agency.address_point.lat,
-        longitude: agency.address_point.lon,
+        lat: agency.address_point.lat,
+        lon: agency.address_point.lon,
         id: agency.id,
       })),
     [agencies]
