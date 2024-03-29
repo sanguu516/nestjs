@@ -1,10 +1,13 @@
 import { searchAgenciesByName, searchLocation } from '@/apis/realEstateApis'
+import { IconSearch } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
+import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
-import { Box, Divider, Input } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useDeferredValue, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
+import AgencyCard from '../real-estates/AgencyCard'
 
 function SearchBar() {
   const [query, setQuery] = useState('')
@@ -22,7 +25,7 @@ function SearchBar() {
     queryFn: ({ pageParam }) =>
       searchAgenciesByName({ name: deferredQuery, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 10 },
-    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
+    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 100 }),
     enabled: deferredQuery !== '',
   })
 
@@ -31,22 +34,30 @@ function SearchBar() {
     [agencyPaginatedResult]
   )
 
+  const locationCount = locationData?.total_count
+  const agencyCount = agencyPaginatedResult?.pages?.[0]?.total_count
+
   return (
     <>
-      <Box position="relative" height="48px">
+      <Flex height="48px" align="center">
         <Input
+          variant="none"
           onFocus={() => {
             setIsFocused(true)
           }}
           onBlur={() => {
             setIsFocused(false)
           }}
-          placeholder="검색어를 입력해주세요."
+          placeholder="지역, 중개인명, 중개사무소명"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           zIndex={200}
         />
-      </Box>
+        <Button width={12} height={12} variant="none" aria-label="search">
+          {<IconSearch width={24} height={24} color={Colors.indigo[600]} />}
+        </Button>
+      </Flex>
+      <Divider height="1px" bgColor={Colors.indigo[600]} />
       {isFocused && (
         <Box
           position="fixed"
@@ -64,16 +75,39 @@ function SearchBar() {
               }
             }}
           >
-            <>
-              {locationData?.results.map((result) => <h3 key={result.id}>{result.name}</h3>)}
-              <Divider h={3} />
-              {agencyData.map((result, index) => (
-                // TODO: key는 result.id로 변경해야됨. 지금은 중복된 id가 내려오는 이슈가 있어 임시 처리
-                <Box height={100} key={result.id + index}>
-                  {result.name}
+            <VStack width="100%" px={4}>
+              {locationCount !== undefined && locationCount > 0 && (
+                <Box width="100%">
+                  <Text
+                    {...fontStyles.LabelSm}
+                    color={Colors.gray[400]}
+                    sx={{ flex: 'display', alignContent: 'center' }}
+                    height={10}
+                  >{`지역정보 ${locationData?.total_count}`}</Text>
+                  {locationData?.results.map((result) => (
+                    <Flex key={result.id} height={10} alignContent="center">
+                      <Text {...fontStyles.BodyMd} color={Colors.gray[800]}>
+                        {result.name}
+                      </Text>
+                    </Flex>
+                  ))}
                 </Box>
-              ))}
-            </>
+              )}
+              {agencyCount !== undefined && agencyCount > 0 && (
+                <Box>
+                  <Text
+                    {...fontStyles.LabelSm}
+                    color={Colors.gray[400]}
+                    sx={{ flex: 'display', alignContent: 'center' }}
+                    height={10}
+                  >{`공인중개소 ${agencyPaginatedResult?.pages?.[0]?.total_count ?? 0}`}</Text>
+                  {agencyData.map((agency) => (
+                    // TODO: key는 result.id로 변경해야됨. 지금은 중복된 id가 내려오는 이슈가 있어 임시 처리
+                    <AgencyCard key={agency.id} agency={agency} />
+                  ))}
+                </Box>
+              )}
+            </VStack>
           </InfiniteScroll>
         </Box>
       )}

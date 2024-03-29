@@ -47,8 +47,8 @@ function KakaoMap(props: Props) {
       <Box
         sx={{
           position: 'absolute',
-          left: -4,
-          right: -4,
+          left: 0,
+          right: 0,
           bottom: 0,
           top: 0,
         }}

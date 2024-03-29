@@ -23,7 +23,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <Box className={spoqaHanSans.className}>
           <Box display="grid" minH="100vh" bg={Colors.white} maxW={480} margin="0 auto">
             <Header />
-            <Box flex={1} as="main" pt={16} pb={20} px={4}>
+            <Box flex={1} as="main" pt={16} pb={20}>
               <Component {...pageProps} />
             </Box>
             <BottomTab
