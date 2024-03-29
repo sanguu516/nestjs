@@ -22,4 +22,9 @@ export const DefaultCenter = {
   },
 }
 
-export const defaultZoom = 3
+export const Zoom = {
+  default: 3,
+  max: 10,
+  clusterStart: 3,
+  enableQueryMax: 5,
+}
