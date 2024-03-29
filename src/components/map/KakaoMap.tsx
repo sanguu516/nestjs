@@ -1,19 +1,25 @@
+import { getRadiusInMeter } from '@/pages/real-estates'
+import { Colors } from '@/styles/colors'
 import { Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
 import { memo, MutableRefObject } from 'react'
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import { Circle, Map, MapMarker, MarkerClusterer } from 'react-kakao-maps-sdk'
 import {
   convertCoordinatesToLatLng,
   convertLatLngToCoordinates,
   DefaultCenter,
-  defaultZoom,
+  Zoom,
 } from '../../utils/mapUtil'
+
+interface Marker extends Coordinates {
+  id: number
+}
 
 const QueryDebounceDelay = 300
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
-  markerPositions: Coordinates[]
+  markerPositions: Marker[]
   onZoomChange: (zoom: number) => void
   onCenterChange: (center: Coordinates) => void
 }
@@ -21,16 +27,23 @@ interface Props {
 function KakaoMap(props: Props) {
   const { mapRef, markerPositions, onZoomChange, onCenterChange } = props
 
+  const center = mapRef.current?.getCenter()
+  const centerLatLng = center
+    ? { lat: center.getLat(), lng: center.getLng() }
+    : DefaultCenter.latLng
+
+  const zoom = mapRef.current?.getLevel() ?? 1
+  const radius = getRadiusInMeter(zoom)
+
   return (
     <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
       <Box
         sx={{
           position: 'absolute',
-          left: 0,
-          right: 0,
+          left: -4,
+          right: -4,
           bottom: 0,
           top: 0,
-          zIndex: 2,
         }}
       >
         <Map
@@ -38,8 +51,8 @@ function KakaoMap(props: Props) {
             onZoomChange(map.getLevel())
             onCenterChange(convertLatLngToCoordinates(map.getCenter()))
           }}
-          level={defaultZoom}
-          minLevel={6}
+          level={Zoom.default}
+          minLevel={20}
           ref={mapRef}
           onCenterChanged={debounce((target: kakao.maps.Map) => {
             onCenterChange(convertLatLngToCoordinates(target.getCenter()))
@@ -50,9 +63,24 @@ function KakaoMap(props: Props) {
           center={DefaultCenter.latLng}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         >
-          {markerPositions.map((position, index) => (
-            <MapMarker key={index} position={convertCoordinatesToLatLng(position)}></MapMarker>
-          ))}
+          {zoom < Zoom.clusterStart ? (
+            markerPositions.map((marker) => (
+              <MapMarker key={`${marker.id}`} position={convertCoordinatesToLatLng(marker)} />
+            ))
+          ) : (
+            <MarkerClusterer averageCenter disableClickZoom minLevel={Zoom.clusterStart}>
+              {markerPositions.map((marker) => (
+                <MapMarker key={`${marker.id}`} position={convertCoordinatesToLatLng(marker)} />
+              ))}
+            </MarkerClusterer>
+          )}
+          <Circle
+            fillColor={Colors.red[500]}
+            strokeWeight={0}
+            fillOpacity={0.3}
+            radius={radius}
+            center={centerLatLng}
+          ></Circle>
         </Map>
       </Box>
     </Box>

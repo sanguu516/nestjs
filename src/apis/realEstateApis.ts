@@ -1,7 +1,6 @@
-import fetchApi from './fetchHandler'
-import { PageParams, PaginatedResponse } from './../types'
 import { objectToQueryString } from '@/utils/queryStringUtil'
-import fetchHandler from './fetchHandler'
+import { PageParams, PaginatedResponse } from './../types'
+import { default as fetchApi, default as fetchHandler } from './fetchHandler'
 
 interface Coordinates {
   latitude: number
