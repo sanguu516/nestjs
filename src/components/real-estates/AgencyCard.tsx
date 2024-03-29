@@ -1,28 +1,22 @@
-import { SearchAgenciesResult } from '@/apis/realEstateApis'
+import type { SearchAgenciesResult } from '@/apis/realEstateApis'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { Box, Flex, SpaceProps, Text } from '@chakra-ui/react'
+import { Box, Flex, type SpaceProps, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 interface Props extends SpaceProps {
   agency: SearchAgenciesResult
+  needBoxShadow?: boolean
 }
 
 export default function AgencyCard({ agency, ...rest }: Props) {
-  const router = useRouter()
   const { name, id, representative_name, address_short, average_rating } = agency
+  console.log(agency)
 
   return (
-    <Box
-      as={Link}
-      href="/real-estate/[id]"
-      onClick={() => router.push(`/real-estate/${id}`)}
-      width="100%"
-      {...rest}
-    >
-      <Flex height={90} alignItems="center" gap={3}>
+    <Box as={Link} href={`/real-estate/${id}`} width="100%" {...rest}>
+      <Flex height={90} alignItems="center" gap={3} bgColor={Colors.white}>
         <Image
           alt={name}
           src="https://dummyimage.com/120x90/000/fff"
@@ -31,9 +25,14 @@ export default function AgencyCard({ agency, ...rest }: Props) {
           style={{ borderRadius: 8, flexShrink: 0 }}
         />
         <Box overflow="hidden">
-          {/* TODO 별점 추가 */}
+          <Flex align="center" gap={1}>
+            <Image alt="rating" width={20} height={20} src="/star.png" />
+            {/* TODO: Fix the rating */}
+            <Text {...fontStyles.TitleMd}>{`${(average_rating ?? 3).toFixed(1)}`}</Text>
+          </Flex>
           <Text
             {...fontStyles.TitleSm}
+            mt={1}
             mb={2}
             whiteSpace="nowrap"
             overflow="hidden"

@@ -43,7 +43,7 @@ export type SearchAgenciesResult = {
     lon: number
     lat: number
   }
-  average_rating: number
+  average_rating: number | null
 }
 
 export type SearchAgenciesResponse = PaginatedResponse<SearchAgenciesResult>

@@ -1,6 +1,7 @@
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
 import { IconCategory, IconLocation } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
+import AgencyCard from '@/components/real-estates/AgencyCard'
 import AgencyListView from '@/components/real-estates/AgencyListView'
 import KakaoMap from '@/components/real-estates/KakaoMap'
 import { Colors } from '@/styles/colors'
@@ -17,6 +18,8 @@ export function getRadiusInMeter(zoom: number) {
 
 export default function RealEstate() {
   const [isMapMode, setIsMapMode] = useState(true)
+  const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
+
   const [center, setCenter] = useState(DefaultCenter.coordinates)
   const [zoom, setZoom] = useState(Zoom.default)
 
@@ -56,6 +59,11 @@ export default function RealEstate() {
     [agenciesResponse]
   )
 
+  const selectedAgency = useMemo(
+    () => agencies.find((agency) => agency.id === selectedAgencyId),
+    [agencies, selectedAgencyId]
+  )
+
   const FabIcon = isMapMode ? IconCategory : IconLocation
 
   return (
@@ -63,6 +71,8 @@ export default function RealEstate() {
       {isMapMode ? (
         <KakaoMap
           agencies={agencies}
+          selectedAgencyId={selectedAgencyId}
+          onSelectAgency={setSelectedAgencyId}
           mapRef={mapRef}
           onCenterChange={handleCenterChange}
           onZoomChange={handleZoomChange}
@@ -70,23 +80,36 @@ export default function RealEstate() {
       ) : (
         <AgencyListView agencies={agencies} />
       )}
-      <Box position="fixed" left={0} bottom="80px" width="100%" zIndex={200}>
-        <Flex justifyContent="flex-end">
-          <CustomIConButton
-            sx={{
-              background: Colors.white,
-              width: '56px',
-              height: '56px',
-              mr: 4,
-              mb: 10,
-              boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.35)',
-            }}
-            size="lg"
-            variant="primary"
-            icon={<FabIcon width={24} height={24} color={Colors.indigo[600]} />}
-            onClick={() => setIsMapMode((prev) => !prev)}
-          />
-        </Flex>
+      <Box position="fixed" left={0} bottom="120px" width="100%" zIndex={200}>
+        {selectedAgency ? (
+          <Box
+            mx={4}
+            px={4}
+            py={3}
+            bgColor={Colors.white}
+            borderRadius="8px"
+            overflow="hidden"
+            boxShadow="0px 1px 3px 0px rgba(0, 0, 0, 0.35)"
+          >
+            <AgencyCard agency={selectedAgency} />
+          </Box>
+        ) : (
+          <Flex justifyContent="flex-end">
+            <CustomIConButton
+              sx={{
+                background: Colors.white,
+                width: '56px',
+                height: '56px',
+                mr: 4,
+                boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.35)',
+              }}
+              size="lg"
+              variant="primary"
+              icon={<FabIcon width={24} height={24} color={Colors.indigo[600]} />}
+              onClick={() => setIsMapMode((prev) => !prev)}
+            />
+          </Flex>
+        )}
       </Box>
     </>
   )

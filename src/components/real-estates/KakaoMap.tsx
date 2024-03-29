@@ -4,7 +4,7 @@ import { Colors } from '@/styles/colors'
 import { Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, MutableRefObject, useMemo, useState } from 'react'
+import { memo, MutableRefObject, useMemo } from 'react'
 import { Circle, Map, MarkerClusterer } from 'react-kakao-maps-sdk'
 import { convertLatLngToCoordinates, DefaultCenter, Zoom } from '../../utils/mapUtil'
 import AgencyMarker from './AgencyMarker'
@@ -14,12 +14,13 @@ interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
   agencies: SearchAgenciesResult[]
   onZoomChange: (zoom: number) => void
+  selectedAgencyId?: number
+  onSelectAgency: (id?: number) => void
   onCenterChange: (center: Coordinates) => void
 }
 
 function KakaoMap(props: Props) {
-  const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
-  const { mapRef, agencies, onZoomChange, onCenterChange } = props
+  const { selectedAgencyId, mapRef, agencies, onZoomChange, onCenterChange, onSelectAgency } = props
 
   const markerPositions = useMemo(
     () =>
@@ -35,7 +36,7 @@ function KakaoMap(props: Props) {
             coordinates={marker}
             isSelected={selectedAgencyId === marker.id}
             onSelect={() => {
-              setSelectedAgencyId(marker.id)
+              onSelectAgency(marker.id)
             }}
           />
         )),
@@ -66,7 +67,7 @@ function KakaoMap(props: Props) {
             onZoomChange(map.getLevel())
             onCenterChange(convertLatLngToCoordinates(map.getCenter()))
           }}
-          onClick={() => setSelectedAgencyId(undefined)}
+          onClick={() => onSelectAgency(undefined)}
           level={Zoom.default}
           minLevel={20}
           ref={mapRef}
