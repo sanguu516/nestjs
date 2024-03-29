@@ -1,10 +1,10 @@
-import { SearchAgenciesResult } from '@/apis/realEstateApis'
+import { type SearchAgenciesResult } from '@/apis/realEstateApis'
 import { getRadiusInMeter } from '@/pages/real-estates'
 import { Colors } from '@/styles/colors'
-import { Coordinates } from '@/types'
+import { type Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, MutableRefObject, useMemo } from 'react'
+import { memo, type MutableRefObject, useMemo } from 'react'
 import { Circle, Map, MapMarker, MarkerClusterer } from 'react-kakao-maps-sdk'
 import {
   convertCoordinatesToLatLng,

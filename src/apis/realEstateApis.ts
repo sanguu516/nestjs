@@ -1,5 +1,5 @@
 import { objectToQueryString } from '@/utils/queryStringUtil'
-import { PageParams, PaginatedResponse } from './../types'
+import { type PageParams, type PaginatedResponse } from './../types'
 import { default as fetchApi, default as fetchHandler } from './fetchHandler'
 
 interface Coordinates {
