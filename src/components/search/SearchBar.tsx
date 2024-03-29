@@ -26,7 +26,7 @@ function SearchBar() {
     queryFn: ({ pageParam }) =>
       searchAgenciesByName({ name: deferredQuery, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 10 },
-    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 100 }),
+    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
     enabled: deferredQuery !== '',
   })
 
@@ -65,8 +65,8 @@ function SearchBar() {
         <Box
           position="fixed"
           top="108px"
-          left={0}
-          right={0}
+          maxWidth={480}
+          marginX="auto"
           bottom="80px"
           zIndex={200}
           bgColor={Colors.white}
