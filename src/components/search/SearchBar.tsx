@@ -69,6 +69,7 @@ function SearchBar() {
           marginX="auto"
           bottom="80px"
           zIndex={200}
+          width="100%"
           bgColor={Colors.white}
         >
           <InfiniteScroll
@@ -106,17 +107,19 @@ function SearchBar() {
                 </Box>
               )}
               {agencyCount !== undefined && agencyCount > 0 && (
-                <Box>
+                <Box width="100%">
                   <Text
                     {...fontStyles.LabelSm}
                     color={Colors.gray[400]}
                     sx={{ flex: 'display', alignContent: 'center' }}
                     height={10}
                   >{`공인중개소 ${agencyPaginatedResult?.pages?.[0]?.total_count ?? 0}`}</Text>
-                  {agencyData.map((agency) => (
-                    // TODO: key는 result.id로 변경해야됨. 지금은 중복된 id가 내려오는 이슈가 있어 임시 처리
-                    <AgencyCard key={agency.id} agency={agency} />
-                  ))}
+                  <VStack gap={8}>
+                    {agencyData.map((agency) => (
+                      // TODO: key는 result.id로 변경해야됨. 지금은 중복된 id가 내려오는 이슈가 있어 임시 처리
+                      <AgencyCard key={agency.id} agency={agency} />
+                    ))}
+                  </VStack>
                 </Box>
               )}
             </VStack>
