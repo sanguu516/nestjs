@@ -97,7 +97,10 @@ export default function RealEstate() {
               size="lg"
               variant="primary"
               icon={<FabIcon width={24} height={24} color={Colors.indigo[600]} />}
-              onClick={() => setIsMapMode((prev) => !prev)}
+              onClick={(e) => {
+                setIsMapMode((prev) => !prev)
+                e.stopPropagation()
+              }}
             />
           </Flex>
         )}

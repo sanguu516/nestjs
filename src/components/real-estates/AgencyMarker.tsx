@@ -11,8 +11,7 @@ interface Props {
 export default function AgencyMarker({ coordinates, isSelected, onSelect }: Props) {
   const size = isSelected ? 74 : 32
   return (
-    <CustomOverlayMap // 커스텀 오버레이를 표시할 Container
-      // 커스텀 오버레이가 표시될 위치입니다
+    <CustomOverlayMap
       position={{
         lat: coordinates.lat,
         lng: coordinates.lon,
