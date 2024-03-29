@@ -5,4 +5,6 @@ export const QueryKeys = {
     center,
     radiusInMeter,
   ],
+  searchLocation: (query: string) => [`searchLocation`, query],
+  agenciesByQuery: (query: string) => [`agenciesByQuery`, query],
 } as const
