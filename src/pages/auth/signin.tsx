@@ -9,7 +9,8 @@ import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-u
 import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { UserContext } from '../_app'
 import { SignupForm } from './signup'
 
 const LOGIN_TITLE = '나만의 솔직한 리뷰를\n작성해보세요!'
@@ -24,12 +25,15 @@ export default function Signin() {
   })
   const router = useRouter()
 
+  const { setUser } = useContext(UserContext)
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     loginMutate(signinForm, {
       onSuccess: (res) => {
         localStorage.setItem(StorageKey.aceessToken, res.access)
         localStorage.setItem(StorageKey.refreshToken, res.refresh)
+        setUser(res.user)
         void router.replace('/')
       },
       onError: (e) => {

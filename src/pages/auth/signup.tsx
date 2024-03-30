@@ -10,7 +10,8 @@ import { validateAuth } from '@/utils/validate'
 import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
+import { UserContext } from '../_app'
 
 const LOGIN_TITLE = '회원정보를 입력해주세요!'
 
@@ -28,6 +29,7 @@ export default function Signup() {
     mutationFn: signUp,
   })
   const router = useRouter()
+  const { setUser } = useContext(UserContext)
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -35,6 +37,7 @@ export default function Signup() {
       onSuccess: (res) => {
         localStorage.setItem(StorageKey.aceessToken, res.access)
         localStorage.setItem(StorageKey.refreshToken, res.refresh)
+        setUser(res.user)
         void router.replace('/')
       },
       onError: (e) => {

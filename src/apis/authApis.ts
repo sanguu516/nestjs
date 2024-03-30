@@ -74,3 +74,7 @@ export function signOut() {
     method: 'POST',
   })
 }
+
+export function getMe(): Promise<User> {
+  return fetchHandler('user/user/me/')
+}
