@@ -19,11 +19,13 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
   const selectedKeywords = user_keywords.filter((e) => e.is_selected)
   const firstKeyword = selectedKeywords[0]
 
-  const handleReviewButton = () => {
+  const handleReviewButton = (e: MouseEvent) => {
+    e.stopPropagation()
     setShowMoreReviews((prev) => !prev)
   }
 
-  const handleKeywordButton = () => {
+  const handleKeywordButton = (e: MouseEvent) => {
+    e.stopPropagation()
     setShowMoreKeywords((prev) => !prev)
   }
 
