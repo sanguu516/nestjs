@@ -1,4 +1,4 @@
-const dummyImageCount = 9
+const dummyImageCount = 18
 
 export function getDummyAgencyImage(id: number) {
   const dummyId = id % dummyImageCount
