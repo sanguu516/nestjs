@@ -19,7 +19,7 @@ function AgencyListView({ agencies }: Props) {
         setPage((prev) => prev + 1)
       }}
     >
-      <VStack width="100%" gap={8} mt={4}>
+      <VStack width="100%" gap={8} mt={4} px={4}>
         {displayingAgencies.map((agency) => (
           <AgencyCard key={agency.id} agency={agency} />
         ))}
