@@ -33,6 +33,7 @@ export default function InfiniteScroll(props: Props) {
     <Box height="100%" overflowY="auto">
       {children}
       <Box ref={bottomRef} />
+      <Box height={10} />
     </Box>
   )
 }
