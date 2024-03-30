@@ -1,16 +1,17 @@
-import React, { cloneElement, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Flex, Input, Text, type InputProps } from '@chakra-ui/react'
-import debounce, { DEBOUNCE_DELAY } from '@/utils/debounce'
-import { Colors } from '@/styles/colors'
 import { IconDangerCircle, IconDeleteCircle, IconHide, IconShow } from '@/assets/icons'
-import CustomIConButton from './CustomIconButton'
+import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
+import debounce, { DEBOUNCE_DELAY } from '@/utils/debounce'
+import { Box, Flex, Input, Text, type InputProps } from '@chakra-ui/react'
+import React, { cloneElement, useCallback, useEffect, useRef, useState } from 'react'
+import CustomIConButton from './CustomIconButton'
 
 interface CustomInputProps extends InputProps {
   supportingText?: string
   isSensitive?: boolean
   isInvalid?: boolean
   isDisabled?: boolean
+  noIcon?: boolean
   initializeValue?: () => void
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
@@ -63,6 +64,7 @@ export default function CustomInput({
   isInvalid,
   isDisabled,
   onChange,
+  noIcon = false,
   ...rest
 }: CustomInputProps) {
   const [value, setValue] = useState<string>('')
@@ -158,12 +160,14 @@ export default function CustomInput({
             }}
           />
         </Box>
-        <Icons
-          isInvalid={isInvalid ?? false}
-          isSensitive={isSensitive ?? false}
-          isShow={isShow}
-          onClicks={handleIconClicks}
-        />
+        {!noIcon && (
+          <Icons
+            isInvalid={isInvalid ?? false}
+            isSensitive={isSensitive ?? false}
+            isShow={isShow}
+            onClicks={handleIconClicks}
+          />
+        )}
       </Flex>
       {isInvalid && (
         <Text

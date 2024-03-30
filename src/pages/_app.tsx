@@ -17,7 +17,10 @@ import { LocalStorageManager, StorageKey } from '@/utils/localStorageUtil'
 import { Box } from '@chakra-ui/react'
 import { usePathname } from 'next/navigation'
 
-export const UserContext = createContext<{ user: User | null; setUser: (user: User) => void }>({
+export const UserContext = createContext<{
+  user: User | null
+  setUser: (user: User | null) => void
+}>({
   user: null,
   setUser: () => {
     // do nothing
