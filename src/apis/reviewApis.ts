@@ -13,19 +13,10 @@ export async function getKeywordData(): Promise<KeywordData[]> {
   })
 }
 
-interface Coordinates {
-  lon: number
-  lat: number
-}
-
-type Agency =
-  | Omit<
-      RealEstateResponse,
-      'address_detail' | 'address_point' | 'tel' | 'mobile' | 'agency_number'
-    >
-  | {
-      address_point: Coordinates
-    }
+type Agency = Omit<
+  RealEstateResponse,
+  'address_detail' | 'address_point' | 'tel' | 'mobile' | 'agency_number'
+>
 
 type UserKeyword = { keyword: KeywordData } & {
   is_selected: boolean
@@ -65,7 +56,7 @@ interface GetReviewsResponse {
 }
 
 export async function getTrendingReviews(): Promise<GetReviewsResponse> {
-  return fetchHandler('review/agency-review/review/', {
+  return fetchHandler('review/agency-review/review/?page=1&page_size=2', {
     method: 'GET',
   })
 }

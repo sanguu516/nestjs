@@ -1,14 +1,14 @@
 import { getTrendingReviews } from '@/apis/reviewApis'
-import Review from '@/components/Review'
+import ReviewCard from '@/components/home/ReviewCard'
 import { popularLocations } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
-import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
+import { Center, Divider, Flex, Text, VStack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import Head from 'next/head'
 import Link from 'next/link'
-import { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 
 function SectionContainer({ title, children }: PropsWithChildren<{ title: string }>) {
   return (
@@ -57,21 +57,9 @@ export default function Home() {
           </Flex>
         </SectionContainer>
         <SectionContainer title="실시간 리뷰">
-          {data?.results.slice(0, 2).map((review) => {
-            return (
-              <Box key={review.id} width="100%">
-                <Review
-                  user={review.user}
-                  rating={review.rating}
-                  content={review.content}
-                  user_keywords={review.user_keywords}
-                  borderBottom="none"
-                  p={0}
-                />
-                <Box width="100%" height="72px" bg={Colors.gray[100]}></Box>
-              </Box>
-            )
-          })}
+          <VStack width="100%" divider={<Divider />} gap={4}>
+            {data?.results.map((review) => <ReviewCard key={review.id} review={review} />)}
+          </VStack>
         </SectionContainer>
       </VStack>
     </>
