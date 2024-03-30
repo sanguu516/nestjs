@@ -3,7 +3,7 @@ import { type AppType } from 'next/app'
 import { spoqaHanSans } from '@/styles/font'
 import '@/styles/globals.css'
 import reaTheme from '@/styles/theme'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Flex } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -21,9 +21,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <ChakraProvider resetCSS theme={reaTheme}>
       <QueryClientProvider client={queryClient}>
         <Box className={spoqaHanSans.className}>
-          <Box display="grid" minH="100vh" bg={Colors.white} maxW={480} margin="0 auto">
+          <Flex direction="column" height="100vh" bg={Colors.white} maxW={480} margin="0 auto">
             <Header />
-            <Box flex={1} as="main" pt={16} pb={20}>
+            <Box flexGrow={1} as="main" overflowY="auto" position="relative">
               <Component {...pageProps} />
             </Box>
             <BottomTab
@@ -31,7 +31,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               activeColor={Colors.white}
               inActiveColor={Colors.indigo[300]}
             />
-          </Box>
+          </Flex>
         </Box>
       </QueryClientProvider>
     </ChakraProvider>
