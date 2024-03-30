@@ -5,7 +5,7 @@ import { fontStyles } from '@/styles/font'
 import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { validateAuth } from '@/utils/validate'
-import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
+import { Box, Checkbox, Flex, FormControl, Heading, Link, Text, useToast } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -26,6 +26,7 @@ export default function Signin() {
   const router = useRouter()
 
   const { setUser } = useContext(UserContext)
+  const toast = useToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -43,7 +44,11 @@ export default function Signin() {
         void router.replace(redirectPath)
       },
       onError: (e) => {
-        console.error(e)
+        toast({
+          title: e.message ?? '회원가입에 실패했습니다.',
+          description: detail ?? '알 수 없는 에러가 발생하였습니다. 다시 시도해 주세요.',
+          status: 'error',
+        })
       },
     })
   }
