@@ -1,5 +1,5 @@
-import fetchHandler from './fetchHandler'
 import { type User } from './authApis'
+import fetchHandler from './fetchHandler'
 import { type RealEstateResponse } from './realEstateApis'
 
 interface KeywordData {
@@ -13,19 +13,10 @@ export async function getKeywordData(): Promise<KeywordData[]> {
   })
 }
 
-interface Coordinates {
-  lon: number
-  lat: number
-}
-
-type Agency =
-  | Omit<
-      RealEstateResponse,
-      'address_detail' | 'address_point' | 'tel' | 'mobile' | 'agency_number'
-    >
-  | {
-      address_point: Coordinates
-    }
+type Agency = Omit<
+  RealEstateResponse,
+  'address_detail' | 'address_point' | 'tel' | 'mobile' | 'agency_number'
+>
 
 type UserKeyword = { keyword: KeywordData } & {
   is_selected: boolean
@@ -62,6 +53,12 @@ interface GetReviewsResponse {
   next_page: number | null
   previous_page: number | null
   results: GetReviewResponse[]
+}
+
+export async function getTrendingReviews(): Promise<GetReviewsResponse> {
+  return fetchHandler('review/agency-review/review/?page=1&page_size=2', {
+    method: 'GET',
+  })
 }
 
 // 하나의 중개사무소에 대한 리뷰 데이터
@@ -107,75 +104,3 @@ export const DUMMY_KEYWORD = [
   { id: 5, name: '거래방식이 안전해요' },
   { id: 6, name: '매물 비교를 잘해줘요' },
 ]
-
-export const DUMMY_DETAIL_DATA: GetReviewsResponse = {
-  total_count: 123,
-  page: 1,
-  page_size: 10,
-  next_page: 0,
-  previous_page: 0,
-  results: [
-    {
-      id: 0,
-      user: {
-        id: 0,
-        email: 'user@example.com',
-        username: '단단한나무늘보23',
-      },
-      agency: {
-        id: 0,
-        name: 'string',
-        representative_name: 'string',
-        address_short: 'string',
-        address_point: {
-          lon: 0,
-          lat: 0,
-        },
-        average_rating: 0,
-      },
-      rating: 2,
-      content:
-        '친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동산인 것 같아요!  친절한 공인중개사',
-      user_keywords: [
-        {
-          keyword: {
-            id: 0,
-            name: 'string',
-          },
-          is_selected: true,
-        },
-      ],
-    },
-    {
-      id: 1,
-      user: {
-        id: 1,
-        email: 'user@example.com',
-        username: '',
-      },
-      agency: {
-        id: 0,
-        name: 'string',
-        representative_name: 'string',
-        address_short: 'string',
-        address_point: {
-          lon: 0,
-          lat: 0,
-        },
-        average_rating: 0,
-      },
-      rating: 3,
-      content:
-        '친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동산인 것 같아요!  친절한 공인중개사 친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동산인 것 같아요!  친절한 공인중개사 친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동산인 것 같아요!  친절한 공인중개사 친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다. 믿고 맡길 수 있는 부동산인 것 같아요!  친절한 공인중개사 친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다는 부동산인 것 같아요!  친절한 공인중개사 친절한 공인중개사님 덕분에 좋은 거래 할 수 있었습니다는 부동산인 것 같아요!  친',
-      user_keywords: [
-        {
-          keyword: {
-            id: 0,
-            name: 'string',
-          },
-          is_selected: true,
-        },
-      ],
-    },
-  ],
-}

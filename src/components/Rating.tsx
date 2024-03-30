@@ -1,7 +1,7 @@
 import { ImageDisabledStar, ImageEnabledStar } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { type FlexProps, Box, Flex, Text } from '@chakra-ui/react'
+import { type FlexProps, Flex, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 
 const RATING_NUM = 5
@@ -21,7 +21,7 @@ interface StarProps {
   isEvaluatable?: boolean
 }
 
-function Star({ id, on, size, isEvaluatable = false }: StarProps) {
+export function Star({ id, on, size, isEvaluatable = false }: StarProps) {
   const cursor = isEvaluatable ? 'pointer' : 'default'
 
   return on ? (
