@@ -18,7 +18,6 @@ export default function InfiniteScroll(props: Props) {
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0] && entries[0].intersectionRatio > 0) {
-        console.log('fetchMore')
         void onLoadMore()
       }
     })
