@@ -6,6 +6,7 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { SIGNUP_FORM, type SignFormList } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
+import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
 import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
@@ -30,6 +31,7 @@ export default function Signup() {
   })
   const router = useRouter()
   const { setUser } = useContext(UserContext)
+  const toast = useCustomToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -45,8 +47,11 @@ export default function Signup() {
 
         void router.replace(redirectPath)
       },
-      onError: (e) => {
-        console.error(e)
+      onError: () => {
+        toast({
+          title: '비밀번호는 8~20자의 영문자/숫자 조합으로 입력해주세요.',
+          status: 'error',
+        })
       },
     })
   }

@@ -4,6 +4,7 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
+import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
 import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
@@ -26,6 +27,7 @@ export default function Signin() {
   const router = useRouter()
 
   const { setUser } = useContext(UserContext)
+  const toast = useCustomToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -39,11 +41,13 @@ export default function Signin() {
         const redirectPath =
           redirect && typeof redirect === 'string' ? decodeURIComponent(redirect) : '/'
 
-        console.log(redirectPath)
         void router.replace(redirectPath)
       },
-      onError: (e) => {
-        console.error(e)
+      onError: () => {
+        toast({
+          title: '이메일, 비밀번호가 일치하지 않습니다.',
+          status: 'error',
+        })
       },
     })
   }
