@@ -78,7 +78,7 @@ function MyPage() {
 
   return (
     <Center px={4} width="100%" height="100%">
-      <VStack gap={10} width="100%">
+      <Flex direction="column" align="center" justify="space-evenly" width="100%" height="100%">
         <VStack {...fontStyles.TitleLg} fontWeight={400}>
           <ImageUser width={80} height={80} />
           <Text>안녕하세요,</Text>
@@ -108,7 +108,7 @@ function MyPage() {
             수정하기
           </CustomButton>
         </VStack>
-      </VStack>
+      </Flex>
     </Center>
   )
 }

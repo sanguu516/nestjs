@@ -129,14 +129,6 @@ export default function CustomInput({
         gap={4}
       >
         <Box as="label" w="100%">
-          {onFocus && value && (
-            <Text
-              color={isInvalid ? Colors.red[600] : Colors.indigo[600]}
-              sx={{ ...fontStyles.BodySm }}
-            >
-              {rest.placeholder}
-            </Text>
-          )}
           <Input
             ref={inputRef}
             id={rest.id}

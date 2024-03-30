@@ -1,7 +1,7 @@
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { type ChipVariant, type ChipSize, chipTheme } from '@/styles/theme/Chip'
-import { Text, Flex, type BoxProps } from '@chakra-ui/react'
+import { chipTheme, type ChipSize, type ChipVariant } from '@/styles/theme/Chip'
+import { Flex, Text, type BoxProps } from '@chakra-ui/react'
 import { cloneElement, useState } from 'react'
 
 interface ChipProps extends BoxProps {
@@ -13,8 +13,8 @@ interface ChipProps extends BoxProps {
 }
 
 export default function Chip({ size, variant, icon, unicode, handleClick, ...rest }: ChipProps) {
-  const isClikable = handleClick !== undefined
-  const [isOff, setIsOff] = useState<boolean>(isClikable)
+  const [isOff, setIsOff] = useState<boolean>(true)
+  const isClickable = handleClick !== undefined
 
   const sizeStyle = chipTheme.sizes[size]
   const variantStyle = chipTheme.variants[variant]
@@ -28,17 +28,25 @@ export default function Chip({ size, variant, icon, unicode, handleClick, ...res
     }
   }
 
+  const borderColor = !isOff && isClickable ? Colors.indigo[600] : Colors.gray[200]
+  const color = isOff && isClickable ? Colors.gray[400] : Colors.gray[600]
+
   return (
     <Flex
-      {...sizeStyle}
-      {...rest}
       justify="start"
       align="center"
       gap={size === 'sm' ? 1 : 2}
       borderRadius={8}
-      color={Colors.gray[500]}
-      sx={{ ...variantStyle, ...disableStyle, ...fontStyles.Caption }}
+      sx={{
+        ...variantStyle,
+        ...disableStyle,
+        ...fontStyles.Caption,
+        borderColor,
+        color,
+      }}
       onClick={handleClick ? handleChipClick : undefined}
+      {...sizeStyle}
+      {...rest}
     >
       <Text>
         {icon && cloneElement(icon, { width: '16px', height: '16px' })}

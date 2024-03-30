@@ -1,13 +1,13 @@
 import { type GetReviewResponse } from '@/apis/reviewApis'
 import { ImageUser } from '@/assets/icons'
 import { KEYWORD_ICONS } from '@/constants'
-import { useEffect, useRef, MouseEventHandler, useState } from 'react'
-import CustomButton from './CustomButton'
-import Chip from './Chip'
-import Rating from './Rating'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
+import { MouseEventHandler, useEffect, useRef, useState } from 'react'
+import Chip from './Chip'
+import CustomButton from './CustomButton'
+import Rating from './Rating'
 
 type ReviewProps = BoxProps &
   Pick<GetReviewResponse, 'user' | 'rating' | 'content' | 'user_keywords'>
@@ -111,7 +111,7 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
                 w="fit-content"
                 h="1.75rem"
                 p={2}
-                borderColor={Colors.gray[400]}
+                borderColor={Colors.gray[200]}
                 color={Colors.gray[600]}
                 sx={{ ...fontStyles.Caption }}
                 onClick={handleKeywordButton}
