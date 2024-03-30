@@ -2,6 +2,13 @@ import { StorageKey } from '@/utils/localStorageUtil'
 
 const baseUrl = process.env.NEXT_PUBLIC_REA_API_URL
 
+export class NeedSignInError extends Error {
+  constructor() {
+    super('Need to sign in')
+    this.name = 'NeedSignInError'
+  }
+}
+
 async function fetchApi(pathname: string, requestInit?: RequestInit) {
   const isBrowser = typeof window !== 'undefined'
 
@@ -27,8 +34,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
 
     const refreshToken = localStorage.getItem('refreshToken')
     if (!accessToken || !refreshToken) {
-      location.href = '/auth/signin'
-      return
+      throw new NeedSignInError()
     }
 
     const refreshResult = await fetch(baseUrl + 'auth/token/refresh/', {
@@ -47,7 +53,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
     } else {
       localStorage.removeItem(StorageKey.aceessToken)
       localStorage.removeItem(StorageKey.refreshToken)
-      location.href = '/auth/signin'
+      throw new NeedSignInError()
     }
   }
 
