@@ -1,17 +1,11 @@
 import { type SearchAgenciesResult } from '@/apis/realEstateApis'
-import { getRadiusInMeter } from '@/pages/real-estates'
 import { Colors } from '@/styles/colors'
 import { type Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
 import { memo, type MutableRefObject, useMemo } from 'react'
-import { Circle, Map, MarkerClusterer } from 'react-kakao-maps-sdk'
-import {
-  convertCoordinatesToLatLng,
-  convertLatLngToCoordinates,
-  DefaultCenter,
-  Zoom,
-} from '../../utils/mapUtil'
+import { Map, MarkerClusterer } from 'react-kakao-maps-sdk'
+import { convertCoordinatesToLatLng, convertLatLngToCoordinates, Zoom } from '../../utils/mapUtil'
 import AgencyMarker from './AgencyMarker'
 
 const QueryDebounceDelay = 300
@@ -57,13 +51,7 @@ function KakaoMap(props: Props) {
     [agencies, selectedAgencyId, onSelectAgency]
   )
 
-  const center = mapRef.current?.getCenter()
-  const centerLatLng = center
-    ? { lat: center.getLat(), lng: center.getLng() }
-    : DefaultCenter.latLng
-
   const zoom = mapRef.current?.getLevel() ?? 1
-  const radius = getRadiusInMeter(zoom)
 
   return (
     <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -116,13 +104,6 @@ function KakaoMap(props: Props) {
               {markerPositions}
             </MarkerClusterer>
           )}
-          <Circle
-            fillColor={Colors.red[500]}
-            strokeWeight={0}
-            fillOpacity={0.3}
-            radius={radius}
-            center={centerLatLng}
-          ></Circle>
         </Map>
       </Box>
     </Box>
