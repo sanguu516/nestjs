@@ -76,37 +76,37 @@ export default function Review({ user, rating, content, user_keywords }: ReviewP
             >
               {firstKeyword.keyword.name}
             </Chip>
-            {showMoreKeywords ? (
-              selectedKeywords.map((e, i) => {
-                return (
-                  i > 0 &&
-                  e.is_selected && (
-                    <Chip
-                      key={e.keyword.id}
-                      size="sm"
-                      w="fit-content"
-                      variant="outlined"
-                      unicode={KEYWORD_ICONS[e.keyword.id]}
-                    >
-                      {e.keyword.name}
-                    </Chip>
+            {showMoreKeywords
+              ? selectedKeywords.map((e, i) => {
+                  return (
+                    i > 0 &&
+                    e.is_selected && (
+                      <Chip
+                        key={e.keyword.id}
+                        size="sm"
+                        w="fit-content"
+                        variant="outlined"
+                        unicode={KEYWORD_ICONS[e.keyword.id]}
+                      >
+                        {e.keyword.name}
+                      </Chip>
+                    )
                   )
-                )
-              })
-            ) : (
-              <CustomButton
-                variant="outlined"
-                size="sm"
-                w="fit-content"
-                h="1.75rem"
-                p={2}
-                color={Colors.gray[600]}
-                sx={{ ...fontStyles.Caption }}
-                onClick={handleKeywordButton}
-              >
-                {`+${selectedKeywords.length}`}
-              </CustomButton>
-            )}
+                })
+              : selectedKeywords.length > 1 && (
+                  <CustomButton
+                    variant="outlined"
+                    size="sm"
+                    w="fit-content"
+                    h="1.75rem"
+                    p={2}
+                    color={Colors.gray[600]}
+                    sx={{ ...fontStyles.Caption }}
+                    onClick={handleKeywordButton}
+                  >
+                    {`+${selectedKeywords.length}`}
+                  </CustomButton>
+                )}
           </Flex>
         )}
       </Box>

@@ -48,7 +48,7 @@ export async function getReviewData(id: number): Promise<GetReviewResponse> {
 }
 
 interface GetReviewsDataParmas {
-  agench_id: number
+  agency_id: number
   pageParams: {
     page: number
     page_size: number
@@ -66,12 +66,12 @@ interface GetReviewsResponse {
 
 // 하나의 중개사무소에 대한 리뷰 데이터
 export async function getAgencyReivewsData({
-  agench_id,
+  agency_id,
   pageParams,
 }: GetReviewsDataParmas): Promise<GetReviewsResponse> {
   const { page, page_size } = pageParams
   return fetchHandler(
-    `review/agency-review/review/?agency_id=${agench_id}&page=${page}&page_size=${page_size}`,
+    `review/agency-review/review/?agency_id=${agency_id}&page=${page}&page_size=${page_size}`,
     {
       method: 'GET',
     }
@@ -91,7 +91,7 @@ export interface PostReviewParmas {
 export type PostReviewResponse = PostReviewParmas | { id: number }
 
 export async function postReview(params: PostReviewParmas): Promise<PostReviewResponse> {
-  return fetchHandler('review/agency-review/review', {
+  return fetchHandler('review/agency-review/review/', {
     method: 'POST',
     body: JSON.stringify(params),
   })

@@ -4,6 +4,7 @@ import Chip from '@/components/Chip'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
+import withAuth from '@/components/withAuth'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   getKeywordData,
@@ -21,11 +22,11 @@ import { useRouter } from 'next/router'
 import { UserContext } from '@/pages/_app'
 import { getRealEstateData } from '@/apis/realEstateApis'
 
+const MAX_TEXT_NUM = 500
 const feedbackQuestion = (userName: string) => `${userName} 님,\n 공인중개사는 어떠셨어요?`
 const REVIEW_PLACEHOLDER =
   '작성된 리뷰는 다른 사용자와, 공인중개사님이 볼 수 있어요. 배려를 위해 공인중개사님에 대한 욕설, 비방, 명예훼손성 표현은 사용을 지양해주세요.'
 const KEYWORD_SELECT_MESSAGE = '공인중개사님과 어울리는\n키워드를 골라주시겠어요?'
-const MAX_STR_NUM = 500
 const initReviewForm = {
   agency: 0,
   rating: 0,
@@ -33,7 +34,7 @@ const initReviewForm = {
   user_keywords: [],
 }
 
-export default function New() {
+function New() {
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -45,8 +46,6 @@ export default function New() {
     queryFn: () => getRealEstateData(agencyId),
     enabled: !isNaN(agencyId),
   })
-
-  // const [agencyId, agencyName] = Array.isArray(agency) ? agency : [agency]
 
   const { data: keywordData } = useQuery({
     queryKey: QueryKeys.keywordAboutReview,
@@ -82,7 +81,8 @@ export default function New() {
   }
 
   const handleTextarea: React.ChangeEventHandler<HTMLTextAreaElement> = useCallback((e) => {
-    setReviewForm((prev) => ({ ...prev, content: e.target.value }))
+    const target = e.target as HTMLTextAreaElement
+    setReviewForm((prev) => ({ ...prev, content: target.value }))
   }, [])
 
   const handleKeyword = (id: number) => {
@@ -109,7 +109,7 @@ export default function New() {
         void queryClient.invalidateQueries({
           queryKey: QueryKeys.reviewsAboutAgency(Number(agencyId)),
         })
-        void router.replace(`/issues/${Number(agencyId)}`)
+        void router.replace(`/real-estate/${Number(agencyId)}`)
       },
     })
   }
@@ -134,11 +134,13 @@ export default function New() {
           <Textarea
             w="100%"
             h="12.5rem"
+            resize="none"
+            maxLength={MAX_TEXT_NUM}
             placeholder={REVIEW_PLACEHOLDER}
             onChange={debounce(handleTextarea, DEBOUNCE_DELAY)}
           />
           <Text color={Colors.gray[400]} sx={{ ...fontStyles.BodySm }}>
-            {`${reviewForm.content.length}/${MAX_STR_NUM}`}
+            {`${reviewForm.content.length}/${MAX_TEXT_NUM}`}
           </Text>
         </Flex>
       </Flex>
@@ -171,3 +173,5 @@ export default function New() {
     </Box>
   )
 }
+
+export default withAuth(New)

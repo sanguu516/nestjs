@@ -46,7 +46,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
     queryKey: QueryKeys.reviewsAboutAgency(agency.id),
     queryFn: ({ pageParam }) =>
-      getAgencyReivewsData({ agench_id: agency.id, pageParams: pageParam }),
+      getAgencyReivewsData({ agency_id: agency.id, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 10 },
     getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
   })
