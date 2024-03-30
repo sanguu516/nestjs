@@ -44,7 +44,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={{ user, setUser }}>
           <Box className={spoqaHanSans.className}>
-            <Flex direction="column" height="100vh" bg={Colors.white} maxW={480} margin="0 auto">
+            <Flex direction="column" height="100dvh" bg={Colors.white} maxW={480} margin="0 auto">
               {needFixedLayout && <Header />}
               <Box flexGrow={1} as="main" overflowY="auto" position="relative">
                 <Component {...pageProps} />

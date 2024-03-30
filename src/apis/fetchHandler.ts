@@ -33,7 +33,6 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
     }
 
     const refreshToken = localStorage.getItem('refreshToken')
-    const currentPath = location.pathname
     if (!accessToken || !refreshToken) {
       throw new NeedSignInError()
     }
