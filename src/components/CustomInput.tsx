@@ -77,8 +77,7 @@ export default function CustomInput({
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    // if (!(isSensitive && inputRef.current)) return
-    if (!inputRef.current) return
+    if (!(isSensitive && inputRef.current)) return
     if (isShow) {
       inputRef.current.type = 'text'
     } else {
