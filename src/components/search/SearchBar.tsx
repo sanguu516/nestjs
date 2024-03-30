@@ -1,18 +1,21 @@
 import { searchAgenciesByName, searchLocation } from '@/apis/realEstateApis'
-import { IconArrowLeft, IconSearch } from '@/assets/icons'
+import { IconArrowLeft, IconDeleteCircle, IconSearch } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Button, Divider, Flex, IconButton, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { isEmpty } from 'lodash-es'
 import Link from 'next/link'
-import { useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
 import AgencyCard from '../real-estates/AgencyCard'
 
 function SearchBar() {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
+  const pathname = usePathname()
 
   const deferredQuery = useDeferredValue(query)
 
@@ -30,6 +33,10 @@ function SearchBar() {
     getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 15 }),
     enabled: deferredQuery !== '',
   })
+
+  useEffect(() => {
+    setIsFocused(false)
+  }, [pathname])
 
   const agencyData = useMemo(
     () => agencyPaginatedResult?.pages.flatMap((page) => page.results) ?? [],
@@ -70,19 +77,32 @@ function SearchBar() {
           onChange={(e) => setQuery(e.target.value)}
           zIndex={200}
         />
-        <Button flexShrink={0} width={12} height={12} variant="none" aria-label="search">
-          {<IconSearch width={24} height={24} color={Colors.indigo[600]} />}
-        </Button>
+        <Flex align="center">
+          {!isEmpty(deferredQuery) && (
+            <Button flexShrink={0} width={12} height={12} variant="none" aria-label="search">
+              {
+                <IconDeleteCircle
+                  color={Colors.gray[400]}
+                  width={24}
+                  height={24}
+                  onClick={() => setQuery('')}
+                />
+              }
+            </Button>
+          )}
+          <Button flexShrink={0} width={12} height={12} variant="none" aria-label="search">
+            {<IconSearch width={24} height={24} color={Colors.indigo[600]} />}
+          </Button>
+        </Flex>
       </Flex>
       <Divider height="1px" bgColor={Colors.indigo[600]} />
       {isFocused && (
         <Box
-          position="fixed"
+          position="absolute"
           top="108px"
           maxWidth={480}
           marginX="auto"
           bottom="80px"
-          zIndex={200}
           width="100%"
           bgColor={Colors.white}
         >
