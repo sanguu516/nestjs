@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import CustomButton from './CustomButton'
-import Chip from './Chip'
-import Rating from './Rating'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { type GetReviewResponse } from '@/apis/reviewApis'
+import { ImageUser } from '@/assets/icons'
+import { KEYWORD_ICONS } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { ImageUser } from '@/assets/icons'
-import { type GetReviewResponse } from '@/apis/reviewApis'
-import { KEYWORD_ICONS } from '@/constants'
+import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
+import { useState } from 'react'
+import Chip from './Chip'
+import CustomButton from './CustomButton'
+import Rating from './Rating'
 
-type ReviewProps = Pick<GetReviewResponse, 'user' | 'rating' | 'content' | 'user_keywords'>
+type ReviewProps = BoxProps &
+  Pick<GetReviewResponse, 'user' | 'rating' | 'content' | 'user_keywords'>
 
-export default function Review({ user, rating, content, user_keywords }: ReviewProps) {
+export default function Review({ user, rating, content, user_keywords, ...boxProps }: ReviewProps) {
   const [showMoreReviews, setShowMoreReviews] = useState<boolean>(false)
   const [showMoreKeywords, setShowMoreKeywords] = useState<boolean>(false)
 
@@ -35,6 +36,7 @@ export default function Review({ user, rating, content, user_keywords }: ReviewP
       bg={Colors.white}
       borderBottom="1px solid"
       borderColor={Colors.gray[300]}
+      {...boxProps}
     >
       <Flex className="user-rating">
         <ImageUser width="1.5rem" height="1.5rem" />

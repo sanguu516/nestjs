@@ -10,4 +10,5 @@ export const QueryKeys = {
   agenciesById: (id: number) => [`agenciesById`, id],
   keywordAboutReview: [`keyword`],
   reviewsAboutAgency: (agencyId: number) => ['reviewsAboutAgency', agencyId],
+  getTrendingReviews: 'getTrendingReviews',
 } as const

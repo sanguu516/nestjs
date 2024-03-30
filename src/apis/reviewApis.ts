@@ -1,5 +1,5 @@
-import fetchHandler from './fetchHandler'
 import { type User } from './authApis'
+import fetchHandler from './fetchHandler'
 import { type RealEstateResponse } from './realEstateApis'
 
 interface KeywordData {
@@ -62,6 +62,12 @@ interface GetReviewsResponse {
   next_page: number | null
   previous_page: number | null
   results: GetReviewResponse[]
+}
+
+export async function getTrendingReviews(): Promise<GetReviewsResponse> {
+  return fetchHandler('review/agency-review/review/', {
+    method: 'GET',
+  })
 }
 
 // 하나의 중개사무소에 대한 리뷰 데이터
