@@ -44,7 +44,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   const router = useRouter()
 
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
-    queryKey: QueryKeys.reviewsAboutAgency(Number(agency.id)),
+    queryKey: QueryKeys.reviewsAboutAgency(agency.id),
     queryFn: ({ pageParam }) =>
       getAgencyReivewsData({ agench_id: agency.id, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 10 },
@@ -57,7 +57,6 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   )
 
   const handleCreateReviewBtn = () => {
-    // void router.push(`/reviews/new/${agency.id}/?n=${agency.name}`)
     void router.push(`/reviews/new/${agency.id}`)
   }
 
