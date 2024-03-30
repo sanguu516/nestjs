@@ -22,16 +22,20 @@ interface OnClicks {
 }
 
 interface IconProps {
+  type: string
   isInvalid: boolean
   isSensitive: boolean
   isShow: boolean
   onClicks: OnClicks
 }
 
-function Icons({ isInvalid, isSensitive, isShow, onClicks }: IconProps) {
+function Icons({ type, isInvalid, isSensitive, isShow, onClicks }: IconProps) {
   let icon, handleOnClick
 
-  if (isInvalid) {
+  const isDangerIcon = isInvalid && type !== 'password'
+
+  // type이 비밀번호 확인이면 아이콘 느낌표 제거
+  if (isDangerIcon) {
     icon = <IconDangerCircle />
   } else if (isSensitive) {
     icon = isShow ? <IconShow /> : <IconHide />
@@ -47,12 +51,12 @@ function Icons({ isInvalid, isSensitive, isShow, onClicks }: IconProps) {
       icon={cloneElement(icon, {
         width: '1.5rem',
         height: '1.5rem',
-        color: isInvalid ? Colors.red[600] : Colors.gray[400],
+        color: isDangerIcon ? Colors.red[600] : Colors.gray[400],
       })}
       variant="tertiary"
-      isDisabled={isInvalid}
+      isDisabled={isDangerIcon}
       onClick={handleOnClick}
-      cursor={isInvalid ? 'default' : 'pointer'}
+      cursor={isDangerIcon ? 'default' : 'pointer'}
     ></CustomIConButton>
   )
 }
@@ -73,7 +77,8 @@ export default function CustomInput({
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (!(isSensitive && inputRef.current)) return
+    // if (!(isSensitive && inputRef.current)) return
+    if (!inputRef.current) return
     if (isShow) {
       inputRef.current.type = 'text'
     } else {
@@ -91,6 +96,7 @@ export default function CustomInput({
   }, [])
 
   const handleShowHide = () => {
+    console.log('showhide')
     setIsShow((prev) => !prev)
   }
 
@@ -162,6 +168,7 @@ export default function CustomInput({
         </Box>
         {!noIcon && (
           <Icons
+            type={rest.type ?? ''}
             isInvalid={isInvalid ?? false}
             isSensitive={isSensitive ?? false}
             isShow={isShow}

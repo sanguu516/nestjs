@@ -4,6 +4,7 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { Star } from '../Rating'
 import Review from '../Review'
 
@@ -30,7 +31,16 @@ function ReviewCard({ review }: Props) {
         borderBottom="none"
         p={0}
       />
-      <Flex width="100%" height="72px" bg={Colors.gray[100]} pl={2} py={4} borderRadius={8} gap={4}>
+      <Flex
+        width="100%"
+        height="72px"
+        bg={Colors.gray[100]}
+        pl={2}
+        py={4}
+        borderRadius={8}
+        gap={4}
+        cursor="pointer"
+      >
         <Flex gap={1}>
           <Star id={id} on size="24px" />
           <Text {...fontStyles.TitleMd}>{rating}</Text>

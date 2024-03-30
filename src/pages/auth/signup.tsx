@@ -62,9 +62,11 @@ export default function Signup() {
 
   const isValidatePassword = validateAuth.password(signupForm.password, signupForm.passwordConfirm)
   const isValidateEmail = validateAuth.email(signupForm.email)
+  const isValidateNickname = validateAuth.username(signupForm.username)
   const isInvalids: Record<string, boolean> = {
     email: !isValidateEmail,
     passwordConfirm: !isValidatePassword,
+    username: !isValidateNickname,
   }
   const isError = Object.values(isInvalids).some((e) => e)
 
@@ -76,14 +78,14 @@ export default function Signup() {
   const initializeValue = initSignupForm
 
   return (
-    <Box display="grid" placeItems="center" height="100%" mx={4}>
+    <Box display="grid" placeItems="center" alignContent="center" height="100%" mx={4}>
       <Heading
         as="h1"
         style={{ fontWeight: 800, fontSize: 24 }}
         noOfLines={2}
         whiteSpace="pre-wrap"
         textAlign="center"
-        mb={12}
+        mb={16}
       >
         {LOGIN_TITLE}
       </Heading>
@@ -102,6 +104,7 @@ export default function Signup() {
           variant="filled"
           size="lg"
           w="100%"
+          mt={14}
           onClick={handleSubmit}
           isDisabled={isBlank || isError}
         >

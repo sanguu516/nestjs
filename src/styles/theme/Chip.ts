@@ -2,12 +2,13 @@ import { type BoxProps } from '@chakra-ui/react'
 
 const outlined = {
   bg: 'white',
-  color: 'gray.800',
-  border: '1px',
-  borderColor: 'gray.300',
+  color: 'gray.600',
+  border: '1px solid',
+  borderColor: 'gray.400',
   disabled: {
-    border: '1px',
     color: 'gray.400',
+    border: '1px solid',
+    borderColor: 'gray.200',
   },
 }
 

@@ -93,14 +93,9 @@ function New() {
         }
         return e
       })
-      console.log(newKeywords)
       return { ...prev, user_keywords: newKeywords }
     })
   }
-
-  useEffect(() => {
-    // console.log(reviewForm)
-  }, [reviewForm])
 
   const handlePostButton: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     if (!agencyId) return
@@ -119,7 +114,12 @@ function New() {
       <NavHeader title={agencyData?.name ?? ''} />
       <Flex as="section" direction="column" align="center" gap="1.5rem" py={8}>
         <Flex direction="column" gap="0.5rem">
-          <Heading textAlign="center" whiteSpace="pre-wrap">
+          <Heading
+            textAlign="center"
+            whiteSpace="pre-wrap"
+            color={Colors.gray[800]}
+            sx={{ ...fontStyles.TitleLg }}
+          >
             {feedbackQuestion(user?.username ?? '')}
           </Heading>
           <Rating

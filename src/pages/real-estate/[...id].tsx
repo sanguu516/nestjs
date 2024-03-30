@@ -61,7 +61,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
     [reviewsResult]
   )
 
-  const handleCreateReviewBtn = () => {
+  const navigateToReviewPage = () => {
     void router.push(`/reviews/new/${agency.id}`)
   }
 
@@ -73,8 +73,8 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
           <Image
             style={{ minWidth: '100%' }}
             src={image}
-            width={300}
-            height={150}
+            width={360}
+            height={220}
             loading="lazy"
             placeholder="blur"
             blurDataURL={blurDataURL}
@@ -98,7 +98,9 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
                     <Text color={Colors.gray[400]} minW={200}>
                       {type}
                     </Text>
-                    <Text color={Colors.gray[600]}>{value?.toString()}</Text>
+                    <Text color={Colors.gray[600]} textAlign="end" whiteSpace="break-spaces">
+                      {value?.toString()}
+                    </Text>
                   </Flex>
                 )
               })}
@@ -109,10 +111,12 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
           className="review-recommendation"
           direction="column"
           align="center"
+          cursor="pointer"
           my={2}
           px={6}
           py={4}
           bg={Colors.indigo[100]}
+          onClick={navigateToReviewPage}
         >
           <Rating size="1.25rem" average_rating={0} showRating={false} mb={2} />
           <Text color={Colors.gray[800]} sx={{ ...fontStyles.TitleMd }}>
@@ -129,10 +133,10 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
               {reviewsResult?.pages[0]?.total_count}
             </Text>
           </Heading>
-          {reviewsData.map(({ user, rating, content, user_keywords }) => {
+          {reviewsData.map(({ id, user, rating, content, user_keywords }) => {
             return (
               <Review
-                key={user.id}
+                key={id}
                 user={user}
                 rating={rating}
                 content={content}
@@ -159,7 +163,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
           width="100%"
           mt={10}
           borderRadius="none"
-          onClick={handleCreateReviewBtn}
+          onClick={navigateToReviewPage}
         >
           리뷰쓰기
         </CustomButton>

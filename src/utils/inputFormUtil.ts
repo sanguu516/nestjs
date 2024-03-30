@@ -2,6 +2,7 @@ import { type ISignupForm } from '@/apis/authApis'
 
 const INVALID_EMAIL = '이메일 형식이 올바르지 않습니다.'
 const INVALID_PASSWORD = '입력한 비밀번호와 재입력한 비밀번호가 일치하지 않습니다.'
+const INVALID_NICKNAME = '닉네임은 한글/영문으로 작성해주세요.'
 
 interface Form {
   name: keyof ISignupForm
@@ -47,12 +48,13 @@ const passwordConfirmForm: GetForm = {
   isSensitive: true,
 }
 
-const usernameForm: GetForm = {
+const nicknameForm: GetForm = {
   name: 'username',
   type: 'text',
-  text: '이름',
-  placeholder: '이름',
-  isSensitive: true,
+  text: '닉네임',
+  placeholder: '닉네임',
+  supportingText: INVALID_NICKNAME,
+  isSensitive: false,
 }
 
 export const SIGNUP_FORM: GetForms = [
@@ -65,8 +67,8 @@ export const SIGNUP_FORM: GetForms = [
     forms: [passwordForm, passwordConfirmForm],
   },
   {
-    title: '개인정보',
-    forms: [usernameForm],
+    title: '닉네임',
+    forms: [nicknameForm],
   },
 ]
 

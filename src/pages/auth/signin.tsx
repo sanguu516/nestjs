@@ -72,7 +72,7 @@ export default function Signin() {
   })
 
   return (
-    <Box display="grid" alignItems="center" h="100%" px={4}>
+    <Box display="grid" alignItems="center" alignContent="center" h="100%" px={4}>
       <Heading
         as="h1"
         style={{ fontWeight: 800, fontSize: 24 }}
@@ -113,7 +113,7 @@ export default function Signin() {
           로그인 상태 유지
         </Checkbox>
       </FormControl>
-      <Flex justify="center" align="center">
+      <Flex justify="center" align="center" mt={14}>
         <Text color={Colors.gray[400]} sx={{ ...fontStyles.BodySm }}>
           아직 별별부동산 회원이 아니신가요?
         </Text>

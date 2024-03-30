@@ -1,33 +1,46 @@
 import { type GetReviewResponse } from '@/apis/reviewApis'
 import { ImageUser } from '@/assets/icons'
 import { KEYWORD_ICONS } from '@/constants'
+import { useEffect, useRef, MouseEventHandler, useState } from 'react'
+import CustomButton from './CustomButton'
+import Chip from './Chip'
+import Rating from './Rating'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
-import { MouseEventHandler, useState } from 'react'
-import Chip from './Chip'
-import CustomButton from './CustomButton'
-import Rating from './Rating'
 
 type ReviewProps = BoxProps &
   Pick<GetReviewResponse, 'user' | 'rating' | 'content' | 'user_keywords'>
 
+const MAX_CONTENT_HEIGHT = '4.7rem'
+const SHOW_KEYWORD_NUM = 2
+
 export default function Review({ user, rating, content, user_keywords, ...boxProps }: ReviewProps) {
-  const [showMoreReviews, setShowMoreReviews] = useState<boolean>(false)
+  const [needShowMore, setNeedShowMore] = useState<boolean>(false)
+  const [isOpenContent, setIsOpenContent] = useState<boolean>(false)
   const [showMoreKeywords, setShowMoreKeywords] = useState<boolean>(false)
+  const contentRef = useRef<HTMLParagraphElement>(null)
 
   const selectedKeywords = user_keywords.filter((e) => e.is_selected)
-  const firstKeyword = selectedKeywords[0]
 
   const handleReviewButton: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
-    setShowMoreReviews((prev) => !prev)
+    setIsOpenContent((prev) => !prev)
   }
 
   const handleKeywordButton: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
     setShowMoreKeywords((prev) => !prev)
   }
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const isTooLong = contentRef.current.scrollHeight > contentRef.current.clientHeight
+      setNeedShowMore(isTooLong)
+    }
+  }, [])
+
+  const maxTextHeight = isOpenContent ? 'fit-content' : MAX_CONTENT_HEIGHT
 
   return (
     <Box
@@ -53,64 +66,59 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
       </Flex>
       <Box className="review" my={2} ml={8}>
         <Text
+          ref={contentRef}
           className="content"
-          maxH={showMoreReviews ? 'fit-content' : '75px'}
+          maxH={maxTextHeight}
           color={Colors.gray[800]}
           sx={{ ...fontStyles.BodyMd }}
           overflow="hidden"
         >
           {content}
         </Text>
-        <CustomButton
-          variant="text"
-          w="2.625rem"
-          size="sm"
-          sx={{ ...fontStyles.LabelSm }}
-          onClick={handleReviewButton}
-        >
-          {showMoreReviews ? '접기' : '더보기'}
-        </CustomButton>
-        {firstKeyword && (
+        {needShowMore && (
+          <CustomButton
+            variant="text"
+            w="2.625rem"
+            size="sm"
+            sx={{ ...fontStyles.LabelSm }}
+            onClick={handleReviewButton}
+          >
+            {isOpenContent ? '접기' : '더보기'}
+          </CustomButton>
+        )}
+
+        {selectedKeywords.length && (
           <Flex mt={2} mb={6} flexWrap="wrap" gap={1}>
-            <Chip
-              size="sm"
-              w="fit-content"
-              variant="outlined"
-              unicode={KEYWORD_ICONS[firstKeyword.keyword.id]}
-            >
-              {firstKeyword.keyword.name}
-            </Chip>
-            {showMoreKeywords
-              ? selectedKeywords.map((e, i) => {
-                  return (
-                    i > 0 &&
-                    e.is_selected && (
-                      <Chip
-                        key={e.keyword.id}
-                        size="sm"
-                        w="fit-content"
-                        variant="outlined"
-                        unicode={KEYWORD_ICONS[e.keyword.id]}
-                      >
-                        {e.keyword.name}
-                      </Chip>
-                    )
-                  )
-                })
-              : selectedKeywords.length > 1 && (
-                  <CustomButton
-                    variant="outlined"
+            {selectedKeywords.map((e, i) => {
+              return (
+                (i + 1 <= SHOW_KEYWORD_NUM || (i + 1 > SHOW_KEYWORD_NUM && showMoreKeywords)) && (
+                  <Chip
+                    key={e?.keyword.id}
                     size="sm"
                     w="fit-content"
-                    h="1.75rem"
-                    p={2}
-                    color={Colors.gray[600]}
-                    sx={{ ...fontStyles.Caption }}
-                    onClick={handleKeywordButton}
+                    variant="outlined"
+                    unicode={KEYWORD_ICONS[e?.keyword.id]}
                   >
-                    {`+${selectedKeywords.length}`}
-                  </CustomButton>
-                )}
+                    {e?.keyword.name}
+                  </Chip>
+                )
+              )
+            })}
+            {!showMoreKeywords && selectedKeywords.length > SHOW_KEYWORD_NUM && (
+              <CustomButton
+                variant="outlined"
+                size="sm"
+                w="fit-content"
+                h="1.75rem"
+                p={2}
+                borderColor={Colors.gray[400]}
+                color={Colors.gray[600]}
+                sx={{ ...fontStyles.Caption }}
+                onClick={handleKeywordButton}
+              >
+                {`+${selectedKeywords.length - SHOW_KEYWORD_NUM}`}
+              </CustomButton>
+            )}
           </Flex>
         )}
       </Box>
