@@ -1,9 +1,9 @@
 import { searchAgenciesByName, searchLocation } from '@/apis/realEstateApis'
-import { IconSearch } from '@/assets/icons'
+import { IconArrowLeft, IconSearch } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
-import { Box, Button, Divider, Flex, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, IconButton, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useCallback, useDeferredValue, useMemo, useState } from 'react'
@@ -13,6 +13,7 @@ import AgencyCard from '../real-estates/AgencyCard'
 function SearchBar() {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
+
   const deferredQuery = useDeferredValue(query)
 
   const { data: locationData } = useQuery({
@@ -47,22 +48,29 @@ function SearchBar() {
   return (
     <>
       <Flex height="48px" align="center">
+        {isFocused && (
+          <IconButton
+            onClick={() => setIsFocused(false)}
+            flexShrink={0}
+            variant="none"
+            aria-label="back"
+            width="48px"
+            height="48px"
+          >
+            <IconArrowLeft width={24} height={24} />
+          </IconButton>
+        )}
         <Input
           variant="none"
           onFocus={() => {
             setIsFocused(true)
-          }}
-          onBlur={() => {
-            setTimeout(() => {
-              setIsFocused(false)
-            }, 50)
           }}
           placeholder="지역, 중개인명, 중개사무소명"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           zIndex={200}
         />
-        <Button width={12} height={12} variant="none" aria-label="search">
+        <Button flexShrink={0} width={12} height={12} variant="none" aria-label="search">
           {<IconSearch width={24} height={24} color={Colors.indigo[600]} />}
         </Button>
       </Flex>
@@ -93,6 +101,7 @@ function SearchBar() {
                       as={Link}
                       onClick={(e) => {
                         e.stopPropagation()
+                        setIsFocused(false)
                       }}
                       href={`/real-estates?lat=${result.address_point.lat}&lon=${result.address_point.lon}`}
                       key={result.id}
