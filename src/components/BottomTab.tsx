@@ -35,8 +35,6 @@ export default function BottomTab({ ...props }: BottomTabProps) {
   return (
     <Flex
       as="nav"
-      pos="fixed"
-      bottom={0}
       justify="space-between"
       align="center"
       w="100%"

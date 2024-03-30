@@ -18,7 +18,6 @@ export default function InfiniteScroll(props: Props) {
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0] && entries[0].intersectionRatio > 0) {
-        console.log('fetchMore')
         void onLoadMore()
       }
     })
@@ -28,10 +27,10 @@ export default function InfiniteScroll(props: Props) {
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, [onLoadMore])
 
   return (
-    <Box height="100%" overflow="scroll">
+    <Box height="100%" overflowY="auto">
       {children}
       <Box ref={bottomRef} />
     </Box>

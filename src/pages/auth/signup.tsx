@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useCallback, useState } from 'react'
-import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
-import CustomInput from '@/components/CustomInput'
+import { type ISignupForm, type SignInResponse, signUp } from '@/apis/authApis'
 import CustomButton from '@/components/CustomButton'
-import { StorageKey } from '@/utils/localStorageUtil'
-import { validateAuth } from '@/utils/validate'
-import { type SignInResponse, type ISignupForm, signUp } from '@/apis/authApis'
+import CustomInput from '@/components/CustomInput'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { SIGNUP_FORM, type SignFormList } from '@/utils/inputFormUtil'
+import { StorageKey } from '@/utils/localStorageUtil'
+import { validateAuth } from '@/utils/validate'
+import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
+import React, { useCallback, useState } from 'react'
 
 const LOGIN_TITLE = '회원정보를 입력해주세요!'
 
@@ -63,7 +63,7 @@ export default function Signup() {
   const initializeValue = initSignupForm
 
   return (
-    <Box display="grid" placeItems="center" height="100%">
+    <Box display="grid" placeItems="center" height="100%" mx={4}>
       <Heading
         as="h1"
         style={{ fontWeight: 800, fontSize: 24 }}

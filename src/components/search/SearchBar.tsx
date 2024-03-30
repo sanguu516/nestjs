@@ -6,7 +6,7 @@ import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Button, Divider, Flex, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
-import { useDeferredValue, useMemo, useState } from 'react'
+import { useCallback, useDeferredValue, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
 import AgencyCard from '../real-estates/AgencyCard'
 
@@ -25,8 +25,8 @@ function SearchBar() {
     queryKey: QueryKeys.agenciesByQuery(deferredQuery),
     queryFn: ({ pageParam }) =>
       searchAgenciesByName({ name: deferredQuery, pageParams: pageParam }),
-    initialPageParam: { page: 1, page_size: 10 },
-    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
+    initialPageParam: { page: 1, page_size: 15 },
+    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 15 }),
     enabled: deferredQuery !== '',
   })
 
@@ -37,6 +37,12 @@ function SearchBar() {
 
   const locationCount = locationData?.total_count
   const agencyCount = agencyPaginatedResult?.pages?.[0]?.total_count
+
+  const handleLoadMoreAgencies = useCallback(() => {
+    if (deferredQuery !== '') {
+      void fetchMoreAgencies()
+    }
+  }, [deferredQuery, fetchMoreAgencies])
 
   return (
     <>
@@ -72,13 +78,7 @@ function SearchBar() {
           width="100%"
           bgColor={Colors.white}
         >
-          <InfiniteScroll
-            onLoadMore={() => {
-              if (deferredQuery !== '') {
-                void fetchMoreAgencies()
-              }
-            }}
-          >
+          <InfiniteScroll onLoadMore={handleLoadMoreAgencies}>
             <VStack width="100%" px={4}>
               {locationCount !== undefined && locationCount > 0 && (
                 <Box width="100%">

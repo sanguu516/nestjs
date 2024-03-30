@@ -66,7 +66,7 @@ export default function RealEstate() {
   const FabIcon = isMapMode ? IconCategory : IconLocation
 
   return (
-    <>
+    <Box position="absolute" top={0} left={0} right={0} bottom={0}>
       {isMapMode ? (
         <KakaoMap
           agencies={agencies}
@@ -80,7 +80,7 @@ export default function RealEstate() {
       ) : (
         <AgencyListView agencies={agencies} />
       )}
-      <Box position="fixed" left={0} bottom="120px" width="100%" zIndex={200}>
+      <Box position="absolute" left={0} bottom="40px" width="100%" zIndex={200}>
         {selectedAgency ? (
           <Box
             mx={4}
@@ -114,6 +114,6 @@ export default function RealEstate() {
           </Flex>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
