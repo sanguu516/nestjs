@@ -77,6 +77,7 @@ export async function searchAgenciesByName(params: {
 }): Promise<SearchAgenciesResponse> {
   const { name, pageParams } = params
 
+  console.log('searchAgenciesByName', name, pageParams)
   return searchAgencies({
     name_in: name,
     ...(pageParams ?? {}),

@@ -28,10 +28,10 @@ export default function InfiniteScroll(props: Props) {
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, [onLoadMore])
 
   return (
-    <Box height="100%" overflow="scroll">
+    <Box height="100%" overflowY="auto">
       {children}
       <Box ref={bottomRef} />
     </Box>
