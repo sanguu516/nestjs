@@ -3,11 +3,12 @@ import Chip from '@/components/Chip'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
+import withAuth from '@/components/withAuth'
 import { KEYWORD_ICONS } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { DEBOUNCE_DELAY } from '@/utils/debounce'
-import { Box, Flex, Heading, Textarea, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Text, Textarea } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
 import { useCallback, useState } from 'react'
 
@@ -26,7 +27,7 @@ const initReviewForm = (agencyId: number, keywordLength: number) => ({
   })),
 })
 
-export default function New() {
+function New() {
   const agecyId = 0
   const keywordLength = 0
   const [reviewForm, setReviewForm] = useState<PostReviewParmas>(
@@ -117,3 +118,5 @@ export default function New() {
     </Box>
   )
 }
+
+export default withAuth(New)

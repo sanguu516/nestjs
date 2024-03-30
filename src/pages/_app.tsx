@@ -36,7 +36,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     }
   }, [])
 
-  console.log('user', user)
   const pathname = usePathname()
   const needFixedLayout = ['/', '/real-estates', '/my-page'].includes(pathname)
 
