@@ -4,7 +4,7 @@ import { KEYWORD_ICONS } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
-import { useState } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import Chip from './Chip'
 import CustomButton from './CustomButton'
 import Rating from './Rating'
@@ -19,11 +19,13 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
   const selectedKeywords = user_keywords.filter((e) => e.is_selected)
   const firstKeyword = selectedKeywords[0]
 
-  const handleReviewButton = () => {
+  const handleReviewButton: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation()
     setShowMoreReviews((prev) => !prev)
   }
 
-  const handleKeywordButton = () => {
+  const handleKeywordButton: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation()
     setShowMoreKeywords((prev) => !prev)
   }
 

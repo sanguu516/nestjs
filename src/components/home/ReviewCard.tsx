@@ -3,7 +3,7 @@ import { IconArrowRight3 } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Star } from '../Rating'
 import Review from '../Review'
 
@@ -12,10 +12,16 @@ interface Props {
 }
 
 function ReviewCard({ review }: Props) {
+  const router = useRouter()
   const { rating, user, user_keywords, content, agency, id } = review
 
   return (
-    <Box as={Link} href={`/real-estate/${agency.id}`} key={id} width="100%">
+    <Box
+      as="div"
+      onClick={() => void router.push(`/real-estate/${agency.id}`)}
+      key={id}
+      width="100%"
+    >
       <Review
         user={user}
         rating={rating}
