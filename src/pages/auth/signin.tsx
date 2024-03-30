@@ -34,7 +34,13 @@ export default function Signin() {
         localStorage.setItem(StorageKey.aceessToken, res.access)
         localStorage.setItem(StorageKey.refreshToken, res.refresh)
         setUser(res.user)
-        void router.replace('/')
+
+        const { redirect } = router.query
+        const redirectPath =
+          redirect && typeof redirect === 'string' ? decodeURIComponent(redirect) : '/'
+
+        console.log(redirectPath)
+        void router.replace(redirectPath)
       },
       onError: (e) => {
         console.error(e)
