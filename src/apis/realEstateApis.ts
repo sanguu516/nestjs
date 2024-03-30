@@ -17,6 +17,10 @@ export interface RealEstateResponse {
   address_detail: string
   address_point: Coordinates
   average_rating: number
+  images: {
+    original_image: string
+    thumbnail_image: string
+  }[]
   // open_at: `${number}-${number}-${number}`
   // status: number
   // kakao_map_place_url?: string
@@ -44,6 +48,10 @@ export type SearchAgenciesResult = {
     lat: number
   }
   average_rating: number | null
+  images: {
+    original_image: string
+    thumbnail_image: string
+  }[]
 }
 
 export type SearchAgenciesResponse = PaginatedResponse<SearchAgenciesResult>

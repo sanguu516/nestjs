@@ -1,19 +1,21 @@
-import { useMemo } from 'react'
-import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
-import { useRouter } from 'next/router'
-import Image from 'next/image'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
-import NavHeader from '@/components/NavHeader'
-import Review from '@/components/Review'
-import Rating from '@/components/Rating'
-import CustomButton from '@/components/CustomButton'
-import { Colors } from '@/styles/colors'
-import { fontStyles } from '@/styles/font'
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { getAgencyReivewsData } from '@/apis/reviewApis'
-import { QueryKeys } from '@/utils/queryUtil'
+import CustomButton from '@/components/CustomButton'
+import NavHeader from '@/components/NavHeader'
+import Rating from '@/components/Rating'
+import Review from '@/components/Review'
 import { blurDataURL } from '@/constants'
+import { Colors } from '@/styles/colors'
+import { fontStyles } from '@/styles/font'
+import { getDummyAgencyImage } from '@/utils/imageUtil'
+import { QueryKeys } from '@/utils/queryUtil'
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { isEmpty } from 'lodash-es'
+import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
 
@@ -40,8 +42,11 @@ export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse
 }
 
 export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { name, average_rating } = agency
+  const { name, average_rating, images, id } = agency
   const router = useRouter()
+
+  const image =
+    images.find(($0) => !isEmpty($0.original_image))?.original_image ?? getDummyAgencyImage(id)
 
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
     queryKey: QueryKeys.reviewsAboutAgency(agency.id),
@@ -67,7 +72,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
         <Box as="section" className="info" bg={Colors.white}>
           <Image
             style={{ minWidth: '100%' }}
-            src={'/images/placeholder-image.png'}
+            src={image}
             width={300}
             height={150}
             loading="lazy"

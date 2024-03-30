@@ -1,7 +1,9 @@
 import type { SearchAgenciesResult } from '@/apis/realEstateApis'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
+import { getDummyAgencyImage } from '@/utils/imageUtil'
 import { Box, Flex, Text, type SpaceProps } from '@chakra-ui/react'
+import { isEmpty } from 'lodash-es'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -10,17 +12,20 @@ interface Props extends SpaceProps {
 }
 
 export default function AgencyCard({ agency, ...rest }: Props) {
-  const { name, id, representative_name, address_short, average_rating } = agency
+  const { name, id, representative_name, address_short, average_rating, images } = agency
+  const image =
+    images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? getDummyAgencyImage(id)
 
   return (
     <Box as={Link} href={`/real-estate/${id}`} width="100%" {...rest}>
       <Flex height={90} alignItems="center" gap={3} bgColor={Colors.white}>
         <Image
           alt={name}
-          src="https://dummyimage.com/120x90/000/fff"
+          src={image}
           width={120}
           height={90}
-          style={{ borderRadius: 8, flexShrink: 0 }}
+          loading="lazy"
+          style={{ borderRadius: 8, flexShrink: 0, width: '120px', height: '90px' }}
         />
         <Box overflow="hidden">
           <Flex align="center" gap={1}>

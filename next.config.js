@@ -18,7 +18,12 @@ const config = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['dummyimage.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.*',
+      },
+    ],
   },
   headers: async () => {
     return [
