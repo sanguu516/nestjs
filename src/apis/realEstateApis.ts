@@ -23,8 +23,8 @@ export interface RealEstateResponse {
   // homepage: string | null
 }
 
-export async function getRealEstateData(id: number) {
-  return fetchHandler(`agency/agency/${id}/`) as Promise<RealEstateResponse>
+export async function getRealEstateData(id: number): Promise<RealEstateResponse> {
+  return fetchHandler(`agency/agency/${id}/`)
 }
 
 interface SearchAgenciesParams {

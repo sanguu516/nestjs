@@ -18,9 +18,12 @@ interface StarProps {
   id: number
   on: boolean
   size: string
+  isEvaluatable?: boolean
 }
 
-function Star({ id, on, size }: StarProps) {
+function Star({ id, on, size, isEvaluatable = false }: StarProps) {
+  const cursor = isEvaluatable ? 'pointer' : 'default'
+
   return on ? (
     <ImageEnabledStar
       data-id={id}
@@ -28,9 +31,10 @@ function Star({ id, on, size }: StarProps) {
       // style={{ zIndex: -1, position: 'relative' }}
       width={size}
       height={size}
+      cursor={cursor}
     />
   ) : (
-    <ImageDisabledStar data-id={id} width={size} height={size} />
+    <ImageDisabledStar data-id={id} width={size} height={size} cursor={cursor} />
   )
 }
 
@@ -58,7 +62,7 @@ export default function Rating({
     <Flex direction={isEvaluatable ? 'column' : 'row'} align="center">
       <Flex {...rest} onClick={isEvaluatable ? handleStarClick : undefined}>
         {Array.from({ length: RATING_NUM }).map((_, i) => {
-          return <Star key={i} id={i + 1} on={i < value} size={size} />
+          return <Star key={i} id={i + 1} on={i < value} size={size} isEvaluatable />
         })}
       </Flex>
       {showRating &&

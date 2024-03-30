@@ -1,38 +1,81 @@
-import { DUMMY_KEYWORD, type PostReviewParmas } from '@/apis/reviewApis'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { debounce } from 'lodash-es'
 import Chip from '@/components/Chip'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
-import withAuth from '@/components/withAuth'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  getKeywordData,
+  postReview,
+  type PostReviewResponse,
+  type PostReviewParmas,
+} from '@/apis/reviewApis'
+import { DEBOUNCE_DELAY } from '@/utils/debounce'
+import { QueryKeys } from '@/utils/queryUtil'
 import { KEYWORD_ICONS } from '@/constants'
+import { Box, Flex, Heading, Textarea, Text } from '@chakra-ui/react'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { DEBOUNCE_DELAY } from '@/utils/debounce'
-import { Box, Flex, Heading, Text, Textarea } from '@chakra-ui/react'
-import { debounce } from 'lodash-es'
-import { useCallback, useState } from 'react'
+import { useRouter } from 'next/router'
+import { UserContext } from '@/pages/_app'
+import { getRealEstateData } from '@/apis/realEstateApis'
 
 const feedbackQuestion = (userName: string) => `${userName} 님,\n 공인중개사는 어떠셨어요?`
 const REVIEW_PLACEHOLDER =
   '작성된 리뷰는 다른 사용자와, 공인중개사님이 볼 수 있어요. 배려를 위해 공인중개사님에 대한 욕설, 비방, 명예훼손성 표현은 사용을 지양해주세요.'
 const KEYWORD_SELECT_MESSAGE = '공인중개사님과 어울리는\n키워드를 골라주시겠어요?'
 const MAX_STR_NUM = 500
-const initReviewForm = (agencyId: number, keywordLength: number) => ({
-  agency: agencyId,
+const initReviewForm = {
+  agency: 0,
   rating: 0,
   content: '',
-  user_keywords: Array.from({ length: keywordLength }).map((_, i) => ({
-    keyword: i + 1,
-    is_selected: false,
-  })),
-})
+  user_keywords: [],
+}
 
-function New() {
-  const agecyId = 0
-  const keywordLength = 0
-  const [reviewForm, setReviewForm] = useState<PostReviewParmas>(
-    initReviewForm(agecyId, keywordLength)
-  )
+export default function New() {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+
+  const { id } = router.query || {}
+  const agencyId = Number(id)
+
+  const { data: agencyData } = useQuery({
+    queryKey: QueryKeys.agenciesById(agencyId),
+    queryFn: () => getRealEstateData(agencyId),
+    enabled: !isNaN(agencyId),
+  })
+
+  // const [agencyId, agencyName] = Array.isArray(agency) ? agency : [agency]
+
+  const { data: keywordData } = useQuery({
+    queryKey: QueryKeys.keywordAboutReview,
+    queryFn: getKeywordData,
+  })
+
+  const { mutate: postMutate } = useMutation<PostReviewResponse, Error, PostReviewParmas>({
+    mutationFn: postReview,
+  })
+
+  const [reviewForm, setReviewForm] = useState<PostReviewParmas>(initReviewForm)
+  const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    if (agencyId) {
+      setReviewForm((prev) => ({ ...prev, agency: Number(agencyId) }))
+    }
+  }, [agencyId])
+
+  useEffect(() => {
+    if (keywordData) {
+      const initKeywords = Array.from({ length: keywordData.length }).map((_, i) => ({
+        keyword: i + 1,
+        is_selected: false,
+      }))
+
+      setReviewForm((prev) => ({ ...prev, user_keywords: initKeywords }))
+    }
+  }, [keywordData])
 
   const handleRating = (rating: number) => {
     setReviewForm((prev) => ({ ...prev, rating }))
@@ -43,7 +86,6 @@ function New() {
   }, [])
 
   const handleKeyword = (id: number) => {
-    console.log(id)
     setReviewForm((prev) => {
       const newKeywords = prev.user_keywords.map((e) => {
         if (e.keyword === id) {
@@ -51,23 +93,34 @@ function New() {
         }
         return e
       })
-
+      console.log(newKeywords)
       return { ...prev, user_keywords: newKeywords }
     })
   }
 
+  useEffect(() => {
+    // console.log(reviewForm)
+  }, [reviewForm])
+
   const handlePostButton: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    //reviewForm 전송
-    //reviewForm.agency(공인 중개사 id)
+    if (!agencyId) return
+    postMutate(reviewForm, {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: QueryKeys.reviewsAboutAgency(Number(agencyId)),
+        })
+        void router.replace(`/issues/${Number(agencyId)}`)
+      },
+    })
   }
 
   return (
     <Box mx={4}>
-      <NavHeader title="하모니 공인중개사" />
+      <NavHeader title={agencyData?.name ?? ''} />
       <Flex as="section" direction="column" align="center" gap="1.5rem" py={8}>
         <Flex direction="column" gap="0.5rem">
           <Heading textAlign="center" whiteSpace="pre-wrap">
-            {feedbackQuestion('별스런동산26')}
+            {feedbackQuestion(user?.username ?? '')}
           </Heading>
           <Rating
             size="2.75rem"
@@ -94,7 +147,7 @@ function New() {
           {KEYWORD_SELECT_MESSAGE}
         </Heading>
         <Flex flexWrap="wrap" gap="0.5rem">
-          {DUMMY_KEYWORD.map((e) => {
+          {keywordData?.map((e) => {
             return (
               <Chip
                 key={e.id}
@@ -118,5 +171,3 @@ function New() {
     </Box>
   )
 }
-
-export default withAuth(New)

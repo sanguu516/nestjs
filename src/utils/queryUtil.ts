@@ -7,4 +7,7 @@ export const QueryKeys = {
   ],
   searchLocation: (query: string) => [`searchLocation`, query],
   agenciesByQuery: (query: string) => [`agenciesByQuery`, query],
+  agenciesById: (id: number) => [`agenciesById`, id],
+  keywordAboutReview: [`keyword`],
+  reviewsAboutAgency: (agencyId: number) => ['reviewsAboutAgency', agencyId],
 } as const

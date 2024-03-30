@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import NavHeader from '@/components/NavHeader'
 import Review from '@/components/Review'
@@ -9,7 +11,8 @@ import CustomButton from '@/components/CustomButton'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
-import { DUMMY_DETAIL_DATA } from '@/apis/reviewApis'
+import { getAgencyReivewsData } from '@/apis/reviewApis'
+import { QueryKeys } from '@/utils/queryUtil'
 import { blurDataURL } from '@/constants'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
@@ -40,10 +43,22 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   const { name, average_rating } = agency
   const router = useRouter()
 
+  const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
+    queryKey: QueryKeys.reviewsAboutAgency(Number(agency.id)),
+    queryFn: ({ pageParam }) =>
+      getAgencyReivewsData({ agench_id: agency.id, pageParams: pageParam }),
+    initialPageParam: { page: 1, page_size: 10 },
+    getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
+  })
+
+  const reviewsData = useMemo(
+    () => reviewsResult?.pages.flatMap((p) => p.results) ?? [],
+    [reviewsResult]
+  )
+
   const handleCreateReviewBtn = () => {
-    void router.push('/reviews/new', {
-      query: agency.name,
-    })
+    // void router.push(`/reviews/new/${agency.id}/?n=${agency.name}`)
+    void router.push(`/reviews/new/${agency.id}`)
   }
 
   return (
@@ -107,10 +122,10 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
           <Heading as="h4" color={Colors.gray[800]} sx={{ ...fontStyles.TitleMd }} my={6} px={4}>
             직접 방문 후기
             <Text as="span" color={Colors.gray[400]} sx={{ ...fontStyles.TitleSm }} ml={2}>
-              {DUMMY_DETAIL_DATA.results.length}
+              {reviewsResult?.pages[0]?.total_count}
             </Text>
           </Heading>
-          {DUMMY_DETAIL_DATA.results.map(({ user, rating, content, user_keywords }) => {
+          {reviewsData.map(({ user, rating, content, user_keywords }) => {
             return (
               <Review
                 key={user.id}
@@ -129,6 +144,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
             px={4}
             py={2}
             borderRadius="none"
+            onClick={() => fetchMoreReviews}
           >
             더보기
           </CustomButton>
