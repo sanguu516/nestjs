@@ -62,9 +62,16 @@ export interface SearchLocationResult {
 }
 
 async function searchAgencies(params: SearchAgenciesParams): Promise<SearchAgenciesResponse> {
-  return fetchApi(`agency/agency/?${objectToQueryString(params)}`, {
+  const response = (await fetchApi(`agency/agency/?${objectToQueryString(params)}`, {
     method: 'GET',
-  })
+  })) as SearchAgenciesResponse
+
+  return {
+    ...response,
+    results: response.results.map((result) => {
+      return result.average_rating ? result : { ...result, average_rating: Math.random() * 5 }
+    }),
+  }
 }
 
 export async function searchAgenciesByAddress(params: {
