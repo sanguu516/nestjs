@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ISignupForm, type SignInResponse, signUp } from '@/apis/authApis'
-import { ApiError } from '@/apis/fetchHandler'
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { SIGNUP_FORM, type SignFormList } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
+import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
-import { Box, FormControl, FormLabel, Heading, useToast } from '@chakra-ui/react'
+import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useState } from 'react'
@@ -31,7 +31,7 @@ export default function Signup() {
   })
   const router = useRouter()
   const { setUser } = useContext(UserContext)
-  const toast = useToast()
+  const toast = useCustomToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -47,21 +47,9 @@ export default function Signup() {
 
         void router.replace(redirectPath)
       },
-      onError: (e) => {
-        let detail = ''
-        if (e instanceof ApiError && e.extra) {
-          const details = Object.values(e.extra).map((value) => {
-            if (typeof value === 'string') {
-              return value
-            } else if (Array.isArray(value) && value[0] && typeof value[0] === 'string') {
-              return value[0]
-            }
-          })
-          detail = details[0] ?? ''
-        }
+      onError: () => {
         toast({
-          description:
-            detail || e.message || '알 수 없는 에러가 발생하였습니다. 다시 시도해 주세요.',
+          title: '비밀번호는 8~20자의 영문자/숫자 조합으로 입력해주세요.',
           status: 'error',
         })
       },

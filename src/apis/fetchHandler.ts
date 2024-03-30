@@ -2,16 +2,6 @@ import { StorageKey } from '@/utils/localStorageUtil'
 
 const baseUrl = process.env.NEXT_PUBLIC_REA_API_URL
 
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly extra?: Record<string, unknown>
-  ) {
-    super(message)
-    this.name = 'ApiError'
-  }
-}
-
 export class NeedSignInError extends Error {
   constructor() {
     super('Need to sign in')
@@ -66,11 +56,8 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
       throw new NeedSignInError()
     }
   }
-  console.log('response json', json)
+
   // TODO: known Error에 대한 처리 좀 더 고민 필요.
-  if (json.code) {
-    throw new ApiError(json.message, json.extra)
-  }
   throw new Error(json.message ?? 'Unknown error occurred')
 }
 
