@@ -1,8 +1,10 @@
+import { signOut } from '@/apis/authApis'
 import { ImageUser } from '@/assets/icons'
 import CustomButton from '@/components/CustomButton'
 import withAuth from '@/components/withAuth'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
+import { StorageKey } from '@/utils/localStorageUtil'
 import { Box, Button, Center, Flex, Input, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
@@ -50,16 +52,26 @@ function InfoRow({
 }
 
 function MyPage() {
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
   if (!user) {
-    void router.replace('/')
     return (
       <Center>
         <Spinner />
       </Center>
     )
+  }
+
+  const handleSignout = async () => {
+    try {
+      await signOut()
+    } finally {
+      localStorage.removeItem(StorageKey.aceessToken)
+      localStorage.removeItem(StorageKey.refreshToken)
+      setUser(null)
+      void router.replace('/')
+    }
   }
 
   const { username, email } = user
@@ -77,16 +89,22 @@ function MyPage() {
             <Text as="span">{' 님!'}</Text>
           </div>
         </VStack>
-        <VStack width="100%">
+        <VStack width="100%" gap={6}>
           <InfoRow label="닉네임" value={username} buttonText="중복확인" />
           <InfoRow label="이메일" value={email} buttonText="연결완료" />
         </VStack>
         <VStack width="100%" gap={6}>
           <Flex justify="flex-end" width="100%">
-            <Button variant="text">로그아웃</Button>
+            <Button onClick={handleSignout} variant="text">
+              로그아웃
+            </Button>
           </Flex>
-
-          <CustomButton width="100%" variant="filled" size="lg">
+          <CustomButton
+            width="100%"
+            variant="filled"
+            size="lg"
+            onClick={() => confirm('내 정보 수정을 제공하고 있지 않습니다')}
+          >
             수정하기
           </CustomButton>
         </VStack>
