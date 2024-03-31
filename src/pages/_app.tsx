@@ -15,6 +15,7 @@ import { Colors } from '@/styles/colors'
 import '@/styles/globals.css'
 import { LocalStorageManager, StorageKey } from '@/utils/localStorageUtil'
 import { Box } from '@chakra-ui/react'
+import Head from 'next/head'
 import { usePathname } from 'next/navigation'
 
 export const UserContext = createContext<{
@@ -44,6 +45,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <ChakraProvider resetCSS theme={reaTheme}>
+      <Head>
+        <title>별별부동산</title>
+      </Head>
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={{ user, setUser }}>
           <Box className={spoqaHanSans.className}>
