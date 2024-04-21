@@ -1,4 +1,8 @@
-import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
+import {
+  getRealEstateData,
+  searchAgenciesByName,
+  type RealEstateResponse,
+} from '@/apis/realEstateApis'
 import { getAgencyReivewsData } from '@/apis/reviewApis'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
@@ -11,8 +15,13 @@ import { getDummyAgencyImage } from '@/utils/imageUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash-es'
-import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
+import { isEmpty, range } from 'lodash-es'
+import {
+  GetStaticProps,
+  InferGetStaticPropsType,
+  type GetServerSideProps,
+  type InferGetServerSidePropsType,
+} from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -29,19 +38,40 @@ const INFO_KEY: InfoKey = {
   agency_number: '등록번호',
 }
 
-export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse }> = async (
-  context
-) => {
-  const id = Number(context?.params?.id?.[0])
+export async function getStaticPaths() {
+  const firstResult = await searchAgenciesByName({
+    name: '',
+  })
+
+  const { total_count } = firstResult
+  const fetchCount = Math.ceil(total_count / 500)
+  const promises = range(fetchCount).map((i) =>
+    searchAgenciesByName({ name: '', pageParams: { page: i + 1, page_size: 500 } })
+  )
+
+  const responses = await Promise.all(promises)
+  const paths = responses
+    .flatMap((r) => r.results)
+    .filter((agency) => agency.id)
+    .map((agency) => ({ params: { id: `${agency.id}` } }))
+
+  console.log('Generating paths: ', paths.length)
+  return { paths, fallback: false }
+}
+
+export const getStaticProps: GetStaticProps<{ agency: RealEstateResponse }> = async (context) => {
+  const id = Number(context?.params?.id)
   const data = await getRealEstateData(id)
+
   return {
     props: {
       agency: data,
+      fallback: false,
     },
   }
 }
 
-export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Detail({ agency }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { name, average_rating, images, id } = agency
   const router = useRouter()
 
