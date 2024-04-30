@@ -66,12 +66,7 @@ async function searchAgencies(params: SearchAgenciesParams): Promise<SearchAgenc
     method: 'GET',
   })) as SearchAgenciesResponse
 
-  return {
-    ...response,
-    results: response.results.map((result) => {
-      return result.average_rating ? result : { ...result, average_rating: Math.random() * 5 }
-    }),
-  }
+  return response
 }
 
 export async function searchAgenciesByAddress(params: {

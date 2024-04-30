@@ -1,7 +1,6 @@
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { getAgencyReivewsData } from '@/apis/reviewApis'
 import AgencyImageView from '@/components/agency-detail/AgencyImageView'
-import KakaoStaticMap from '@/components/agency-detail/KakaoStaticMap'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
@@ -9,8 +8,6 @@ import ShareButton from '@/components/agency-detail/ShareButton'
 import Review from '@/components/Review'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { getDummyAgencyImage } from '@/utils/imageUtil'
-import { convertLatLngToCoordinates } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -49,15 +46,12 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   const router = useRouter()
 
   const image =
-    images.find(($0) => !isEmpty($0.original_image))?.original_image ?? getDummyAgencyImage(id)
+    images.find(($0) => !isEmpty($0.original_image))?.original_image ?? '/placeholder-image.png'
 
   const shareData = {
     title: name,
     text: `별별부동산에서 ${name} 정보를 확인해 보세요.`,
-    image:
-      image.startsWith('/images/dummy') && typeof window !== 'undefined'
-        ? window.location.origin + image
-        : image,
+    image: typeof window !== 'undefined' ? window.location.origin + image : image,
   }
 
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({

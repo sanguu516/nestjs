@@ -1,7 +1,6 @@
 import type { SearchAgenciesResult } from '@/apis/realEstateApis'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { getDummyAgencyImage } from '@/utils/imageUtil'
 import { Box, Flex, Text, type SpaceProps } from '@chakra-ui/react'
 import { isEmpty } from 'lodash-es'
 import Image from 'next/image'
@@ -14,7 +13,7 @@ interface Props extends SpaceProps {
 export default function AgencyCard({ agency, ...rest }: Props) {
   const { name, id, representative_name, address_short, average_rating, images } = agency
   const image =
-    images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? getDummyAgencyImage(id)
+    images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? '/placeholder-image.png'
 
   return (
     <Box as={Link} href={`/real-estate/${id}`} width="100%" {...rest}>
