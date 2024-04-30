@@ -1,11 +1,18 @@
 import CustomIConButton from '@/components/CustomIconButton'
 import { IconArrowLeft } from '@/assets/icons'
-import { Grid, Heading } from '@chakra-ui/react'
+import { Flex, Grid, Heading } from '@chakra-ui/react'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { useRouter } from 'next/router'
+import { ReactElement } from 'react'
 
-export default function NavHeader({ title }: { title: string }) {
+export default function NavHeader({
+  title,
+  rightMenu,
+}: {
+  title: string
+  rightMenu?: ReactElement
+}) {
   const router = useRouter()
 
   return (
@@ -13,7 +20,7 @@ export default function NavHeader({ title }: { title: string }) {
       <CustomIConButton
         size="md"
         variant="tertiary"
-        icon={<IconArrowLeft color={Colors.gray[400]} />}
+        icon={<IconArrowLeft color={Colors.black} />}
         my={1}
         onClick={() => router.back()}
       />
@@ -25,6 +32,7 @@ export default function NavHeader({ title }: { title: string }) {
       >
         {title}
       </Heading>
+      <Flex justify="flex-end">{rightMenu}</Flex>
     </Grid>
   )
 }

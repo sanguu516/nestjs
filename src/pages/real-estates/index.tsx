@@ -57,7 +57,6 @@ export default function RealEstate() {
   }, [])
 
   const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse])
-
   const selectedAgency = useMemo(
     () => agencies.find((agency) => agency.id === selectedAgencyId),
     [agencies, selectedAgencyId]

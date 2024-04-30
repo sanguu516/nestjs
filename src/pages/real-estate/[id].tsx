@@ -1,19 +1,22 @@
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { getAgencyReivewsData } from '@/apis/reviewApis'
+import AgencyImageView from '@/components/agency-detail/AgencyImageView'
+import KakaoStaticMap from '@/components/agency-detail/KakaoStaticMap'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
+import ShareButton from '@/components/agency-detail/ShareButton'
 import Review from '@/components/Review'
-import { blurDataURL } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { getDummyAgencyImage } from '@/utils/imageUtil'
+import { convertLatLngToCoordinates } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'
 import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
-import Image from 'next/image'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -32,7 +35,7 @@ const INFO_KEY: InfoKey = {
 export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse }> = async (
   context
 ) => {
-  const id = Number(context?.params?.id?.[0])
+  const id = Number(context?.params?.id)
   const data = await getRealEstateData(id)
   return {
     props: {
@@ -47,6 +50,15 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
 
   const image =
     images.find(($0) => !isEmpty($0.original_image))?.original_image ?? getDummyAgencyImage(id)
+
+  const shareData = {
+    title: name,
+    text: `별별부동산에서 ${name} 정보를 확인해 보세요.`,
+    image:
+      image.startsWith('/images/dummy') && typeof window !== 'undefined'
+        ? window.location.origin + image
+        : image,
+  }
 
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
     queryKey: QueryKeys.reviewsAboutAgency(agency.id),
@@ -67,19 +79,17 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
 
   return (
     <>
-      <NavHeader title={agency.name} />
+      <NavHeader title={agency.name} rightMenu={<ShareButton shareData={shareData} />} />
+      <Head>
+        <title>{shareData.title}</title>
+        <meta name="description" content={shareData.text} />
+        <meta property="og:title" content={shareData.title} />
+        <meta property="og:description" content={shareData.text} />
+        <meta property="og:image" content={shareData.image} />
+      </Head>
       <Box bg={Colors.gray[100]}>
         <Box as="section" className="info" bg={Colors.white}>
-          <Image
-            style={{ minWidth: '100%' }}
-            src={image}
-            width={360}
-            height={220}
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL={blurDataURL}
-            alt="대표이미지"
-          />
+          <AgencyImageView agency={agency} />
           <Box as="address" px={4}>
             <Box mt={6}>
               <Flex align={'center'}>
