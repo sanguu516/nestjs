@@ -45,8 +45,7 @@ export const getServerSideProps: GetServerSideProps<{
   dehydratedState: DehydratedState
 }> = async (context) => {
   const queryClient = new QueryClient()
-
-  const id = Number(context?.params?.id)
+  const id = Number(context?.params?.id?.[0])
   const agencyData = await getRealEstateData(id)
 
   await queryClient.prefetchInfiniteQuery({
@@ -65,7 +64,9 @@ export const getServerSideProps: GetServerSideProps<{
 
 export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { name, average_rating, images, id, representative_name, agency_number } = agency
-  const tel = addHyphenToTel(agency.tel)
+  const tel = addHyphenToTel(agency.tel) ?? ''
+  const mobile = addHyphenToTel(agency.mobile) ?? ''
+
   const router = useRouter()
 
   const image = images.find(($0) => !isEmpty($0.original_image))?.original_image
@@ -89,7 +90,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   const shareTextList: Record<string, string> = {
     대표자: representative_name,
     중개등록번호: agency_number,
-    전화번호: tel,
+    전화번호: tel || mobile,
   }
 
   const shareText = Object.keys(shareTextList).reduce((acc, key) => {
@@ -143,6 +144,9 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
                 if (e === 'tel') {
                   value = tel
                 }
+                if (e === 'mobile') {
+                  value = mobile
+                }
                 return (
                   <Flex key={e} justify={'space-between'} sx={{ ...fontStyles.BodyMd }}>
                     <Text color={Colors.gray[400]} minW={200}>
@@ -154,7 +158,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
                       whiteSpace="break-spaces"
                       wordBreak="keep-all"
                     >
-                      {value?.toString()}
+                      {String(value)}
                     </Text>
                   </Flex>
                 )

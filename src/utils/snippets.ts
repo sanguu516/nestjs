@@ -20,7 +20,7 @@ export const getRichSnippet = (agency: RealEstateResponse, review: GetReviewResp
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: agency.name,
-  telephone: addHyphenToTel(agency.tel),
+  telephone: addHyphenToTel(agency.tel || agency.mobile),
   address: {
     '@type': 'PostalAddress',
     streetAddress: agency.address_detail,

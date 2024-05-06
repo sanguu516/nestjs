@@ -8,10 +8,11 @@ interface Coordinates {
 }
 export interface RealEstateResponse {
   id: number
+  seo_key: string
   agency_number: string
   name: string
   representative_name: string
-  tel: string
+  tel: string | null
   mobile: string | null
   address_short: string
   address_detail: string
@@ -40,6 +41,7 @@ interface SearchAgenciesParams {
 
 export type SearchAgenciesResult = {
   id: number
+  seo_key: string
   name: string
   representative_name: string
   address_short: string

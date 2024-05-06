@@ -11,12 +11,12 @@ interface Props extends SpaceProps {
 }
 
 export default function AgencyCard({ agency, ...rest }: Props) {
-  const { name, id, representative_name, address_short, average_rating, images } = agency
+  const { name, id, seo_key, representative_name, address_short, average_rating, images } = agency
   const image =
     images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? '/placeholder-image.png'
 
   return (
-    <Box as={Link} href={`/real-estate/${id}`} width="100%" {...rest}>
+    <Box as={Link} href={`/real-estate/${id}/${seo_key}`} width="100%" {...rest}>
       <Flex height={90} alignItems="center" gap={3} bgColor={Colors.white}>
         <Image
           alt={name}

@@ -4,7 +4,6 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { Star } from '../Rating'
 import Review from '../Review'
 
@@ -15,11 +14,10 @@ interface Props {
 function ReviewCard({ review }: Props) {
   const router = useRouter()
   const { rating, user, user_keywords, content, agency, id } = review
-
   return (
     <Box
       as="div"
-      onClick={() => void router.push(`/real-estate/${agency.id}`)}
+      onClick={() => void router.push(`/real-estate/${agency.id}/${agency.seo_key}`)}
       key={id}
       width="100%"
     >

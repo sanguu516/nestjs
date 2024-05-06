@@ -27,7 +27,7 @@ export interface GetReviewResponse {
   user: User
   agency: Agency
   rating: number
-  content: string //
+  content: string
   user_keywords: UserKeyword[]
 }
 

@@ -104,7 +104,7 @@ function New() {
         void queryClient.invalidateQueries({
           queryKey: QueryKeys.reviewsAboutAgency(Number(agencyId)),
         })
-        void router.replace(`/real-estate/${Number(agencyId)}`)
+        void router.replace(`/real-estate/${Number(agencyId)}/${agencyData?.seo_key}`)
       },
     })
   }
