@@ -1,21 +1,32 @@
-import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
-import { getAgencyReivewsData } from '@/apis/reviewApis'
+import { useMemo } from 'react'
+import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import {
+  dehydrate,
+  QueryClient,
+  useInfiniteQuery,
+  type DehydratedState,
+} from '@tanstack/react-query'
+import { isEmpty } from 'lodash-es'
+
 import AgencyImageView from '@/components/agency-detail/AgencyImageView'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
 import ShareButton from '@/components/agency-detail/ShareButton'
 import Review from '@/components/Review'
+
+import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
+import { getAgencyReivewsData } from '@/apis/reviewApis'
+
+import { QueryKeys } from '@/utils/queryUtil'
+import { addHyphenToTel } from '@/utils/telUtil'
+import { getRichSnippet } from '@/utils/snippets'
+
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash-es'
-import { type GetServerSideProps, type InferGetServerSidePropsType } from 'next'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
 
 type InfoKey = Partial<Record<keyof RealEstateResponse, string>>
 
@@ -29,35 +40,39 @@ const INFO_KEY: InfoKey = {
   agency_number: '등록번호',
 }
 
-export const getServerSideProps: GetServerSideProps<{ agency: RealEstateResponse }> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<{
+  agency: RealEstateResponse
+  dehydratedState: DehydratedState
+}> = async (context) => {
+  const queryClient = new QueryClient()
+
   const id = Number(context?.params?.id)
-  const data = await getRealEstateData(id)
+  const agencyData = await getRealEstateData(id)
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: QueryKeys.reviewsAboutAgency(id),
+    initialPageParam: { page: 1, page_size: 10 },
+    queryFn: ({ pageParam }) => getAgencyReivewsData({ agency_id: id, pageParams: pageParam }),
+  })
+
   return {
     props: {
-      agency: data,
+      agency: agencyData,
+      dehydratedState: dehydrate(queryClient),
     },
   }
 }
 
 export default function Detail({ agency }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { name, average_rating, images, id } = agency
+  const { name, average_rating, images, id, representative_name, agency_number } = agency
+  const tel = addHyphenToTel(agency.tel)
   const router = useRouter()
 
-  const image =
-    images.find(($0) => !isEmpty($0.original_image))?.original_image ?? '/placeholder-image.png'
-
-  const shareData = {
-    title: name,
-    text: `별별부동산에서 ${name} 정보를 확인해 보세요.`,
-    image: typeof window !== 'undefined' ? window.location.origin + image : image,
-  }
+  const image = images.find(($0) => !isEmpty($0.original_image))?.original_image
 
   const { data: reviewsResult, fetchNextPage: fetchMoreReviews } = useInfiniteQuery({
-    queryKey: QueryKeys.reviewsAboutAgency(agency.id),
-    queryFn: ({ pageParam }) =>
-      getAgencyReivewsData({ agency_id: agency.id, pageParams: pageParam }),
+    queryKey: QueryKeys.reviewsAboutAgency(id),
+    queryFn: ({ pageParam }) => getAgencyReivewsData({ agency_id: id, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 10 },
     getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
   })
@@ -68,19 +83,47 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   )
 
   const navigateToReviewPage = () => {
-    void router.push(`/reviews/new/${agency.id}`)
+    void router.push(`/reviews/new/${id}`)
   }
+
+  const shareTextList: Record<string, string> = {
+    대표자: representative_name,
+    중개등록번호: agency_number,
+    전화번호: tel,
+  }
+
+  const shareText = Object.keys(shareTextList).reduce((acc, key) => {
+    if (shareTextList[key]) {
+      return acc + `${acc !== '' ? ', ' : ''}${key}: ${shareTextList[key]}`
+    }
+    return acc
+  }, '')
+
+  const shareData = {
+    title: `${name} | 별별부동산`,
+    text: `${agency.address_short} ${agency.name}, ${shareText} 등의 정보를 확인해보세요`,
+    image,
+  }
+
+  const richSnippet = getRichSnippet(agency, reviewsData)
 
   return (
     <>
-      <NavHeader title={agency.name} rightMenu={<ShareButton shareData={shareData} />} />
       <Head>
         <title>{shareData.title}</title>
-        <meta name="description" content={shareData.text} />
-        <meta property="og:title" content={shareData.title} />
-        <meta property="og:description" content={shareData.text} />
-        <meta property="og:image" content={shareData.image} />
+        <meta name="title" content={shareData.title} key="title" />
+        <meta name="description" content={shareData.text} key="description" />
+        <meta property="og:title" content={shareData.title} key="og_title" />
+        <meta property="og:description" content={shareData.text} key="og_description" />
+        {image && <meta property="og:image" content={shareData.image} key="og_image" />}
+        <meta property="og:image:alt" content="agent_image" key="og_image_alt" />
+        <script
+          type="application/ld+json"
+          defer
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(richSnippet) }}
+        />
       </Head>
+      <NavHeader title={name} rightMenu={<ShareButton shareData={shareData} />} />
       <Box bg={Colors.gray[100]}>
         <Box as="section" className="info" bg={Colors.white}>
           <AgencyImageView agency={agency} />
@@ -96,13 +139,21 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
             <Box pt={4} pb={6}>
               {Object.keys(INFO_KEY).map((e) => {
                 const type = INFO_KEY[e as keyof typeof INFO_KEY]
-                const value = agency[e as keyof RealEstateResponse]
+                let value = agency[e as keyof RealEstateResponse]
+                if (e === 'tel') {
+                  value = tel
+                }
                 return (
                   <Flex key={e} justify={'space-between'} sx={{ ...fontStyles.BodyMd }}>
                     <Text color={Colors.gray[400]} minW={200}>
                       {type}
                     </Text>
-                    <Text color={Colors.gray[600]} textAlign="end" whiteSpace="break-spaces">
+                    <Text
+                      color={Colors.gray[600]}
+                      textAlign="end"
+                      whiteSpace="break-spaces"
+                      wordBreak="keep-all"
+                    >
                       {value?.toString()}
                     </Text>
                   </Flex>

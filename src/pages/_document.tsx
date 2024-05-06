@@ -1,22 +1,17 @@
 import { Head, Html, Main, NextScript } from 'next/document'
 
-const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_API_KEY!}&autoload=false&libraries=clusterer`
 const kakaoApiKey = process.env.KAKAO_API_KEY
+const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
 
 export default function Document() {
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        <script defer src={kakaoMapSdkSrc} />
+      </Head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              var script = document.createElement('script');
-              script.src = '${kakaoMapSdkSrc}';
-              document.body.appendChild(script);
-            `,
-          }}
-        />
+        <Main />
+        <NextScript />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -32,9 +27,6 @@ export default function Document() {
             `,
           }}
         />
-
-        <Main />
-        <NextScript />
       </body>
     </Html>
   )

@@ -11,8 +11,8 @@ export interface RealEstateResponse {
   agency_number: string
   name: string
   representative_name: string
-  tel: number
-  mobile: number | null
+  tel: string
+  mobile: string | null
   address_short: string
   address_detail: string
   address_point: Coordinates

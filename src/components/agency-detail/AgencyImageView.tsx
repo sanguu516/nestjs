@@ -1,5 +1,5 @@
-import { RealEstateResponse } from '@/apis/realEstateApis'
-import { head, isEmpty } from 'lodash-es'
+import { type RealEstateResponse } from '@/apis/realEstateApis'
+import { head } from 'lodash-es'
 import Image from 'next/image'
 import KakaoStaticMap from './KakaoStaticMap'
 

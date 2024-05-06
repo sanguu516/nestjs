@@ -46,7 +46,7 @@ interface GetReviewsDataParmas {
   }
 }
 
-interface GetReviewsResponse {
+export interface GetReviewsResponse {
   total_count: number
   page: number
   page_size: number

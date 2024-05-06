@@ -6,7 +6,6 @@ import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Center, Divider, Flex, Text, VStack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import Head from 'next/head'
 import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
 
@@ -27,25 +26,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>별별부동산</title>
-        <meta name="title" content="별별부동산 | 솔직하고 간편한 공인중개사 리뷰 서비스" />
-        <meta
-          name="description"
-          content="이제 별별부동산에서 리뷰 검색하고, 안전하게 거래하세요!"
-        />
-        <meta property="og:title" content="별별부동산 | 솔직하고 간편한 공인중개사 리뷰 서비스" />
-        <meta property="og:url" content="https://develop.starstaragent.com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="/thumbnail.png" />
-        <meta property="og:image:alt" content="starstaragent logo" />
-        <meta
-          property="og:description"
-          content="이제 별별부동산에서 리뷰 검색하고, 안전하게 거래하세요!"
-        />
-        <meta property="og:site_name" content="별별부동산" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <VStack as="main" bg={Colors.gray[100]} gap={2}>
         <SectionContainer title="인기 지역">
           <Flex flexWrap="wrap" gap={2}>

@@ -1,11 +1,10 @@
-import { IconArrowDown, IconShare } from '@/assets/icons'
-import { IconButton } from '@chakra-ui/react'
+import { IconShare } from '@/assets/icons'
 import CustomIConButton from '../CustomIconButton'
 
 export interface AgencyShareData {
   title: string
   text: string
-  image: string
+  image?: string
 }
 
 function ShareButton({ shareData }: { shareData: AgencyShareData }) {
