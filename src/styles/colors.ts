@@ -85,4 +85,8 @@ export const Colors = {
   },
   black: '#000000',
   white: '#ffffff',
+  kakao: {
+    bg: '#FEE500',
+    text: '#000',
+  },
 } as const

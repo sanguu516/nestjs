@@ -120,21 +120,25 @@ export function SignupForm({
   isInvalids,
   setForm,
   initializeValue,
+  hasLabel = true,
 }: {
   list: SignFormList
   isInvalids: Record<string, boolean>
   setForm: React.Dispatch<React.SetStateAction<any>>
   initializeValue: () => void
+  hasLabel?: boolean
 }) {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setForm((prev: any) => ({ ...prev, [e.target.name]: e.target.value }))
   }, [])
 
   return (
-    <Box mb={10}>
-      <FormLabel color={Colors.gray[400]} sx={{ ...fontStyles.TitleSm }} mb={4}>
-        {title}
-      </FormLabel>
+    <Box>
+      {hasLabel && (
+        <FormLabel color={Colors.gray[400]} sx={{ ...fontStyles.TitleSm }} mb={4}>
+          {title}
+        </FormLabel>
+      )}
       {forms.map((form) => {
         return (
           <CustomInput
@@ -149,7 +153,6 @@ export function SignupForm({
             isSensitive={form.isSensitive}
             isInvalid={!!isInvalids[form.name] ?? false}
             w="100%"
-            mt={3}
           />
         )
       })}

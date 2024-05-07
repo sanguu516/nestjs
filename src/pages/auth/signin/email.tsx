@@ -2,20 +2,23 @@ import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useMutation } from '@tanstack/react-query'
-import { type ISigninForm, type SignInResponse, signIn } from '@/apis/authApis'
-import CustomButton from '@/components/CustomButton'
 import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
-import { Colors } from '@/styles/colors'
-import { fontStyles } from '@/styles/font'
+
+import CustomButton from '@/components/CustomButton'
+import { UserContext } from '@/pages/_app'
+import { SignupForm } from '@/pages/auth/signup'
+import NavHeader from '@/components/NavHeader'
+import { type ISigninForm, type SignInResponse, signIn } from '@/apis/authApis'
+
 import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
-import { UserContext } from '../_app'
-import { SignupForm } from './signup'
 
-const LOGIN_TITLE = '나만의 솔직한 리뷰를\n작성해보세요!'
+import { Colors } from '@/styles/colors'
+import { fontStyles } from '@/styles/font'
 
+const LOGIN_TITLE = '이메일 로그인'
 const INIT_SIGNIN_FORM = { email: '', password: '' }
 
 export default function Signin() {
@@ -72,61 +75,64 @@ export default function Signin() {
   })
 
   return (
-    <Box display="grid" alignItems="center" alignContent="center" h="100%" px={4}>
-      <Heading
-        as="h1"
-        style={{ fontWeight: 800, fontSize: 24 }}
-        noOfLines={2}
-        textAlign="center"
-        whiteSpace="pre-wrap"
-      >
-        {LOGIN_TITLE}
-      </Heading>
-      <FormControl as="form" my={14}>
-        {SIGNIN_FORM.map((list) => (
-          <SignupForm
-            key={list.title}
-            list={list}
-            isInvalids={isInvalids}
-            initializeValue={initSigninForm}
-            setForm={setSigninForm}
-          />
-        ))}
-        <CustomButton
-          type="submit"
-          variant="filled"
-          size="lg"
-          w="100%"
-          onClick={handleSubmit}
-          isDisabled={isBlank || isError}
+    <>
+      <NavHeader />
+      <Box display="grid" alignItems="center" alignContent="center" h="100%" px={4} pb={14}>
+        <Heading
+          as="h1"
+          style={{ fontWeight: 800, fontSize: 24 }}
+          textAlign="center"
+          whiteSpace="pre-wrap"
         >
-          로그인
-        </CustomButton>
-        <Checkbox
-          id="signin-keep"
-          checked={isLoginKeep}
-          onChange={handleLoginKeep}
-          mt={4}
-          color={Colors.gray[400]}
-          sx={{ ...fontStyles.BodySm }}
-        >
-          로그인 상태 유지
-        </Checkbox>
-      </FormControl>
-      <Flex justify="center" align="center" mt={14}>
-        <Text color={Colors.gray[400]} sx={{ ...fontStyles.BodySm }}>
-          아직 별별부동산 회원이 아니신가요?
-        </Text>
-        <Link
-          as={NextLink}
-          href="/auth/signup"
-          ml={4}
-          color={Colors.indigo[600]}
-          sx={{ ...fontStyles.LabelSm }}
-        >
-          회원가입하기
-        </Link>
-      </Flex>
-    </Box>
+          {LOGIN_TITLE}
+        </Heading>
+        <FormControl as="form" display="grid" gap={2} my={14}>
+          {SIGNIN_FORM.map((list) => (
+            <SignupForm
+              key={list.title}
+              list={list}
+              isInvalids={isInvalids}
+              initializeValue={initSigninForm}
+              setForm={setSigninForm}
+              hasLabel={false}
+            />
+          ))}
+          <CustomButton
+            type="submit"
+            variant="filled"
+            size="lg"
+            w="100%"
+            onClick={handleSubmit}
+            isDisabled={isBlank || isError}
+          >
+            로그인
+          </CustomButton>
+          <Checkbox
+            id="signin-keep"
+            checked={isLoginKeep}
+            onChange={handleLoginKeep}
+            mt={4}
+            color={Colors.gray[400]}
+            sx={{ ...fontStyles.BodySm }}
+          >
+            로그인 상태 유지
+          </Checkbox>
+        </FormControl>
+        <Flex justify="center" align="center">
+          <Text color={Colors.gray[400]} sx={{ ...fontStyles.BodySm }}>
+            아직 별별부동산 회원이 아니신가요?
+          </Text>
+          <Link
+            as={NextLink}
+            href="/auth/signup"
+            ml={4}
+            color={Colors.indigo[600]}
+            sx={{ ...fontStyles.LabelSm }}
+          >
+            회원가입하기
+          </Link>
+        </Flex>
+      </Box>
+    </>
   )
 }

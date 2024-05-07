@@ -1,7 +1,6 @@
 import { IconDangerCircle, IconDeleteCircle, IconHide, IconShow } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import debounce, { DEBOUNCE_DELAY } from '@/utils/debounce'
 import { Box, Flex, Input, Text, type InputProps } from '@chakra-ui/react'
 import React, { cloneElement, useCallback, useEffect, useRef, useState } from 'react'
 import CustomIConButton from './CustomIconButton'
@@ -14,6 +13,7 @@ interface CustomInputProps extends InputProps {
   noIcon?: boolean
   initializeValue?: () => void
   onChange?: React.ChangeEventHandler<HTMLInputElement>
+  hasLabel?: boolean
 }
 
 interface OnClicks {
@@ -38,7 +38,7 @@ function Icons({ type, isInvalid, isSensitive, isShow, onClicks }: IconProps) {
   if (isDangerIcon) {
     icon = <IconDangerCircle />
   } else if (isSensitive) {
-    icon = isShow ? <IconShow /> : <IconHide />
+    icon = isShow ? <IconHide /> : <IconShow />
     handleOnClick = onClicks.handleShowHide
   } else {
     icon = <IconDeleteCircle />
@@ -69,11 +69,11 @@ export default function CustomInput({
   isDisabled,
   onChange,
   noIcon = false,
+  hasLabel = true,
   ...rest
 }: CustomInputProps) {
   const [value, setValue] = useState<string>('')
   const [isShow, setIsShow] = useState<boolean>(false)
-  const [onFocus, setOnFocus] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -90,17 +90,12 @@ export default function CustomInput({
   }
 
   const handleInput: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    handleTyping(e)
     onChange?.(e)
+    handleTyping(e)
   }, [])
 
   const handleShowHide = () => {
-    console.log('showhide')
     setIsShow((prev) => !prev)
-  }
-
-  const handleFocus = () => {
-    setOnFocus((prev) => !prev)
   }
 
   const handleDelete = () => {
@@ -134,11 +129,9 @@ export default function CustomInput({
             id={rest.id}
             type={rest.type}
             name={rest.name}
-            defaultValue={rest.defaultValue}
+            value={value ?? ''}
             placeholder={rest.placeholder}
-            onChange={debounce(handleInput, DEBOUNCE_DELAY)}
-            onFocus={handleFocus}
-            onBlur={handleFocus}
+            onChange={handleInput}
             isInvalid={isInvalid}
             isDisabled={isDisabled ?? false}
             h="100%"
@@ -167,10 +160,9 @@ export default function CustomInput({
           />
         )}
       </Flex>
-      {isInvalid && (
+      {isInvalid && hasLabel && (
         <Text
           width="100%"
-          position="absolute"
           mt={1}
           px={4}
           color={isInvalid ? Colors.red[600] : isDisabled ? Colors.gray[300] : Colors.gray[400]}

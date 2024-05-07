@@ -54,8 +54,6 @@ export default function BottomTab({ ...props }: BottomTabProps) {
             href={link}
             w={120}
             h={46}
-            mt={1}
-            mb={30}
             display={'grid'}
             placeItems={'center'}
           >

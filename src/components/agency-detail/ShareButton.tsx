@@ -1,5 +1,6 @@
 import { IconShare } from '@/assets/icons'
 import CustomIConButton from '../CustomIconButton'
+import useCustomToast from '@/utils/useCustomToast'
 
 export interface AgencyShareData {
   title: string
@@ -8,6 +9,8 @@ export interface AgencyShareData {
 }
 
 function ShareButton({ shareData }: { shareData: AgencyShareData }) {
+  const toast = useCustomToast()
+
   const handleShare = async () => {
     const canUseShareApi =
       typeof window !== 'undefined' &&
@@ -17,7 +20,10 @@ function ShareButton({ shareData }: { shareData: AgencyShareData }) {
     // Consider other share methods when share api is not available.
     if (!canUseShareApi) {
       await window.navigator.clipboard.writeText(location.href)
-      alert('클립보드에 복사되었습니다.')
+      toast({
+        title: 'URL이 복사되었습니다.',
+        status: 'info',
+      })
       return
     }
 
@@ -34,7 +40,7 @@ function ShareButton({ shareData }: { shareData: AgencyShareData }) {
       onClick={handleShare}
       aria-label="share"
       size="sm"
-      icon={<IconShare width={24} height={24} color="black" />}
+      icon={<IconShare width={20} height={20} color="black" />}
       sx={{ mx: 2.5 }}
     />
   )

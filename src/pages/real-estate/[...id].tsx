@@ -16,6 +16,7 @@ import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
 import ShareButton from '@/components/agency-detail/ShareButton'
 import Review from '@/components/Review'
+import EmptyReview from '@/components/Review/Empty'
 
 import { getRealEstateData, type RealEstateResponse } from '@/apis/realEstateApis'
 import { getAgencyReivewsData } from '@/apis/reviewApis'
@@ -46,13 +47,18 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async (context) => {
   const queryClient = new QueryClient()
   const id = Number(context?.params?.id?.[0])
-  const agencyData = await getRealEstateData(id)
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: QueryKeys.reviewsAboutAgency(id),
-    initialPageParam: { page: 1, page_size: 10 },
-    queryFn: ({ pageParam }) => getAgencyReivewsData({ agency_id: id, pageParams: pageParam }),
-  })
+  const getAgencyData = () => getRealEstateData(id)
+
+  const prefetchReviewData = async () => {
+    await queryClient.prefetchInfiniteQuery({
+      queryKey: QueryKeys.reviewsAboutAgency(id),
+      initialPageParam: { page: 1, page_size: 10 },
+      queryFn: ({ pageParam }) => getAgencyReivewsData({ agency_id: id, pageParams: pageParam }),
+    })
+  }
+
+  const [agencyData] = await Promise.all([getAgencyData(), prefetchReviewData()])
 
   return {
     props: {
@@ -107,6 +113,7 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
   }
 
   const richSnippet = getRichSnippet(agency, reviewsData)
+  const needMoreView = reviewsData.length > 5
 
   return (
     <>
@@ -185,36 +192,41 @@ export default function Detail({ agency }: InferGetServerSidePropsType<typeof ge
             {REVIEW_RECOMNEDATION_MSG}
           </Text>
         </Flex>
-        <Flex as="section" direction="column" className="reviews" bg={Colors.white}>
-          <Heading as="h4" color={Colors.gray[800]} sx={{ ...fontStyles.TitleMd }} my={6} px={4}>
+        <Flex as="section" direction="column" className="reviews" bg={Colors.white} px={4} py={6}>
+          <Heading as="h4" color={Colors.gray[800]} sx={{ ...fontStyles.TitleMd }}>
             직접 방문 후기
             <Text as="span" color={Colors.gray[400]} sx={{ ...fontStyles.TitleSm }} ml={2}>
               {reviewsResult?.pages[0]?.total_count}
             </Text>
           </Heading>
-          {reviewsData.map(({ id, user, rating, content, user_keywords }) => {
-            return (
-              <Review
-                key={id}
-                user={user}
-                rating={rating}
-                content={content}
-                user_keywords={user_keywords}
-              />
-            )
-          })}
-          <CustomButton
-            variant="text"
-            size="md"
-            width="100%"
-            my={3}
-            px={4}
-            py={2}
-            borderRadius="none"
-            onClick={() => fetchMoreReviews}
-          >
-            더보기
-          </CustomButton>
+          <Box py={6}>
+            {reviewsData.length ? (
+              reviewsData.map(({ id, user, rating, content, user_keywords }) => {
+                return (
+                  <Review
+                    key={id}
+                    user={user}
+                    rating={rating}
+                    content={content}
+                    user_keywords={user_keywords}
+                  />
+                )
+              })
+            ) : (
+              <EmptyReview />
+            )}
+          </Box>
+          {needMoreView && (
+            <CustomButton
+              variant="text"
+              size="md"
+              width="100%"
+              borderRadius="none"
+              onClick={() => fetchMoreReviews}
+            >
+              더보기
+            </CustomButton>
+          )}
         </Flex>
         <CustomButton
           variant="filled"

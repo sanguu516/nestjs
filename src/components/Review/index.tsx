@@ -1,13 +1,13 @@
+import { type MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { type BoxProps, Box, Flex, Text } from '@chakra-ui/react'
+import Chip from '@/components/Chip'
+import CustomButton from '@/components/CustomButton'
+import Rating from '@/components/Rating'
 import { type GetReviewResponse } from '@/apis/reviewApis'
-import { ImageUser } from '@/assets/icons'
-import { KEYWORD_ICONS } from '@/constants'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
-import { MouseEventHandler, useEffect, useRef, useState } from 'react'
-import Chip from './Chip'
-import CustomButton from './CustomButton'
-import Rating from './Rating'
+import { ImageUser } from '@/assets/icons'
+import { KEYWORD_ICONS } from '@/constants'
 
 type ReviewProps = BoxProps &
   Pick<GetReviewResponse, 'user' | 'rating' | 'content' | 'user_keywords'>
