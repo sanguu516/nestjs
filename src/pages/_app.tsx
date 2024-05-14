@@ -65,7 +65,7 @@ const MyApp: AppType<{ dehydratedState: DehydratedState }> = ({ Component, pageP
         <meta property="og:site_name" content="별별부동산" key="og_site_name" />
         <meta property="og:image" content="/thumbnail.png" key="og_image" />
         <meta property="og:image:alt" content="starstaragent_logo" key="og_image_alt" />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_API + pathname} key="og_url" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_URL + pathname} key="og_url" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ChakraProvider resetCSS theme={reaTheme}>

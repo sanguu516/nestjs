@@ -6,6 +6,9 @@ import { fontStyles } from '@/styles/font'
 import { IconKakaoLogo, IconLogo, IconTitle } from '@/assets/icons'
 
 export default function Signin() {
+  const callback_url = `${process.env.NEXT_PUBLIC_URL}/oauth/kakao`
+  const KAKAO_OAUTH_URL = `${process.env.NEXT_PUBLIC_REA_API_URL}social-account/kakao/login/?callback_url=${callback_url}`
+
   return (
     <Flex flexDirection="column" justifyContent="space-around" h="100%" px={4}>
       <Flex justifyContent="space-evenly" alignItems="center" alignSelf="center" w={194} h={70}>
@@ -13,7 +16,7 @@ export default function Signin() {
         <IconTitle width={116} height={24} />
       </Flex>
       <Flex gap={4} flexDirection="column">
-        <Link as={NextLink} href={process.env.NEXT_KAKAO_AUTH_URL ?? ''}>
+        <a href={KAKAO_OAUTH_URL}>
           <CustomButton
             variant="filled"
             size="lg"
@@ -22,12 +25,10 @@ export default function Signin() {
             background={Colors.kakao.bg}
             color={Colors.kakao.text}
           >
-            <Flex gap={2}>
-              <IconKakaoLogo width={18} height={18} />
-              카카오로 로그인
-            </Flex>
+            <IconKakaoLogo width={18} height={18} />
+            카카오로 로그인
           </CustomButton>
-        </Link>
+        </a>
         <Link as={NextLink} href="/auth/signin/email">
           <CustomButton variant="filled" size="lg" w="100%" h={12}>
             이메일로 로그인
