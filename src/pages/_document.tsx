@@ -1,6 +1,6 @@
 import { Head, Html, Main, NextScript } from 'next/document'
 
-const kakaoApiKey = process.env.KAKAO_API_KEY
+const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
 const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
 
 export default function Document() {
