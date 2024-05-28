@@ -11,10 +11,19 @@ export default function Signin() {
 
   return (
     <Flex flexDirection="column" justifyContent="space-around" h="100%" px={4}>
-      <Flex justifyContent="space-evenly" alignItems="center" alignSelf="center" w={194} h={70}>
+      <Link
+        as={NextLink}
+        href="/"
+        display="flex"
+        justifyContent="space-evenly"
+        alignItems="center"
+        alignSelf="center"
+        w={194}
+        h={70}
+      >
         <IconLogo width={50} height={50} />
         <IconTitle width={116} height={24} />
-      </Flex>
+      </Link>
       <Flex gap={4} flexDirection="column">
         <a href={KAKAO_OAUTH_URL}>
           <CustomButton

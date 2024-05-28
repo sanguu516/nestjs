@@ -24,6 +24,15 @@ const reaTheme = extendTheme({
     Textarea: textareaTheme,
     Input: inputTheme,
     Link: linkTheme,
+    Popover: {
+      variants: {
+        responsive: {
+          content: {
+            width: 'unset',
+          },
+        },
+      },
+    },
   },
 })
 

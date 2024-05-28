@@ -1,14 +1,9 @@
-import { IconShare } from '@/assets/icons'
-import CustomIConButton from '../CustomIconButton'
+import CustomIConButton from '@/components/CustomIconButton'
+import { type AgencyShareData } from '@/components/agency-detail/ShareButton'
 import useCustomToast from '@/utils/useCustomToast'
+import { IconLink } from '@/assets/icons'
 
-export interface AgencyShareData {
-  title: string
-  text: string
-  image?: string
-}
-
-function ShareButton({ shareData }: { shareData: AgencyShareData }) {
+export default function UrlShare({ shareData }: { shareData: AgencyShareData }) {
   const toast = useCustomToast()
 
   const handleShare = async () => {
@@ -40,10 +35,7 @@ function ShareButton({ shareData }: { shareData: AgencyShareData }) {
       onClick={handleShare}
       aria-label="share"
       size="sm"
-      icon={<IconShare width={20} height={20} color="black" />}
-      sx={{ mx: 2.5 }}
+      icon={<IconLink width={24} height={24} color="black" />}
     />
   )
 }
-
-export default ShareButton

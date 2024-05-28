@@ -22,6 +22,9 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
   const contentRef = useRef<HTMLParagraphElement>(null)
 
   const selectedKeywords = user_keywords.filter((e) => e.is_selected)
+  const hasKeywords = selectedKeywords.length > 0
+
+  const maxTextHeight = isOpenContent ? 'fit-content' : MAX_CONTENT_HEIGHT
 
   const handleReviewButton: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
@@ -39,8 +42,6 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
       setNeedShowMore(isTooLong)
     }
   }, [])
-
-  const maxTextHeight = isOpenContent ? 'fit-content' : MAX_CONTENT_HEIGHT
 
   return (
     <Box
@@ -86,8 +87,7 @@ export default function Review({ user, rating, content, user_keywords, ...boxPro
             {isOpenContent ? '접기' : '더보기'}
           </CustomButton>
         )}
-
-        {selectedKeywords.length && (
+        {hasKeywords && (
           <Flex mt={2} mb={6} flexWrap="wrap" gap={1}>
             {selectedKeywords.map((e, i) => {
               return (
