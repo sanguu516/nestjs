@@ -34,11 +34,10 @@ function Icons({ type, isInvalid, isSensitive, isShow, onClicks }: IconProps) {
 
   const isDangerIcon = isInvalid && type !== 'password'
 
-  // type이 비밀번호 확인이면 아이콘 느낌표 제거
   if (isDangerIcon) {
     icon = <IconDangerCircle />
   } else if (isSensitive) {
-    icon = isShow ? <IconHide /> : <IconShow />
+    icon = isShow ? <IconShow /> : <IconHide />
     handleOnClick = onClicks.handleShowHide
   } else {
     icon = <IconDeleteCircle />

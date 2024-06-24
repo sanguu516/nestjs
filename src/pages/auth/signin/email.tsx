@@ -92,7 +92,6 @@ export default function Signin() {
               key={list.title}
               list={list}
               isInvalids={isInvalids}
-              initializeValue={initSigninForm}
               setForm={setSigninForm}
               hasLabel={false}
             />

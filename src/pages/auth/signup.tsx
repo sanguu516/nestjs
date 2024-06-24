@@ -8,7 +8,7 @@ import { SIGNUP_FORM, type SignFormList } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
-import { Box, FormControl, FormLabel, Heading } from '@chakra-ui/react'
+import { Box, FormControl, FormLabel, Grid, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useState } from 'react'
@@ -47,17 +47,18 @@ export default function Signup() {
 
         void router.replace(redirectPath)
       },
-      onError: () => {
-        toast({
-          title: '비밀번호는 8~20자의 영문자/숫자 조합으로 입력해주세요.',
-          status: 'error',
-        })
+      onError: (error) => {
+        if (error instanceof Error) {
+          const EXITST_MSG = '이미 해당 이메일로 회원가입 되어있습니다.'
+          const INVALID_MSG = '비밀번호는 8~20자의 영문자/숫자 조합으로 입력해주세요.'
+          const message = error.message === 'ALREADY_EXISTS' ? EXITST_MSG : INVALID_MSG
+          toast({
+            title: message,
+            status: 'error',
+          })
+        }
       },
     })
-  }
-
-  const initSignupForm = () => {
-    setSignupForm(INIT_SIGNUP_FORM)
   }
 
   const isValidatePassword = validateAuth.password(signupForm.password, signupForm.passwordConfirm)
@@ -75,8 +76,6 @@ export default function Signup() {
     return signupForm[key] === ''
   })
 
-  const initializeValue = initSignupForm
-
   return (
     <Box display="grid" placeItems="center" alignContent="center" height="100%" mx={4}>
       <Heading
@@ -90,15 +89,16 @@ export default function Signup() {
         {LOGIN_TITLE}
       </Heading>
       <FormControl as="form">
-        {SIGNUP_FORM.map((list) => (
-          <SignupForm
-            key={list.title}
-            list={list}
-            isInvalids={isInvalids}
-            setForm={setSignupForm}
-            initializeValue={initializeValue}
-          />
-        ))}
+        <Grid gap={6}>
+          {SIGNUP_FORM.map((list) => (
+            <SignupForm
+              key={list.title}
+              list={list}
+              isInvalids={isInvalids}
+              setForm={setSignupForm}
+            />
+          ))}
+        </Grid>
         <CustomButton
           type="submit"
           variant="filled"
@@ -119,13 +119,11 @@ export function SignupForm({
   list: { title, forms },
   isInvalids,
   setForm,
-  initializeValue,
   hasLabel = true,
 }: {
   list: SignFormList
   isInvalids: Record<string, boolean>
   setForm: React.Dispatch<React.SetStateAction<any>>
-  initializeValue: () => void
   hasLabel?: boolean
 }) {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -139,23 +137,29 @@ export function SignupForm({
           {title}
         </FormLabel>
       )}
-      {forms.map((form) => {
-        return (
-          <CustomInput
-            id={form.name}
-            key={form.name}
-            name={form.name}
-            type={form.type}
-            placeholder={form.placeholder}
-            supportingText={form?.supportingText}
-            initializeValue={initializeValue}
-            onChange={onChange}
-            isSensitive={form.isSensitive}
-            isInvalid={!!isInvalids[form.name] ?? false}
-            w="100%"
-          />
-        )
-      })}
+      <Grid gap={2}>
+        {forms.map((form) => {
+          const initializeValue = () => {
+            setForm((prev: any) => ({ ...prev, [form.name]: '' }))
+          }
+
+          return (
+            <CustomInput
+              id={form.name}
+              key={form.name}
+              name={form.name}
+              type={form.type}
+              placeholder={form.placeholder}
+              supportingText={form?.supportingText}
+              onChange={onChange}
+              isSensitive={form.isSensitive}
+              isInvalid={!!isInvalids[form.name] ?? false}
+              initializeValue={initializeValue}
+              w="100%"
+            />
+          )
+        })}
+      </Grid>
     </Box>
   )
 }
