@@ -2,13 +2,13 @@ import { signOut } from '@/apis/authApis'
 import { ImageUser } from '@/assets/icons'
 import CustomButton from '@/components/CustomButton'
 import withAuth from '@/components/withAuth'
+import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { Box, Button, Center, Flex, Input, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import { UserContext } from '../_app'
 
 function InfoRow({
   label,

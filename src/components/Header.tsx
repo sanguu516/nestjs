@@ -1,5 +1,6 @@
 import { IconLogo, IconProfile, IconTitle } from '@/assets/icons'
-import { UserContext } from '@/pages/_app'
+
+import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Flex, IconButton, Link, Text } from '@chakra-ui/react'

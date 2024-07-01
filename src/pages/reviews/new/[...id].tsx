@@ -1,26 +1,27 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { debounce } from 'lodash-es'
+import {
+  getKeywordData,
+  postReview,
+  type PostReviewParmas,
+  type PostReviewResponse,
+} from '@/apis/reviewApis'
 import Chip from '@/components/Chip'
 import CustomButton from '@/components/CustomButton'
 import NavHeader from '@/components/NavHeader'
 import Rating from '@/components/Rating'
 import withAuth from '@/components/withAuth'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  getKeywordData,
-  postReview,
-  type PostReviewResponse,
-  type PostReviewParmas,
-} from '@/apis/reviewApis'
-import { DEBOUNCE_DELAY } from '@/utils/debounce'
-import { QueryKeys } from '@/utils/queryUtil'
 import { KEYWORD_ICONS } from '@/constants'
-import { Box, Flex, Heading, Textarea, Text } from '@chakra-ui/react'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
+import { DEBOUNCE_DELAY } from '@/utils/debounce'
+import { QueryKeys } from '@/utils/queryUtil'
+import { Box, Flex, Heading, Text, Textarea } from '@chakra-ui/react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { debounce } from 'lodash-es'
 import { useRouter } from 'next/router'
-import { UserContext } from '@/pages/_app'
+import { useCallback, useContext, useEffect, useState } from 'react'
+
 import { getRealEstateData } from '@/apis/realEstateApis'
+import UserContext from '@/providers/UserProvider'
 
 const MAX_TEXT_NUM = 500
 const feedbackQuestion = (userName: string) => `${userName} 님,\n 공인중개사는 어떠셨어요?`

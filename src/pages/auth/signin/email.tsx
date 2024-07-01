@@ -1,20 +1,21 @@
-import React, { useContext, useState } from 'react'
+import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useMutation } from '@tanstack/react-query'
-import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
+import React, { useContext, useState } from 'react'
 
 import CustomButton from '@/components/CustomButton'
-import { UserContext } from '@/pages/_app'
-import { SignupForm } from '@/pages/auth/signup'
+
+import { signIn, type ISigninForm, type SignInResponse } from '@/apis/authApis'
 import NavHeader from '@/components/NavHeader'
-import { type ISigninForm, type SignInResponse, signIn } from '@/apis/authApis'
+import { SignupForm } from '@/pages/auth/signup'
 
 import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
 
+import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 

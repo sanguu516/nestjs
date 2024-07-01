@@ -1,11 +1,11 @@
-import { useContext, useEffect } from 'react'
+import { oauthSignup } from '@/apis/oauthApis'
+import UserContext from '@/providers/UserProvider'
+import { StorageKey } from '@/utils/localStorageUtil'
+import useCustomToast from '@/utils/useCustomToast'
+import { useMutation } from '@tanstack/react-query'
 import { type InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
-import { useMutation } from '@tanstack/react-query'
-import { UserContext } from '../_app'
-import { StorageKey } from '@/utils/localStorageUtil'
-import { oauthSignup } from '@/apis/oauthApis'
-import useCustomToast from '@/utils/useCustomToast'
+import { useContext, useEffect } from 'react'
 
 export const getServerSideProps = (context: { query: { code: string } }) => {
   const { code } = context?.query

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ISignupForm, type SignInResponse, signUp } from '@/apis/authApis'
+import { signUp, type ISignupForm, type SignInResponse } from '@/apis/authApis'
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
+import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { SIGNUP_FORM, type SignFormList } from '@/utils/inputFormUtil'
@@ -12,7 +13,6 @@ import { Box, FormControl, FormLabel, Grid, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useState } from 'react'
-import { UserContext } from '../_app'
 
 const LOGIN_TITLE = '회원정보를 입력해주세요!'
 

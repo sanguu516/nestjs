@@ -1,3 +1,5 @@
+'use client'
+
 import { searchAgenciesByName, searchLocation } from '@/apis/realEstateApis'
 import { IconArrowLeft, IconDeleteCircle, IconSearch } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
