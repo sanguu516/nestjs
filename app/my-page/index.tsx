@@ -55,7 +55,6 @@ const InfoRow = ({
 
 const MyPage = () => {
   const { user, setUser } = useContext(UserContext)
-  // [Migrated] const router = useRouter()
   const { replace } = useRouter()
 
   if (!user) {
@@ -73,7 +72,6 @@ const MyPage = () => {
       localStorage.removeItem(StorageKey.aceessToken)
       localStorage.removeItem(StorageKey.refreshToken)
       setUser(null)
-      // [Migrated] void router.replace('/')
       replace('/')
     }
   }
