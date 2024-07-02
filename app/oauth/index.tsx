@@ -1,27 +1,22 @@
+'use client'
+
 import { oauthSignup } from '@/apis/oauthApis'
 import UserContext from '@/providers/UserProvider'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { useMutation } from '@tanstack/react-query'
-import { type InferGetServerSidePropsType } from 'next'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useContext, useEffect } from 'react'
 
-export const getServerSideProps = (context: { query: { code: string } }) => {
-  const { code } = context?.query
-
-  return {
-    props: {
-      code,
-    },
-  }
+export type Props = {
+  params: { code: string }
 }
 
-export default function OAuth({ code }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter()
+export const OAuth = ({ params }: Props) => {
+  const { code } = params
+  const { replace } = useRouter()
   const { setUser } = useContext(UserContext)
   const toast = useCustomToast()
-
   const { mutate: oauthLoginMutate } = useMutation({ mutationFn: oauthSignup })
 
   useEffect(() => {
@@ -33,10 +28,10 @@ export default function OAuth({ code }: InferGetServerSidePropsType<typeof getSe
           localStorage.setItem(StorageKey.aceessToken, res.access)
           localStorage.setItem(StorageKey.refreshToken, res.refresh)
           setUser(res.user)
-          void router.replace('/')
+          void (() => replace('/'))()
         },
         onError: () => {
-          void router.replace('/auth/signin')
+          replace('/auth/signin')
           const EXIST_MSG = '이미 해당 이메일로 회원가입 되어있습니다.'
           toast({
             title: EXIST_MSG,

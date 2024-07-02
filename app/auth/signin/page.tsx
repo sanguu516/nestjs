@@ -1,9 +1,9 @@
-import NextLink from 'next/link'
-import { Flex, Link } from '@chakra-ui/react'
+import { IconKakaoLogo, IconLogo, IconTitle } from '@/assets/icons'
 import CustomButton from '@/components/CustomButton'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { IconKakaoLogo, IconLogo, IconTitle } from '@/assets/icons'
+import { Flex, Link } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
 export default function Signin() {
   const callback_url = `${process.env.NEXT_PUBLIC_URL}/oauth/kakao`

@@ -5,10 +5,10 @@ import IconButton from '@/components/CustomIconButton'
 import Input from '@/components/CustomInput'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { type ButtonVariant, buttonTheme } from '@/styles/theme/Button'
-import { type ChipVariant, chipTheme } from '@/styles/theme/Chip'
-import { type Size, type IconButtonVariant, iconButtonTheme } from '@/styles/theme/IconButton'
-import { Box, HStack, VStack, Text, Flex, Textarea } from '@chakra-ui/react'
+import { buttonTheme, type ButtonVariant } from '@/styles/theme/Button'
+import { chipTheme, type ChipVariant } from '@/styles/theme/Chip'
+import { iconButtonTheme, type IconButtonVariant, type Size } from '@/styles/theme/IconButton'
+import { Box, Flex, HStack, Text, Textarea, VStack } from '@chakra-ui/react'
 
 const colorBlocks = Object.entries(Colors)
   .filter(([key]) => key !== 'black' && key !== 'white')

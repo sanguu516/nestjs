@@ -1,3 +1,5 @@
+'use client'
+
 import { signOut } from '@/apis/authApis'
 import { ImageUser } from '@/assets/icons'
 import CustomButton from '@/components/CustomButton'
@@ -7,10 +9,10 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { Box, Button, Center, Flex, Input, Spinner, Text, VStack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 
-function InfoRow({
+const InfoRow = ({
   label,
   value,
   buttonText,
@@ -18,7 +20,7 @@ function InfoRow({
   label: string
   value: string
   buttonText: string
-}) {
+}) => {
   return (
     <VStack gap={3} align="start" width="100%">
       <Text color={Colors.gray[400]} {...fontStyles.TitleSm}>
@@ -51,9 +53,10 @@ function InfoRow({
   )
 }
 
-function MyPage() {
+const MyPage = () => {
   const { user, setUser } = useContext(UserContext)
-  const router = useRouter()
+  // [Migrated] const router = useRouter()
+  const { replace } = useRouter()
 
   if (!user) {
     return (
@@ -70,7 +73,8 @@ function MyPage() {
       localStorage.removeItem(StorageKey.aceessToken)
       localStorage.removeItem(StorageKey.refreshToken)
       setUser(null)
-      void router.replace('/')
+      // [Migrated] void router.replace('/')
+      replace('/')
     }
   }
 

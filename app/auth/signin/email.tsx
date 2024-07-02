@@ -8,7 +8,7 @@ import CustomButton from '@/components/CustomButton'
 
 import { signIn, type ISigninForm, type SignInResponse } from '@/apis/authApis'
 import NavHeader from '@/components/NavHeader'
-import { SignupForm } from '@/pages/auth/signup'
+import { SignupForm } from '@/components/temp/auth/signup'
 
 import { SIGNIN_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'

@@ -1,3 +1,4 @@
+'use client'
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
 import { IconCategory, IconLocation } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
@@ -10,14 +11,11 @@ import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
+import { getRadiusInMeter } from 'app/real-estates'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-export function getRadiusInMeter(zoom: number) {
-  return 50 * Math.pow(2, zoom - 1)
-}
-
-export default function RealEstate() {
+const RealEstate = () => {
   const [isMapMode, setIsMapMode] = useState(true)
   const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
 
@@ -116,3 +114,5 @@ export default function RealEstate() {
     </Box>
   )
 }
+
+export default RealEstate

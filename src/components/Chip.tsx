@@ -1,3 +1,5 @@
+'use client'
+
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { chipTheme, type ChipSize, type ChipVariant } from '@/styles/theme/Chip'
