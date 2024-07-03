@@ -15,7 +15,8 @@ export type Props = {
 export const OAuth = ({ params }: Props) => {
   const { code } = params
   const { replace } = useRouter()
-  const { setUser } = useContext(UserContext)
+  const userContext = useContext(UserContext)
+  const { setUser } = userContext
   const toast = useCustomToast()
   const { mutate: oauthLoginMutate } = useMutation({ mutationFn: oauthSignup })
 
@@ -28,7 +29,7 @@ export const OAuth = ({ params }: Props) => {
           localStorage.setItem(StorageKey.aceessToken, res.access)
           localStorage.setItem(StorageKey.refreshToken, res.refresh)
           setUser(res.user)
-          void (() => replace('/'))()
+          replace('/')
         },
         onError: () => {
           replace('/auth/signin')
@@ -40,7 +41,7 @@ export const OAuth = ({ params }: Props) => {
         },
       }
     )
-  }, [])
+  }, [code, oauthLoginMutate, replace, setUser, toast])
 
   return <></>
 }
