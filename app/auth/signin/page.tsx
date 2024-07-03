@@ -1,3 +1,5 @@
+'use client'
+
 import { IconKakaoLogo, IconLogo, IconTitle } from '@/assets/icons'
 import CustomButton from '@/components/CustomButton'
 import { Colors } from '@/styles/colors'

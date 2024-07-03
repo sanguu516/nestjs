@@ -1,3 +1,5 @@
+'use client'
+
 import { IconArrowLeft, IconHeart, IconLocation, IconSend } from '@/assets/icons'
 import Chip from '@/components/Chip'
 import Button from '@/components/CustomButton'

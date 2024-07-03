@@ -1,4 +1,5 @@
 'use client'
+
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
 import { IconCategory, IconLocation } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'

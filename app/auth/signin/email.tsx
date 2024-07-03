@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
