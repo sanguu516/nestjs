@@ -1,16 +1,13 @@
+import { IconLink } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
 import { type AgencyShareData } from '@/components/agency-detail/ShareButton'
 import useCustomToast from '@/utils/useCustomToast'
-import { IconLink } from '@/assets/icons'
 
 export default function UrlShare({ shareData }: { shareData: AgencyShareData }) {
   const toast = useCustomToast()
 
   const handleShare = async () => {
-    const canUseShareApi =
-      typeof window !== 'undefined' &&
-      window.navigator.canShare &&
-      window.navigator.canShare(shareData)
+    const canUseShareApi = typeof window !== 'undefined' && window.navigator.canShare?.(shareData)
 
     // Consider other share methods when share api is not available.
     if (!canUseShareApi) {
