@@ -13,7 +13,6 @@ import { Center, Divider, Flex, Text, VStack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
-
 import { useContext, useEffect } from 'react'
 
 function SectionContainer({ title, children }: PropsWithChildren<{ title: string }>) {
@@ -31,13 +30,14 @@ export default function Home() {
     queryKey: [QueryKeys.getTrendingReviews],
     queryFn: getTrendingReviews,
   })
+
   useEffect(() => {
     const token = LocalStorageManager.get(StorageKey.aceessToken)
 
     if (token) {
       void getMe().then(setUser)
     }
-  }, [])
+  }, [setUser])
 
   return (
     <>

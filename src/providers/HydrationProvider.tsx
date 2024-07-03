@@ -1,4 +1,5 @@
-import { DehydratedState, HydrationBoundary } from '@tanstack/react-query'
+'use client'
+import { HydrationBoundary, type DehydratedState } from '@tanstack/react-query'
 import React from 'react'
 
 const HydrationProvider = ({
@@ -10,6 +11,6 @@ const HydrationProvider = ({
     dehydratedState: DehydratedState
   }
 }) => {
-  return <HydrationBoundary state={pageProps?.dehydratedState}></HydrationBoundary>
+  return <HydrationBoundary state={pageProps?.dehydratedState}>{children}</HydrationBoundary>
 }
 export default HydrationProvider

@@ -1,11 +1,11 @@
-import Chakra from '@/providers/ChakraProvider';
-import ClientLayout from '@/providers/ClientLayout';
-import HydrationProvider from '@/providers/HydrationProvider';
-import QueryProvider from '@/providers/QueryClientProvider';
-import { UserProvider } from '@/providers/UserProvider';
-import '@/styles/globals.css';
-import type { Metadata, Viewport } from 'next';
-import Head from 'next/head';
+import Chakra from '@/providers/ChakraProvider'
+import ClientLayout from '@/providers/ClientLayout'
+import HydrationProvider from '@/providers/HydrationProvider'
+import QueryProvider from '@/providers/QueryClientProvider'
+import { UserProvider } from '@/providers/UserProvider'
+import '@/styles/globals.css'
+import type { Metadata, Viewport } from 'next'
+import Head from 'next/head'
 
 const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
 const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
@@ -29,9 +29,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <Head>
-        {/* <meta charSet="UTF-8" /> */}
-        {/* <meta property="og:image:alt" content="starstaragent_logo" key="og_image_alt" /> */}
-        {/* <meta property="og:url" content={process.env.NEXT_PUBLIC_URL + pathname} key="og_url" /> */}
         <link rel="icon" href="/favicon.ico" />
         <script defer src={kakaoMapSdkSrc} />
       </Head>
@@ -40,50 +37,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <QueryProvider>
             <HydrationProvider>
               <UserProvider>
-                {/* <Main /> */}
-                {/* <NextScript /> */}
                 <script
                   dangerouslySetInnerHTML={{
                     __html: `
-              var script = document.createElement('script');
-              script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js';
-              script.integrity = 'sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01';
-              script.crossOrigin = 'anonymous';
-              script.onload = function() {
-                window.Kakao.init('${kakaoApiKey}');
-                window.Kakao.isInitialized();
-              }
-              document.body.appendChild(script);
-            `,
+                      var script = document.createElement('script');
+                      script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js';
+                      script.integrity = 'sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01';
+                      script.crossOrigin = 'anonymous';
+                      script.onload = function() {
+                        window.Kakao.init('${kakaoApiKey}');
+                        window.Kakao.isInitialized();
+                      }
+                      document.body.appendChild(script);
+                      `,
                   }}
                 />
-                {/* <Box className={spoqaHanSans.className}>
-                  <Flex
-                    direction="column"
-                    height="100dvh"
-                    bg={Colors.white}
-                    maxW={480}
-                    margin="0 auto"
-                  >
-                    {needFixedLayout && <Header />}
-                    <Box
-                      flexGrow={1}
-                      as="main"
-                      overflowY="auto"
-                      position="relative"
-                      sx={{ scrollbarWidth: 'none' }}
-                    > */}
                 <ClientLayout>{children}</ClientLayout>
-                {/* </Box>
-                    {needFixedLayout && (
-                      <BottomTab
-                        backgroundColor={Colors.indigo[600]}
-                        activeColor={Colors.white}
-                        inActiveColor={Colors.indigo[300]}
-                      />
-                    )}
-                  </Flex>
-                </Box> */}
               </UserProvider>
             </HydrationProvider>
           </QueryProvider>
