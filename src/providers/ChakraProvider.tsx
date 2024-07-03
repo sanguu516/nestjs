@@ -1,3 +1,5 @@
+'use client'
+
 import reaTheme from '@/styles/theme'
 import { ChakraProvider } from '@chakra-ui/react'
 
