@@ -3,7 +3,7 @@ import { IconArrowLeft } from '@/assets/icons'
 import { Flex, Grid, Heading } from '@chakra-ui/react'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { type ReactElement } from 'react'
 
 export default function NavHeader({

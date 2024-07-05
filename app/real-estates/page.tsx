@@ -13,7 +13,7 @@ import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { getRadiusInMeter } from 'app/real-estates'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 const RealEstate = () => {
@@ -23,12 +23,16 @@ const RealEstate = () => {
   const [center, setCenter] = useState(DefaultCenter.coordinates)
   const [zoom, setZoom] = useState(Zoom.default)
 
-  const { query } = useRouter()
+  const searchParams = useSearchParams()
+
+  const querylat = searchParams.get('lat')
+  const querylon = searchParams.get('lon')
+
   const initialCenter = useMemo(() => {
-    const lat = Number(query.lat)
-    const lon = Number(query.lon)
+    const lat = Number(querylat)
+    const lon = Number(querylon)
     return lat && lon ? { lat, lon } : DefaultCenter.coordinates
-  }, [query.lat, query.lon])
+  }, [querylat, querylon])
 
   const mapRef = useRef<kakao.maps.Map | null>(null)
 

@@ -3,7 +3,7 @@ import { NeedSignInError } from '@/apis/fetchHandler'
 import { Colors } from '@/styles/colors'
 import { Center, Spinner } from '@chakra-ui/react'
 import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import type { ReactJSXIntrinsicAttributes } from 'node_modules/@emotion/react/types/jsx-namespace'
 import { type ComponentType, useEffect, useState } from 'react'
 
