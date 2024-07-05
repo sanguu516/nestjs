@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       `,
                   }}
                 />
-                <Script strategy="afterInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
+                <Script strategy="beforeInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
                 <ClientLayout>{children}</ClientLayout>
               </UserProvider>
             </HydrationProvider>
