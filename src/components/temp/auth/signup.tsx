@@ -11,8 +11,8 @@ import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
 import { Box, FormControl, FormLabel, Grid, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const LOGIN_TITLE = '회원정보를 입력해주세요!'
 
@@ -30,6 +30,8 @@ export default function Signup() {
     mutationFn: signUp,
   })
   const router = useRouter()
+  const searchParams = useSearchParams()
+
   const { setUser } = useContext(UserContext)
   const toast = useCustomToast()
 
@@ -40,8 +42,8 @@ export default function Signup() {
         localStorage.setItem(StorageKey.aceessToken, res.access)
         localStorage.setItem(StorageKey.refreshToken, res.refresh)
         setUser(res.user)
+        const redirect = searchParams.get('redirect')
 
-        const { redirect } = router.query
         const redirectPath =
           redirect && typeof redirect === 'string' ? decodeURIComponent(redirect) : '/'
 

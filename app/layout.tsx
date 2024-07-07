@@ -6,6 +6,7 @@ import { UserProvider } from '@/providers/UserProvider'
 import '@/styles/globals.css'
 import type { Metadata, Viewport } from 'next'
 import Head from 'next/head'
+import Script from 'next/script'
 
 const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
 const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
@@ -30,7 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <Head>
         <link rel="icon" href="/favicon.ico" />
-        <script defer src={kakaoMapSdkSrc} />
       </Head>
       <body>
         <Chakra>
@@ -52,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       `,
                   }}
                 />
+                <Script strategy="beforeInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
                 <ClientLayout>{children}</ClientLayout>
               </UserProvider>
             </HydrationProvider>

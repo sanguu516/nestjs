@@ -3,7 +3,7 @@ import { IconArrowRight3 } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Center, Flex, Text, VStack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Star } from '../Rating'
 import Review from '../Review'
 

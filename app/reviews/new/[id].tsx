@@ -19,7 +19,7 @@ import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex, Heading, Text, Textarea } from '@chakra-ui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { debounce } from 'lodash-es'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useContext, useEffect, useState } from 'react'
 
 import { getRealEstateData } from '@/apis/realEstateApis'
@@ -40,8 +40,9 @@ const initReviewForm = {
 function New() {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const { id } = router.query || {}
+  const id = searchParams.get('id')
   const agencyId = Number(id)
 
   const { data: agencyData } = useQuery({

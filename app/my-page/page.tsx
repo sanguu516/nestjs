@@ -9,7 +9,7 @@ import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { Box, Button, Center, Flex, Input, Spinner, Text, VStack } from '@chakra-ui/react'
-import { AuthProvider } from 'app/my-page/AuthProvider'
+import { AuthProvider } from './AuthProvider'
 import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 

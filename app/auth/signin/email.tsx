@@ -3,7 +3,7 @@
 import { Box, Checkbox, Flex, FormControl, Heading, Link, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useContext, useState } from 'react'
 
 import CustomButton from '@/components/CustomButton'
@@ -31,6 +31,7 @@ export default function Signin() {
     mutationFn: signIn,
   })
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const { setUser } = useContext(UserContext)
   const toast = useCustomToast()
@@ -42,8 +43,8 @@ export default function Signin() {
         localStorage.setItem(StorageKey.aceessToken, res.access)
         localStorage.setItem(StorageKey.refreshToken, res.refresh)
         setUser(res.user)
+        const redirect = searchParams.get('redirect')
 
-        const { redirect } = router.query
         const redirectPath =
           redirect && typeof redirect === 'string' ? decodeURIComponent(redirect) : '/'
 
