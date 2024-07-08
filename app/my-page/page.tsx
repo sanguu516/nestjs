@@ -4,14 +4,12 @@ import { signOut } from '@/apis/authApis'
 import { ImageUser } from '@/assets/icons'
 
 import CustomButton from '@/components/CustomButton'
-import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { StorageKey } from '@/utils/localStorageUtil'
 import { Box, Button, Center, Flex, Input, Spinner, Text, VStack } from '@chakra-ui/react'
-import { AuthProvider } from './AuthProvider'
+import { useAuth } from 'app/my-page/AuthProvider'
 import { useRouter } from 'next/navigation'
-import { useContext } from 'react'
 
 const InfoRow = ({
   label,
@@ -55,10 +53,15 @@ const InfoRow = ({
 }
 
 const MyPage = () => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser, isCheckingAuth } = useAuth()
   const router = useRouter()
 
   if (!user) {
+    // TODO: 이 로직 다시 체크
+    return null
+  }
+
+  if (!isCheckingAuth) {
     return (
       <Center>
         <Spinner />
@@ -116,10 +119,4 @@ const MyPage = () => {
   )
 }
 
-const WrappedMyPage = () => (
-  <AuthProvider>
-    <MyPage />
-  </AuthProvider>
-)
-
-export default WrappedMyPage
+export default MyPage
