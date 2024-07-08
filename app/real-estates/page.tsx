@@ -12,14 +12,12 @@ import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Flex } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import { getRadiusInMeter } from 'app/real-estates'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-const RealEstate = () => {
+const RealEstates = () => {
   const [isMapMode, setIsMapMode] = useState(true)
   const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
-
   const [center, setCenter] = useState(DefaultCenter.coordinates)
   const [zoom, setZoom] = useState(Zoom.default)
 
@@ -60,12 +58,17 @@ const RealEstate = () => {
   }, [])
 
   const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse])
+
   const selectedAgency = useMemo(
     () => agencies.find((agency) => agency.id === selectedAgencyId),
     [agencies, selectedAgencyId]
   )
 
   const FabIcon = isMapMode ? IconCategory : IconLocation
+
+  const getRadiusInMeter = (zoom: number) => {
+    return 50 * Math.pow(2, zoom - 1)
+  }
 
   return (
     <Box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={1}>
@@ -120,4 +123,4 @@ const RealEstate = () => {
   )
 }
 
-export default RealEstate
+export default RealEstates

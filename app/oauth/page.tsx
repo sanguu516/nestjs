@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useContext, useEffect } from 'react'
 
-export default function OAuth() {
+const OAuth = () => {
   const router = useRouter()
   const { setUser } = useContext(UserContext)
   const toast = useCustomToast()
@@ -44,3 +44,5 @@ export default function OAuth() {
 
   return <></>
 }
+
+export default OAuth
