@@ -22,7 +22,6 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
           position="relative"
           sx={{ scrollbarWidth: 'none' }}
         >
-          {/* <Component {...pageProps} /> */}
           {children}
         </Box>
         {needFixedLayout && (
