@@ -57,7 +57,7 @@ const MyPage = () => {
   const router = useRouter()
 
   if (!user) {
-    // TODO: 이 로직 다시 체크
+    // TODO: 이 로직 다시 체크 
     return null
   }
 
