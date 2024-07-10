@@ -1,14 +1,15 @@
 import { type SearchAgenciesResult } from '@/apis/realEstateApis'
-import { Colors } from '@/styles/colors'
 import { type Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, type MutableRefObject, useMemo } from 'react'
-import { Map, MarkerClusterer } from 'react-kakao-maps-sdk'
-import { convertCoordinatesToLatLng, convertLatLngToCoordinates, Zoom } from '../../utils/mapUtil'
-import AgencyMarker from './AgencyMarker'
+import { memo, type MutableRefObject, useEffect, useRef } from 'react'
+import { Map } from 'react-kakao-maps-sdk'
+import { convertCoordinatesToLatLng, convertLatLngToCoordinates, Zoom } from '@/utils/mapUtil'
+import useClusterer from '@/hooks/useClusterer'
+import { Colors } from '@/styles/colors'
+import useMarker from '@/hooks/useMarker'
 
-const QueryDebounceDelay = 300
+const QueryDebounceDelay = 100
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
   agencies: SearchAgenciesResult[]
@@ -17,6 +18,18 @@ interface Props {
   selectedAgencyId?: number
   onSelectAgency: (id?: number) => void
   onCenterChange: (center: Coordinates) => void
+}
+
+const MARKER_IMAGE = '/marker.png'
+const MARKER_SIZE = {
+  default: {
+    width: 27,
+    height: 32,
+  },
+  selected: {
+    width: 40,
+    height: 50,
+  },
 }
 
 function KakaoMap(props: Props) {
@@ -30,28 +43,70 @@ function KakaoMap(props: Props) {
     initialCenter,
   } = props
 
-  const markerPositions = useMemo(
-    () =>
-      agencies
-        .map((agency) => ({
-          lat: agency.address_point.lat,
-          lon: agency.address_point.lon,
-          id: agency.id,
-        }))
-        .map((marker) => (
-          <AgencyMarker
-            key={`${marker.id}`}
-            coordinates={marker}
-            isSelected={selectedAgencyId === marker.id}
-            onSelect={() => {
-              onSelectAgency(marker.id)
-            }}
-          />
-        )),
-    [agencies, selectedAgencyId, onSelectAgency]
-  )
+  const previousAgencies = useRef<SearchAgenciesResult[]>([])
 
-  const zoom = mapRef.current?.getLevel() ?? 1
+  const { initMarker, addMarker, removeMarker } = useMarker({
+    mapRef,
+    image: MARKER_IMAGE,
+    size: MARKER_SIZE,
+    onSelect: onSelectAgency,
+  })
+
+  const clusterer = useClusterer({
+    mapRef,
+    averageCenter: true,
+    minLevel: Zoom.clusterStart,
+    styles: [
+      {
+        background: `url(${MARKER_IMAGE}) no-repeat`,
+        width: '34px',
+        height: '44px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: Colors.white,
+        fontSize: '14px',
+      },
+    ],
+  })
+
+  useEffect(() => {
+    if (mapRef.current && agencies.length && clusterer) {
+      const newAgencies = agencies.filter(
+        (agency) => !previousAgencies.current.some((prev) => prev.id === agency.id)
+      )
+      const removedAgencies = previousAgencies.current.filter(
+        (prev) => !agencies.some((agency) => agency.id === prev.id)
+      )
+
+      // 마커 추가
+      newAgencies.forEach((agency) => {
+        const isSelected = selectedAgencyId === agency.id
+        console.log(selectedAgencyId, agency.id, isSelected)
+
+        const markerPosition = new kakao.maps.LatLng(
+          agency.address_point.lat,
+          agency.address_point.lon
+        )
+
+        const marker = addMarker(agency.id, isSelected, {
+          position: markerPosition,
+          map: mapRef.current!,
+        })
+        clusterer.addMarker(marker)
+      })
+
+      // 마커 제거
+      removedAgencies.forEach((removed) => {
+        const removedMarker = removeMarker(removed.id)
+        if (removedMarker) {
+          clusterer.removeMarker(removedMarker)
+        }
+      })
+
+      previousAgencies.current = agencies
+    }
+  }, [agencies, clusterer])
 
   return (
     <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -69,11 +124,14 @@ function KakaoMap(props: Props) {
             onZoomChange(map.getLevel())
             onCenterChange(convertLatLngToCoordinates(map.getCenter()))
           }}
-          onClick={() => onSelectAgency(undefined)}
+          onClick={() => {
+            onSelectAgency(undefined)
+            initMarker()
+          }}
           level={Zoom.default}
           minLevel={20}
           ref={mapRef}
-          onCenterChanged={debounce((target: kakao.maps.Map) => {
+          onDragEnd={debounce((target: kakao.maps.Map) => {
             onCenterChange(convertLatLngToCoordinates(target.getCenter()))
           }, QueryDebounceDelay)}
           onZoomChanged={debounce((target: kakao.maps.Map) => {
@@ -81,30 +139,7 @@ function KakaoMap(props: Props) {
           }, QueryDebounceDelay)}
           center={convertCoordinatesToLatLng(initialCenter)}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        >
-          {zoom < Zoom.clusterStart ? (
-            markerPositions
-          ) : (
-            <MarkerClusterer
-              averageCenter
-              minLevel={Zoom.clusterStart}
-              styles={[
-                {
-                  background: 'url(/marker.png) no-repeat',
-                  width: '34px',
-                  height: '44px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  color: Colors.white,
-                  fontSize: '14px',
-                },
-              ]}
-            >
-              {markerPositions}
-            </MarkerClusterer>
-          )}
-        </Map>
+        ></Map>
       </Box>
     </Box>
   )

@@ -15,6 +15,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
+// TODO: zoom level에 따른 적절한 반경 찾기
+export function getRadiusInMeter(zoom: number) {
+  return 50 * Math.pow(2, zoom - 1)
+}
+
 const RealEstates = () => {
   const [isMapMode, setIsMapMode] = useState(true)
   const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
@@ -35,15 +40,12 @@ const RealEstates = () => {
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
   const { data: agenciesResponse } = useQuery({
-    queryKey: QueryKeys.agenciesByAddress(
-      center,
-      zoom * 200 // TODO: level에 따른 적절한 반경 찾기
-    ),
+    queryKey: QueryKeys.agenciesByAddress(center, zoom),
     queryFn: () => {
       return searchAgenciesByAddress({
         center,
         radiusInMeter: getRadiusInMeter(zoom),
-        pageParams: { page: 1, page_size: 1000 },
+        pageParams: { page: 1, page_size: 500 },
       })
     },
     enabled: zoom <= Zoom.enableQueryMax,
@@ -57,11 +59,10 @@ const RealEstates = () => {
     setZoom(zoom)
   }, [])
 
-  const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse])
-
+  const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse?.results, zoom])
   const selectedAgency = useMemo(
     () => agencies.find((agency) => agency.id === selectedAgencyId),
-    [agencies, selectedAgencyId]
+    [selectedAgencyId]
   )
 
   const FabIcon = isMapMode ? IconCategory : IconLocation
