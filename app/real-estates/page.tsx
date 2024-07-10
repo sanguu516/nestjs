@@ -16,7 +16,7 @@ import { useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 // TODO: zoom level에 따른 적절한 반경 찾기
-export function getRadiusInMeter(zoom: number) {
+function getRadiusInMeter(zoom: number) {
   return 50 * Math.pow(2, zoom - 1)
 }
 

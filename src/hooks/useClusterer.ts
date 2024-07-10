@@ -10,7 +10,7 @@ const useClusterer = ({ mapRef, ...props }: useClustererProps) => {
   useEffect(() => {
     if (mapRef.current && !clusterer) {
       const newClusterer = new kakao.maps.MarkerClusterer({
-        map: mapRef.current!,
+        map: mapRef.current,
         ...props,
       })
       setClusterer(newClusterer)
