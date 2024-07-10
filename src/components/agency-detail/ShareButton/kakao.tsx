@@ -13,7 +13,7 @@ declare global {
 
 export default function KakaoShare() {
   const pathname = usePathname()
-  const url = process.env.NEXT_PUBLIC_URL + pathname
+  const url = `${process.env.NEXT_PUBLIC_URL}` + pathname
 
   const kakaoButton = () => {
     if (window.Kakao) {

@@ -1,3 +1,5 @@
+'use client'
+
 import { IconDangerCircle } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'

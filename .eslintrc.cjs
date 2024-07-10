@@ -41,6 +41,7 @@ const config = {
     '@typescript-eslint/no-unsafe-argument': 'warn',
     '@typescript-eslint/no-unsafe-member-access': 'warn',
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+    '@typescript-eslint/unbound-method': 'warn',
   },
 }
 module.exports = config

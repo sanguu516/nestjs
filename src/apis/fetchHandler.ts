@@ -77,7 +77,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
     }
   }
 
-  throw new Error('Unknown error occurred')
+  // throw new Error('Unknown error occurred')
 }
 
 export default fetchApi

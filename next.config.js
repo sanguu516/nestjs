@@ -6,7 +6,7 @@ await import('./src/env.js')
 
 /** @type {import("next").NextConfig} */
 const config = {
-  crossOrigin: false,
+  crossOrigin: 'anonymous',
   reactStrictMode: true,
 
   /**
@@ -47,6 +47,9 @@ const config = {
         ],
       },
     ]
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 }
 
