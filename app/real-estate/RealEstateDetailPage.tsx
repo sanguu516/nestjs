@@ -1,5 +1,4 @@
 'use client'
-
 import {
   QueryClient,
   QueryClientProvider,
@@ -96,9 +95,9 @@ export default function RealEstateDetailPage({
   const needMoreView = reviewsData.length > 5
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       {/* <Hydrate state={dehydratedState}> */}
-      <head>
+      {/* <head>
         <title>{shareData.title}</title>
         <meta name="title" content={shareData.title} key="title" />
         <meta name="description" content={shareData.text} key="description" />
@@ -111,7 +110,7 @@ export default function RealEstateDetailPage({
           defer
           dangerouslySetInnerHTML={{ __html: JSON.stringify(richSnippet) }}
         />
-      </head>
+      </head> */}
       <NavHeader title={name} rightMenu={<ShareButton shareData={shareData} />} />
       <Box bg={Colors.gray[100]}>
         <Box as="section" className="info" bg={Colors.white}>
@@ -221,6 +220,6 @@ export default function RealEstateDetailPage({
         </CustomButton>
       </Box>
       {/* </Hydrate> */}
-    </QueryClientProvider>
+    </>
   )
 }
