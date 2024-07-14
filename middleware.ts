@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getRealEstateData } from './apis/realEstateApis'
+import { getRealEstateData } from './src/apis/realEstateApis'
 
 export const middleware = async (request: NextRequest) => {
-  const [_x, _y, id, seo_key] = decodeURI(request.nextUrl.pathname).split('/')
+  const [_x, _y, id, seo_key] = decodeURIComponent(request.nextUrl.pathname).split('/')
   if (_y === 'real-estate' && Number(id) > 0) {
     const agencyData = await getRealEstateData(Number(id))
     if (agencyData.seo_key !== seo_key) {

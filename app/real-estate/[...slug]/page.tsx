@@ -50,9 +50,5 @@ export default async function Page({ params }: { params: { slug: [string, string
 
   const dehydratedState = dehydrate(queryClient)
 
-  return (
-    <HydrationBoundary state={dehydratedState}>
-      <RealEstateDetailPage agency={agencyData} dehydratedState={dehydratedState} />
-    </HydrationBoundary>
-  )
+  return <RealEstateDetailPage agency={agencyData} dehydratedState={dehydratedState} />
 }

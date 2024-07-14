@@ -15,9 +15,6 @@ function ReviewCard({ review }: Props) {
   const router = useRouter()
   const { rating, user, user_keywords, content, agency, id } = review
 
-  console.log('agency.id>>>', agency.id)
-  console.log('agency.seo_key>>>', agency.seo_key)
-
   return (
     <Box
       as="div"
