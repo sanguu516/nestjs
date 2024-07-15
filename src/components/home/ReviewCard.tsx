@@ -14,10 +14,11 @@ interface Props {
 function ReviewCard({ review }: Props) {
   const router = useRouter()
   const { rating, user, user_keywords, content, agency, id } = review
+
   return (
     <Box
       as="div"
-      onClick={() => void router.push(`/real-estate/${agency.id}/${agency.seo_key}`)}
+      onClick={() => router.push(`/real-estate/${agency.id}/${agency.seo_key}`)}
       key={id}
       width="100%"
     >

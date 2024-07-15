@@ -4,10 +4,9 @@ import { Colors } from '@/styles/colors'
 import { Center, Spinner } from '@chakra-ui/react'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import type { ReactJSXIntrinsicAttributes } from 'node_modules/@emotion/react/types/jsx-namespace'
 import { type ComponentType, useEffect, useState } from 'react'
 
-function withAuth<T extends ReactJSXIntrinsicAttributes>(Component: ComponentType<T>) {
+function withAuth<T extends object>(Component: ComponentType<T>) {
   return function WithAuth(props: T) {
     const [isCheckingAuth, setIsCheckingAuth] = useState(true)
     const router = useRouter()
@@ -27,7 +26,7 @@ function withAuth<T extends ReactJSXIntrinsicAttributes>(Component: ComponentTyp
             )
           }
         })
-    }, [])
+    }, [pathname, router])
 
     if (isCheckingAuth) {
       return (

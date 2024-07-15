@@ -37,7 +37,7 @@ const initReviewForm = {
   user_keywords: [],
 }
 
-function New() {
+function NewReviewPage() {
   const queryClient = useQueryClient()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -163,7 +163,7 @@ function New() {
                 variant="outlined"
                 unicode={KEYWORD_ICONS[e.id]}
                 cursor="pointer"
-                handleClick={handleKeyword}
+                handleClick={() => handleKeyword(e.id)}
               >
                 {e.name}
               </Chip>
@@ -178,4 +178,4 @@ function New() {
   )
 }
 
-export default withAuth(New)
+export default withAuth(NewReviewPage)

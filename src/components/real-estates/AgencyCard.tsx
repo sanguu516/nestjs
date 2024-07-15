@@ -5,6 +5,7 @@ import { Box, Flex, Text, type SpaceProps } from '@chakra-ui/react'
 import { isEmpty } from 'lodash-es'
 import Image from 'next/image'
 import Link from 'next/link'
+import { ImageEnabledStar } from '@/assets/icons'
 
 interface Props extends SpaceProps {
   agency: SearchAgenciesResult
@@ -17,21 +18,14 @@ export default function AgencyCard({ agency, ...rest }: Props) {
 
   return (
     <Box as={Link} href={`/real-estate/${id}/${seo_key}`} width="100%" {...rest}>
-      <Flex height={90} alignItems="center" gap={3} bgColor={Colors.white}>
-        <Image
-          alt={name}
-          src={image}
-          width={120}
-          height={90}
-          loading="lazy"
-          style={{ borderRadius: 8, flexShrink: 0, width: '120px', height: '90px' }}
-        />
+      <Flex
+        height={90}
+        alignItems="center"
+        justifyContent="space-between"
+        gap={3}
+        bgColor={Colors.white}
+      >
         <Box overflow="hidden">
-          <Flex align="center" gap={1}>
-            <Image alt="rating" width={20} height={20} src="/star.png" />
-            {/* TODO: Fix the rating */}
-            <Text {...fontStyles.TitleMd}>{`${(average_rating ?? 3).toFixed(1)}`}</Text>
-          </Flex>
           <Text
             {...fontStyles.TitleSm}
             mt={1}
@@ -45,9 +39,22 @@ export default function AgencyCard({ agency, ...rest }: Props) {
           <Text
             {...fontStyles.Caption}
             color={Colors.gray[400]}
-          >{`대표자  ${representative_name}`}</Text>
-          <Text {...fontStyles.Caption} color={Colors.gray[400]}>{`소재지  ${address_short}`}</Text>
+          >{`${address_short} ${representative_name}`}</Text>
+
+          <Flex align="center" gap={1}>
+            <ImageEnabledStar width={16} height={16} />
+            {/* TODO: Fix the rating */}
+            <Text {...fontStyles.TitleSm}>{`${(average_rating ?? 3).toFixed(1)}`}</Text>
+          </Flex>
         </Box>
+        <Image
+          alt={name}
+          src={image}
+          width={96}
+          height={73}
+          loading="lazy"
+          style={{ borderRadius: 6, flexShrink: 0, width: '120px', height: '90px' }}
+        />
       </Flex>
     </Box>
   )

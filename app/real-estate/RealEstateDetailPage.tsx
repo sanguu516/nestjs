@@ -1,11 +1,5 @@
 'use client'
-
-import {
-  QueryClient,
-  QueryClientProvider,
-  useInfiniteQuery,
-  type DehydratedState,
-} from '@tanstack/react-query'
+import { QueryClientProvider, useInfiniteQuery, type DehydratedState } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
@@ -48,7 +42,6 @@ export default function RealEstateDetailPage({
   agency,
   dehydratedState,
 }: RealEstateDetailPageProps) {
-  const [queryClient] = useState(() => new QueryClient())
   const { name, average_rating, images, id, representative_name, agency_number } = agency
   const tel = addHyphenToTel(agency.tel) ?? ''
   const mobile = addHyphenToTel(agency.mobile) ?? ''
@@ -64,13 +57,15 @@ export default function RealEstateDetailPage({
     getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
   })
 
+  console.log('reviewsResult>>', reviewsResult)
+
   const reviewsData = useMemo(
     () => reviewsResult?.pages.flatMap((p) => p.results) ?? [],
     [reviewsResult]
   )
 
   const navigateToReviewPage = () => {
-    void router.push(`/reviews/new/${id}`)
+    router.push(`/reviews/new/${id}`)
   }
 
   const shareTextList: Record<string, string> = {
@@ -96,9 +91,8 @@ export default function RealEstateDetailPage({
   const needMoreView = reviewsData.length > 5
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Hydrate state={dehydratedState}> */}
-      <head>
+    <>
+      {/* <head>
         <title>{shareData.title}</title>
         <meta name="title" content={shareData.title} key="title" />
         <meta name="description" content={shareData.text} key="description" />
@@ -111,7 +105,7 @@ export default function RealEstateDetailPage({
           defer
           dangerouslySetInnerHTML={{ __html: JSON.stringify(richSnippet) }}
         />
-      </head>
+      </head> */}
       <NavHeader title={name} rightMenu={<ShareButton shareData={shareData} />} />
       <Box bg={Colors.gray[100]}>
         <Box as="section" className="info" bg={Colors.white}>
@@ -220,7 +214,6 @@ export default function RealEstateDetailPage({
           리뷰쓰기
         </CustomButton>
       </Box>
-      {/* </Hydrate> */}
-    </QueryClientProvider>
+    </>
   )
 }
