@@ -1,7 +1,7 @@
 'use client'
 
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
-import { IconCategory, IconLocation } from '@/assets/icons'
+import { IconCategory, IconLocation, IconNoSearch } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
 import AgencyCard from '@/components/real-estates/AgencyCard'
 import AgencyListView from '@/components/real-estates/AgencyListView'
@@ -71,6 +71,7 @@ const RealEstates = () => {
     return 50 * Math.pow(2, zoom - 1)
   }
 
+  console.log('selectedAgency>>', selectedAgency)
   return (
     <Box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={1}>
       {isMapMode ? (
