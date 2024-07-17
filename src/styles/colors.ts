@@ -83,6 +83,18 @@ export const Colors = {
     900: '#101828',
     950: '#0c111d',
   },
+  new_gray: {
+    0: '#FFFFFF',
+    1: '#FAFAFA',
+    2: '#F3F3F3',
+    3: '#EBEBEB',
+    4: '#DDDDDD',
+    5: '#C3C3C3',
+    6: '#8F8F8F',
+    7: '#626262',
+    8: '#343434',
+    9: '#121212',
+  },
   black: '#000000',
   white: '#ffffff',
   kakao: {
