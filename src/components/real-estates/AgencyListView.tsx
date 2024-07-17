@@ -25,14 +25,14 @@ function AgencyListView({ agencies }: Props) {
           height="100%"
           width="100%"
           flexDirection={'column'}
-          gap={3}
+          gap={2}
           overflow={'hidden'}
         >
           <IconNoSearch width={80} height={80} />
-          <Text {...fontStyles.TitleLg} color={Colors.gray[400]}>
+          <Text {...fontStyles.semibold_20} color={Colors.new_gray[6]} mt={3}>
             중개사무소가 없어요
           </Text>
-          <Text {...fontStyles.TitleMd} color={Colors.gray[400]}>
+          <Text {...fontStyles.regular_16} color={Colors.new_gray[6]}>
             지도에서 다른 지역을 선택해보세요
           </Text>
         </Flex>

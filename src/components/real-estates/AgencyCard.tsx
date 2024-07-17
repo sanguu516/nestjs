@@ -27,25 +27,37 @@ export default function AgencyCard({ agency, ...rest }: Props) {
       >
         <Box overflow={'hidden'}>
           <Text
-            {...fontStyles.TitleSm}
+            {...fontStyles.semibold_16}
             mt={1}
             mb={1}
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="ellipsis"
+            color={Colors.new_gray[9]}
           >
             {name}
           </Text>
           <Flex align={'center'} gap={1}>
-            <Text {...fontStyles.Caption} color={Colors.gray[400]}>{`${address_short}`}</Text>
+            <Text {...fontStyles.medium_13} color={Colors.new_gray[6]}>{`${address_short}`}</Text>
             <IconDivider width={3} height={3} />
-            <Text {...fontStyles.Caption} color={Colors.gray[400]}>{`${representative_name}`}</Text>
+            <Text
+              {...fontStyles.medium_13}
+              color={Colors.new_gray[6]}
+            >{`${representative_name}`}</Text>
           </Flex>
 
-          <Flex align="center" gap={1} mt={2} direction={'row'}>
+          <Flex alignItems="center" mt={2} direction={'row'}>
             <ImageEnabledStar width={16} height={16} />
-            <Text {...fontStyles.TitleSm}>{`${(average_rating ?? 3).toFixed(1)}`}</Text>
-            <Text {...fontStyles.Caption} color={Colors.gray[400]} ml={1}>{`리뷰 2`}</Text>
+            <Text
+              {...fontStyles.TitleSm}
+              lineHeight="1"
+            >{`${(average_rating ?? 3).toFixed(1)}`}</Text>
+            <Text
+              {...fontStyles.medium_13}
+              color={Colors.new_gray[6]}
+              ml={2}
+              lineHeight="1"
+            >{`리뷰 2`}</Text>
           </Flex>
         </Box>
         <Image
