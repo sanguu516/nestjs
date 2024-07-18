@@ -95,7 +95,7 @@ const RealEstates = () => {
             bgColor={Colors.white}
             borderRadius="8px"
             overflow="hidden"
-            boxShadow="0px 1px 3px 0px rgba(0, 0, 0, 0.35)"
+            boxShadow="box-shadow: 0px 2px 6px -1px #0000001F;"
           >
             <AgencyCard agency={selectedAgency} />
           </Box>

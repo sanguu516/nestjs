@@ -6,6 +6,7 @@ import AgencyCard from './AgencyCard'
 import { IconNoSearch } from '@/assets/icons'
 import { fontStyles } from '@/styles/font'
 import { Colors } from '@/styles/colors'
+import SearchNoData from '../search/SearchNoData'
 
 interface Props {
   agencies: SearchAgenciesResult[]
@@ -28,13 +29,7 @@ function AgencyListView({ agencies }: Props) {
           gap={2}
           overflow={'hidden'}
         >
-          <IconNoSearch width={80} height={80} />
-          <Text {...fontStyles.semibold_20} color={Colors.new_gray[6]} mt={3}>
-            중개사무소가 없어요
-          </Text>
-          <Text {...fontStyles.regular_16} color={Colors.new_gray[6]}>
-            지도에서 다른 지역을 선택해보세요
-          </Text>
+          <SearchNoData title="중개사무소가 없어요" content="지도에서 다른 지역을 선택해보세요" />
         </Flex>
       ) : (
         <InfiniteScroll

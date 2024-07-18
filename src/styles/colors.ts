@@ -13,6 +13,7 @@ export const Colors = {
     900: '#2d3282',
     950: '#1f235b',
   },
+
   red: {
     25: '#fffafa',
     50: '#fef3f2',
@@ -82,6 +83,10 @@ export const Colors = {
     800: '#1d2939',
     900: '#101828',
     950: '#0c111d',
+  },
+  blue_gray: {
+    1: '#F4F5F8',
+    3: '#B7C0CD',
   },
   new_gray: {
     0: '#FFFFFF',
