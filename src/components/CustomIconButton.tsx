@@ -8,7 +8,7 @@ interface CustomIconButtonProps extends ButtonProps {
   size: Size
   variant: IconButtonVariant
   icon: React.ReactElement
-  title: string
+  title?: string
 }
 
 export default function CustomIConButton({
@@ -35,7 +35,7 @@ export default function CustomIConButton({
       {...fontStyles.semibold_16}
     >
       {icon && cloneElement(icon, { ...iconSize, ...icon.props, style: { marginRight: '5px' } })}
-      {title}
+      {title ?? title}
     </Button>
   )
 }
