@@ -57,8 +57,6 @@ export default function RealEstateDetailPage({
     getNextPageParam: (lastPage) => ({ page: lastPage.page + 1, page_size: 10 }),
   })
 
-  console.log('reviewsResult>>', reviewsResult)
-
   const reviewsData = useMemo(
     () => reviewsResult?.pages.flatMap((p) => p.results) ?? [],
     [reviewsResult]

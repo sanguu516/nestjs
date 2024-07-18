@@ -1,7 +1,7 @@
 'use client'
 
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
-import { IconCategory, IconLocation, IconNoSearch } from '@/assets/icons'
+import { IconCategory, IconLocation, IconMap, IconToggle } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
 import AgencyCard from '@/components/real-estates/AgencyCard'
 import AgencyListView from '@/components/real-estates/AgencyListView'
@@ -65,13 +65,12 @@ const RealEstates = () => {
     [selectedAgencyId]
   )
 
-  const FabIcon = isMapMode ? IconCategory : IconLocation
+  const FabIcon = isMapMode ? IconToggle : IconMap
 
   const getRadiusInMeter = (zoom: number) => {
     return 50 * Math.pow(2, zoom - 1)
   }
 
-  console.log('selectedAgency>>', selectedAgency)
   return (
     <Box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={1}>
       {isMapMode ? (
@@ -87,7 +86,7 @@ const RealEstates = () => {
       ) : (
         <AgencyListView agencies={agencies} />
       )}
-      <Box position="absolute" left={0} bottom="40px" width="100%" zIndex={200}>
+      <Box position="absolute" left={0} bottom="20px" width="100%" zIndex={200}>
         {selectedAgency ? (
           <Box
             mx={4}
@@ -101,14 +100,14 @@ const RealEstates = () => {
             <AgencyCard agency={selectedAgency} />
           </Box>
         ) : (
-          <Flex justifyContent="flex-end">
+          <Flex justifyContent="center" textAlign={'center'}>
             <CustomIConButton
               sx={{
-                background: Colors.white,
-                width: '56px',
-                height: '56px',
-                mr: 4,
-                boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.35)',
+                background: isMapMode ? Colors.white : Colors.new_gray[8],
+                width: '88px',
+                height: '44px',
+                color: isMapMode ? Colors.new_gray[9] : Colors.white,
+                boxShadow: '0px 2px 6px -1px #0000001F',
               }}
               size="lg"
               variant="primary"
@@ -117,6 +116,7 @@ const RealEstates = () => {
                 setIsMapMode((prev) => !prev)
                 e.stopPropagation()
               }}
+              title={isMapMode ? '목록' : '지도'}
             />
           </Flex>
         )}
