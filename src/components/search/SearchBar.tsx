@@ -27,7 +27,6 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
     enabled: deferredQuery !== '',
   })
 
-  console.log('locationData>>', locationData)
   const {
     data: agencyPaginatedResult,
     fetchNextPage: fetchMoreAgencies,
@@ -103,7 +102,7 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
         maxWidth={480}
         top="50px"
         marginX="auto"
-        bottom="80px"
+        bottom="0px"
         width="100%"
         bgColor={Colors.white}
       >

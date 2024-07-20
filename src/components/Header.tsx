@@ -1,5 +1,5 @@
 'use client'
-import { IconSearch, IconProfile, IconTitle } from '@/assets/icons'
+import { IconSearch, IconProfile, IconTitle, ImageUser } from '@/assets/icons'
 
 import UserContext from '@/providers/UserProvider'
 import { Colors } from '@/styles/colors'
@@ -22,11 +22,11 @@ export default function Header() {
   return (
     <Box as="header" top={0} zIndex={100} w="100%" maxW="inherit" bg={Colors.white}>
       {!isSearch ? (
-        <Flex h={16} justify="space-between" align="center" p={4}>
+        <Flex h={'48px'} justify="space-between" align="center" p={5}>
           <Link as={NextLink} href="/" display="flex" alignItems="center" w={135}>
             <IconTitle width={80} height={16} />
           </Link>
-          <Flex align="center" gap={1}>
+          <Flex align="center" gap={2}>
             <IconSearch width={24} height={24} onClick={() => setIsSearch(!isSearch)} />
             {user ? (
               <IconButton
@@ -39,7 +39,7 @@ export default function Header() {
                   mr: -2,
                 }}
               >
-                <IconProfile width={24} height={24} />
+                <ImageUser width={28} height={28} style={{ borderRadius: '100%' }} />
               </IconButton>
             ) : (
               <Text

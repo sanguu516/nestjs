@@ -60,7 +60,7 @@ export default function SearchMain({ setIsSearch }: { setIsSearch: (isSearch: bo
                 bgColor={Colors.blue_gray[1]}
                 px={3}
                 borderRadius={8}
-                href={`/real-estates?lat=${lat}&lon=${lon}`}
+                href={`/?lat=${lat}&lon=${lon}`}
                 height="36px"
                 onClick={() => setIsSearch(false)}
               >

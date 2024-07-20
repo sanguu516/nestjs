@@ -16,6 +16,7 @@ export default function AgencyCard({ agency, ...rest }: Props) {
   const image =
     images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? '/placeholder-image.png'
 
+  console.log('>>', agency)
   return (
     <Box as={Link} href={`/real-estate/${id}/${seo_key}`} width="100%" {...rest}>
       <Flex
@@ -40,10 +41,9 @@ export default function AgencyCard({ agency, ...rest }: Props) {
           <Flex align={'center'} gap={1}>
             <Text {...fontStyles.medium_13} color={Colors.new_gray[6]}>{`${address_short}`}</Text>
             <IconDivider width={3} height={3} />
-            <Text
-              {...fontStyles.medium_13}
-              color={Colors.new_gray[6]}
-            >{`${representative_name}`}</Text>
+            <Text {...fontStyles.medium_13} color={Colors.new_gray[6]}>
+              {`${representative_name}`}
+            </Text>
           </Flex>
 
           <Flex alignItems="center" mt={2} direction={'row'}>

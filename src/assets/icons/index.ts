@@ -1,3 +1,5 @@
+export { default as IconBottomSheet } from './IconBottomSheet'
+export { default as ImagePlaceholder } from './ImagePlaceholder'
 export { default as IconArrowDown3 } from './IconArrowDown3'
 export { default as IconArrowDown } from './IconArrowDown'
 export { default as IconArrowLeft3 } from './IconArrowLeft3'

@@ -31,10 +31,9 @@ export default function CustomIConButton({
       _disabled={{ opacity: 1 }}
       sx={{ ...variants[variant], ...sx }}
       borderRadius="48px"
-      p={0}
       {...fontStyles.semibold_16}
     >
-      {icon && cloneElement(icon, { ...iconSize, ...icon.props, style: { marginRight: '5px' } })}
+      {icon && cloneElement(icon, { ...iconSize, ...icon.props, style: { marginRight: '6px' } })}
       {title ?? title}
     </Button>
   )
