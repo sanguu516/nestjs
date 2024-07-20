@@ -24,13 +24,6 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
         >
           {children}
         </Box>
-        {needFixedLayout && (
-          <BottomTab
-            backgroundColor={Colors.indigo[600]}
-            activeColor={Colors.white}
-            inActiveColor={Colors.indigo[300]}
-          />
-        )}
       </Flex>
     </Box>
   )

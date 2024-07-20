@@ -1,76 +1,151 @@
 'use client'
 
-import { getMe } from '@/apis/authApis'
-import { getTrendingReviews } from '@/apis/reviewApis'
-import ReviewCard from '@/components/home/ReviewCard'
-import { popularLocations } from '@/constants'
-import UserContext from '@/providers/UserProvider'
+import { searchAgenciesByAddress } from '@/apis/realEstateApis'
+import { IconMap, IconToggle, IconBottomSheet } from '@/assets/icons'
+import CustomIConButton from '@/components/CustomIconButton'
+import AgencyCard from '@/components/real-estates/AgencyCard'
+import AgencyListView from '@/components/real-estates/AgencyListView'
+import KakaoMap from '@/components/real-estates/KakaoMap'
 import { Colors } from '@/styles/colors'
-import { fontStyles } from '@/styles/font'
-import { LocalStorageManager, StorageKey } from '@/utils/localStorageUtil'
+import type { Coordinates } from '@/types'
+import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
-import { Center, Divider, Flex, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import Link from 'next/link'
-import type { PropsWithChildren } from 'react'
-import { useContext, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
-function SectionContainer({ title, children }: PropsWithChildren<{ title: string }>) {
-  return (
-    <VStack bg={Colors.white} as="section" px={4} py={6} gap={6} width="100%" align="start">
-      <Text {...fontStyles.TitleLg}>{title}</Text>
-      {children}
-    </VStack>
-  )
+// TODO: zoom level에 따른 적절한 반경 찾기
+function getRadiusInMeter(zoom: number) {
+  return 50 * Math.pow(2, zoom - 1)
 }
 
-export default function Home() {
-  const { setUser } = useContext(UserContext)
-  const { data } = useQuery({
-    queryKey: [QueryKeys.getTrendingReviews],
-    queryFn: getTrendingReviews,
+const Home = () => {
+  const [isMapMode, setIsMapMode] = useState(true)
+  const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
+  const [center, setCenter] = useState(DefaultCenter.coordinates)
+  const [zoom, setZoom] = useState(Zoom.default)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const btnRef = useRef(null)
+
+  const searchParams = useSearchParams()
+
+  const querylat = searchParams.get('lat')
+  const querylon = searchParams.get('lon')
+
+  const initialCenter = useMemo(() => {
+    const lat = Number(querylat)
+    const lon = Number(querylon)
+    return lat && lon ? { lat, lon } : DefaultCenter.coordinates
+  }, [querylat, querylon])
+
+  const mapRef = useRef<kakao.maps.Map | null>(null)
+
+  const { data: agenciesResponse } = useQuery({
+    queryKey: QueryKeys.agenciesByAddress(center, zoom),
+    queryFn: () => {
+      return searchAgenciesByAddress({
+        center,
+        radiusInMeter: getRadiusInMeter(zoom),
+        pageParams: { page: 1, page_size: 500 },
+      })
+    },
+    enabled: zoom <= Zoom.enableQueryMax,
   })
 
-  useEffect(() => {
-    const token = LocalStorageManager.get(StorageKey.aceessToken)
+  const handleCenterChange = useCallback((center: Coordinates) => {
+    setCenter(center)
+  }, [])
 
-    if (token) {
-      void getMe().then(setUser)
-    }
-  }, [setUser])
+  const handleZoomChange = useCallback((zoom: number) => {
+    setZoom(zoom)
+  }, [])
+
+  const agencies = useMemo(() => agenciesResponse?.results ?? [], [agenciesResponse?.results, zoom])
+  const selectedAgency = useMemo(
+    () => agencies.find((agency) => agency.id === selectedAgencyId),
+    [selectedAgencyId]
+  )
+
+  const FabIcon = isMapMode ? IconToggle : IconMap
+
+  const getRadiusInMeter = (zoom: number) => {
+    return 50 * Math.pow(2, zoom - 1)
+  }
 
   return (
-    <>
-      <VStack as="main" bg={Colors.gray[100]} gap={2}>
-        <SectionContainer title="인기 지역">
-          <Flex flexWrap="wrap" gap={2}>
-            {popularLocations.map(({ address_point, name }) => {
-              const { lat, lon } = address_point
-
-              return (
-                <Center
-                  key={`${lat}-${lon}`}
-                  as={Link}
-                  bgColor={Colors.gray[100]}
-                  px={4}
-                  borderRadius={8}
-                  href={`/real-estates?lat=${lat}&lon=${lon}`}
-                  height="48px"
-                >
-                  <Text {...fontStyles.BodyMd} color={Colors.gray[600]}>
-                    {name}
-                  </Text>
-                </Center>
-              )
-            })}
+    <Box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={1}>
+      {isMapMode ? (
+        <KakaoMap
+          agencies={agencies}
+          selectedAgencyId={selectedAgencyId}
+          onSelectAgency={setSelectedAgencyId}
+          mapRef={mapRef}
+          initialCenter={initialCenter}
+          onCenterChange={handleCenterChange}
+          onZoomChange={handleZoomChange}
+        />
+      ) : (
+        <AgencyListView agencies={agencies} />
+      )}
+      <Box position="absolute" bottom={selectedAgency ? 0 : 4} left={0} width="100%" zIndex={200}>
+        {selectedAgency ? (
+          <Box
+            p={4}
+            bgColor={Colors.white}
+            borderRadius="20px 20px 0px 0px"
+            overflow="hidden"
+            boxShadow="box-shadow: 0px 2px 6px -1px #0000001F;"
+          >
+            <Flex justifyContent={'center'} mt={-3} ref={btnRef} onClick={onOpen}>
+              <IconBottomSheet width={40} height={8} />
+              {/* <Drawer isOpen={isOpen} placement="bottom" onClose={onClose} finalFocusRef={btnRef}>
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>Create your account</DrawerHeader>
+                </DrawerContent>
+              </Drawer> */}
+            </Flex>
+            <AgencyCard agency={selectedAgency} />
+          </Box>
+        ) : (
+          <Flex justifyContent="center" textAlign={'center'}>
+            <CustomIConButton
+              sx={{
+                background: isMapMode ? Colors.white : Colors.new_gray[8],
+                width: '86px',
+                height: '44px',
+                color: isMapMode ? Colors.new_gray[9] : Colors.white,
+                boxShadow: '0px 2px 6px -1px #0000001F',
+                border: isMapMode ? `1.5px solid ${Colors.new_gray[3]}` : 'none',
+                padding: '16px',
+              }}
+              size="lg"
+              variant="primary"
+              icon={<FabIcon width={20} height={20} color={Colors.indigo[600]} />}
+              onClick={(e) => {
+                setIsMapMode((prev) => !prev)
+                e.stopPropagation()
+              }}
+              title={isMapMode ? '목록' : '지도'}
+            />
           </Flex>
-        </SectionContainer>
-        <SectionContainer title="실시간 리뷰">
-          <VStack width="100%" divider={<Divider />} gap={4}>
-            {data?.results.map((review) => <ReviewCard key={review.id} review={review} />)}
-          </VStack>
-        </SectionContainer>
-      </VStack>
-    </>
+        )}
+      </Box>
+    </Box>
   )
 }
+
+export default Home

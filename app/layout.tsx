@@ -2,7 +2,7 @@ import Chakra from '@/providers/ChakraProvider'
 import ClientLayout from '@/providers/ClientLayout'
 import HydrationProvider from '@/providers/HydrationProvider'
 import QueryProvider from '@/providers/QueryClientProvider'
-import { UserProvider } from '@/providers/UserProvider'
+import UserContext, { UserProvider } from '@/providers/UserProvider'
 import '@/styles/globals.css'
 import type { Metadata, Viewport } from 'next'
 import Head from 'next/head'
@@ -26,7 +26,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  splash,
+}: {
+  children: React.ReactNode
+  splash: React.ReactNode
+}) {
   return (
     <html lang="en">
       <Head>
@@ -38,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <HydrationProvider>
               <UserProvider>
                 <Script strategy="beforeInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
+                {splash}
                 <ClientLayout>{children}</ClientLayout>
               </UserProvider>
             </HydrationProvider>

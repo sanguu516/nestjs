@@ -82,7 +82,6 @@ function KakaoMap(props: Props) {
       // 마커 추가
       newAgencies.forEach((agency) => {
         const isSelected = selectedAgencyId === agency.id
-        console.log(selectedAgencyId, agency.id, isSelected)
 
         const markerPosition = new kakao.maps.LatLng(
           agency.address_point.lat,
