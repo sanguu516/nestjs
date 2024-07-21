@@ -1,19 +1,26 @@
+'use client'
 import { type SearchAgenciesResult } from '@/apis/realEstateApis'
 import { type Coordinates } from '@/types'
 import { Box } from '@chakra-ui/react'
 import { debounce } from 'lodash-es'
-import { memo, type MutableRefObject, useEffect, useRef } from 'react'
+import { memo, type MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { Map } from 'react-kakao-maps-sdk'
-import { convertCoordinatesToLatLng, convertLatLngToCoordinates, Zoom } from '@/utils/mapUtil'
+import {
+  convertCoordinatesToLatLng,
+  convertLatLngToCoordinates,
+  DefaultCenter,
+  Zoom,
+} from '@/utils/mapUtil'
 import useClusterer from '@/hooks/useClusterer'
 import { Colors } from '@/styles/colors'
 import useMarker from '@/hooks/useMarker'
+import { useSearchParams } from 'next/navigation'
 
 const QueryDebounceDelay = 100
 interface Props {
   mapRef: MutableRefObject<kakao.maps.Map | null>
   agencies: SearchAgenciesResult[]
-  initialCenter: Coordinates
+  initialCenter?: Coordinates
   onZoomChange: (zoom: number) => void
   selectedAgencyId?: number
   onSelectAgency: (id?: number) => void
@@ -33,15 +40,7 @@ const MARKER_SIZE = {
 }
 
 function KakaoMap(props: Props) {
-  const {
-    selectedAgencyId,
-    mapRef,
-    agencies,
-    onZoomChange,
-    onCenterChange,
-    onSelectAgency,
-    initialCenter,
-  } = props
+  const { selectedAgencyId, mapRef, agencies, onZoomChange, onCenterChange, onSelectAgency } = props
 
   const previousAgencies = useRef<SearchAgenciesResult[]>([])
 
@@ -69,6 +68,16 @@ function KakaoMap(props: Props) {
       },
     ],
   })
+  const searchParams = useSearchParams()
+
+  const querylat = searchParams.get('lat')
+  const querylon = searchParams.get('lon')
+
+  const initialCenter = useMemo(() => {
+    const lat = Number(querylat)
+    const lon = Number(querylon)
+    return lat && lon ? { lat, lon } : DefaultCenter.coordinates
+  }, [querylat, querylon])
 
   useEffect(() => {
     if (mapRef.current && agencies.length && clusterer) {

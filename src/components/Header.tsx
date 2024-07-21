@@ -22,7 +22,7 @@ export default function Header() {
   return (
     <Box as="header" top={0} zIndex={100} w="100%" maxW="inherit" bg={Colors.white}>
       {!isSearch ? (
-        <Flex h={'48px'} justify="space-between" align="center" p={5}>
+        <Flex h={14} justify="space-between" align="center" p={5}>
           <Link as={NextLink} href="/" display="flex" alignItems="center" w={135}>
             <IconTitle width={80} height={16} />
           </Link>

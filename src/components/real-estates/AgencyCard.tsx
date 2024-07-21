@@ -16,7 +16,6 @@ export default function AgencyCard({ agency, ...rest }: Props) {
   const image =
     images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? '/placeholder-image.png'
 
-  console.log('>>', agency)
   return (
     <Box as={Link} href={`/real-estate/${id}/${seo_key}`} width="100%" {...rest}>
       <Flex

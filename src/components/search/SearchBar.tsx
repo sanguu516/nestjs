@@ -8,12 +8,10 @@ import { Box, Button, Divider, Flex, IconButton, Input, Text, VStack } from '@ch
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
 import AgencyCard from '../real-estates/AgencyCard'
 import SearchNoData from './SearchNoData'
-import Home from 'app/page'
 import SearchMain from './SearchMain'
 
 function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }) {

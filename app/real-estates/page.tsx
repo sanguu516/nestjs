@@ -1,7 +1,7 @@
 'use client'
 
 import { searchAgenciesByAddress } from '@/apis/realEstateApis'
-import { IconCategory, IconLocation, IconMap, IconToggle } from '@/assets/icons'
+import { IconMap, IconToggle, IconBottomSheet } from '@/assets/icons'
 import CustomIConButton from '@/components/CustomIconButton'
 import AgencyCard from '@/components/real-estates/AgencyCard'
 import AgencyListView from '@/components/real-estates/AgencyListView'
@@ -20,7 +20,7 @@ function getRadiusInMeter(zoom: number) {
   return 50 * Math.pow(2, zoom - 1)
 }
 
-const RealEstates = () => {
+const Page = () => {
   const [isMapMode, setIsMapMode] = useState(true)
   const [selectedAgencyId, setSelectedAgencyId] = useState<number>()
   const [center, setCenter] = useState(DefaultCenter.coordinates)
@@ -86,17 +86,18 @@ const RealEstates = () => {
       ) : (
         <AgencyListView agencies={agencies} />
       )}
-      <Box position="absolute" left={0} bottom="20px" width="100%" zIndex={200}>
+      <Box position="absolute" bottom={selectedAgency ? 0 : 4} left={0} width="100%" zIndex={200}>
         {selectedAgency ? (
           <Box
-            mx={4}
-            px={4}
-            py={3}
+            p={4}
             bgColor={Colors.white}
-            borderRadius="8px"
+            borderRadius="20px 20px 0px 0px"
             overflow="hidden"
             boxShadow="box-shadow: 0px 2px 6px -1px #0000001F;"
           >
+            <Flex textAlign={'center'}>
+              <IconBottomSheet width={40} height={8} />
+            </Flex>
             <AgencyCard agency={selectedAgency} />
           </Box>
         ) : (
@@ -104,14 +105,16 @@ const RealEstates = () => {
             <CustomIConButton
               sx={{
                 background: isMapMode ? Colors.white : Colors.new_gray[8],
-                width: '88px',
+                width: '86px',
                 height: '44px',
                 color: isMapMode ? Colors.new_gray[9] : Colors.white,
                 boxShadow: '0px 2px 6px -1px #0000001F',
+                border: isMapMode ? `1.5px solid ${Colors.new_gray[3]}` : 'none',
+                padding: '16px',
               }}
               size="lg"
               variant="primary"
-              icon={<FabIcon width={24} height={24} color={Colors.indigo[600]} />}
+              icon={<FabIcon width={20} height={20} color={Colors.indigo[600]} />}
               onClick={(e) => {
                 setIsMapMode((prev) => !prev)
                 e.stopPropagation()
@@ -125,4 +128,4 @@ const RealEstates = () => {
   )
 }
 
-export default RealEstates
+export default Page
