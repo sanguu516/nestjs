@@ -10,21 +10,10 @@ import { Colors } from '@/styles/colors'
 import type { Coordinates } from '@/types'
 import { DefaultCenter, Zoom } from '@/utils/mapUtil'
 import { QueryKeys } from '@/utils/queryUtil'
-import {
-  Box,
-  Flex,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Flex, useDisclosure } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useRef, useState } from 'react'
+import { Suspense } from 'react'
 
 // TODO: zoom level에 따른 적절한 반경 찾기
 function getRadiusInMeter(zoom: number) {
@@ -38,17 +27,6 @@ const Home = () => {
   const [zoom, setZoom] = useState(Zoom.default)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
-
-  const searchParams = useSearchParams()
-
-  const querylat = searchParams.get('lat')
-  const querylon = searchParams.get('lon')
-
-  const initialCenter = useMemo(() => {
-    const lat = Number(querylat)
-    const lon = Number(querylon)
-    return lat && lon ? { lat, lon } : DefaultCenter.coordinates
-  }, [querylat, querylon])
 
   const mapRef = useRef<kakao.maps.Map | null>(null)
 
@@ -87,15 +65,16 @@ const Home = () => {
   return (
     <Box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={1}>
       {isMapMode ? (
-        <KakaoMap
-          agencies={agencies}
-          selectedAgencyId={selectedAgencyId}
-          onSelectAgency={setSelectedAgencyId}
-          mapRef={mapRef}
-          initialCenter={initialCenter}
-          onCenterChange={handleCenterChange}
-          onZoomChange={handleZoomChange}
-        />
+        <Suspense>
+          <KakaoMap
+            agencies={agencies}
+            selectedAgencyId={selectedAgencyId}
+            onSelectAgency={setSelectedAgencyId}
+            mapRef={mapRef}
+            onCenterChange={handleCenterChange}
+            onZoomChange={handleZoomChange}
+          />
+        </Suspense>
       ) : (
         <AgencyListView agencies={agencies} />
       )}
