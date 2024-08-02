@@ -24,7 +24,7 @@ export default function Header() {
       {!isSearch ? (
         <Flex h={14} justify="space-between" align="center" p={5}>
           <Link as={NextLink} href="/" display="flex" alignItems="center" w={135}>
-            <IconTitle width={80} height={16} />
+            {/* <IconTitle width={80} height={16} /> */}
           </Link>
           <Flex align="center" gap={2}>
             <IconSearch width={24} height={24} onClick={() => setIsSearch(!isSearch)} />

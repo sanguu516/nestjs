@@ -33,7 +33,7 @@ export default function Signin({ children }: { children: React.ReactNode }) {
           alignItems="center"
           gap={6}
         >
-          <IconTitle width={240} height={37} />
+          {/* <IconTitle width={240} height={37} /> */}
           {LOGIN_TITLE}
         </Link>
         {children}

@@ -44,11 +44,6 @@ export default function SearchMain({ setIsSearch }: { setIsSearch: (isSearch: bo
 
   return (
     <>
-      <SectionContainer title="최근 리뷰를 받은 중개사무소">
-        {/* <VStack width="100%" divider={<Divider />} gap={4}>
-            {data?.results.map((review) => <ReviewCard key={review.id} review={review} />)}
-          </VStack> */}
-      </SectionContainer>
       <SectionContainer title="인기 지역">
         <Flex flexWrap="wrap" gap={2}>
           {popularLocations.map(({ address_point, name }) => {
@@ -72,6 +67,11 @@ export default function SearchMain({ setIsSearch }: { setIsSearch: (isSearch: bo
             )
           })}
         </Flex>
+      </SectionContainer>
+      <SectionContainer title="최근 리뷰를 받은 중개사무소">
+        {/* <VStack width="100%" divider={<Divider />} gap={4}>
+          {data?.results.map((review) => <ReviewCard key={review.id} review={review} />)}
+        </VStack> */}
       </SectionContainer>
     </>
   )

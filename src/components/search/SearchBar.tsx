@@ -1,6 +1,6 @@
 'use client'
 import { searchAgenciesByName, searchLocation } from '@/apis/realEstateApis'
-import { IconArrowLeft, IconDeleteCircle, IconNoSearch, IconSearch } from '@/assets/icons'
+import { IconArrowLeft, IconDeleteCircle, IconMapSoild } from '@/assets/icons'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
@@ -87,7 +87,7 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
                   width={24}
                   height={24}
                   onClick={() => setQuery('')}
-                  color={Colors.new_gray[6]}
+                  fill={Colors.new_gray[6]}
                 />
               }
             </Button>
@@ -108,28 +108,39 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
           <VStack width="100%" px={4}>
             {locationCount !== undefined && locationCount > 0 && (
               <Box width="100%">
-                {locationData?.results.map((result) => (
-                  <Flex
-                    as={Link}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                    }}
-                    href={`/real-estates?lat=${result.address_point.lat}&lon=${result.address_point.lon}`}
-                    key={result.id}
-                    height={10}
-                    alignContent="center"
-                  >
-                    <Text {...fontStyles.BodyMd} color={Colors.gray[800]}>
-                      {result.name}
-                    </Text>
-                  </Flex>
+                {locationData?.results.map((result, index) => (
+                  <>
+                    <Flex
+                      as={Link}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                      href={`/real-estates?lat=${result.address_point.lat}&lon=${result.address_point.lon}`}
+                      key={result.id}
+                      height={10}
+                      alignContent="center"
+                      alignItems={'center'}
+                      gap={1}
+                    >
+                      <IconMapSoild width={20} height={20} />
+                      <Text {...fontStyles.BodyMd} color={Colors.gray[800]}>
+                        {result.name}
+                      </Text>
+                    </Flex>
+                    <Box position="relative" width="calc(100% + 32px)" marginLeft="-16px">
+                      <Divider height="1px" bgColor={Colors.new_gray[1]} />
+                      {locationData?.results.length === index + 1 && (
+                        <Divider height="4px" bgColor={Colors.new_gray[3]} />
+                      )}
+                    </Box>
+                  </>
                 ))}
               </Box>
             )}
             {query === '' && <SearchMain setIsSearch={setIsSearch} />}
             {agencyCount !== undefined && agencyCount > 0 ? (
               <Box width="100%">
-                <VStack gap={8} pt={6}>
+                <VStack gap={8} pt={3}>
                   {agencyData.map((agency, index) => (
                     // TODO: key는 result.id로 변경해야됨. 지금은 중복된 id가 내려오는 이슈가 있어 임시 처리
                     <>
