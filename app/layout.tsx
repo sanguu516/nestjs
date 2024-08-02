@@ -45,7 +45,7 @@ export default function RootLayout({
           <QueryProvider>
             <HydrationProvider>
               <UserProvider>
-                <Script strategy="beforeInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
+                <Script strategy="afterInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
                 {splash}
                 <ClientLayout>{children}</ClientLayout>
               </UserProvider>
