@@ -7,6 +7,7 @@ import '@/styles/globals.css'
 import type { Metadata, Viewport } from 'next'
 import Head from 'next/head'
 import Script from 'next/script'
+import GoogleAnalytics from './googleAnalytics'
 
 const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
 const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
@@ -39,11 +40,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body>
+        <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID} />
         <Chakra>
           <QueryProvider>
             <HydrationProvider>
               <UserProvider>
-                <Script strategy="beforeInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
+                <Script strategy="afterInteractive" type="text/javascript" src={kakaoMapSdkSrc} />
                 {splash}
                 <ClientLayout>{children}</ClientLayout>
               </UserProvider>

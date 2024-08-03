@@ -89,13 +89,6 @@ const Home = () => {
           >
             <Flex justifyContent={'center'} mt={-3} ref={btnRef} onClick={onOpen}>
               <IconBottomSheet width={40} height={8} />
-              {/* <Drawer isOpen={isOpen} placement="bottom" onClose={onClose} finalFocusRef={btnRef}>
-                <DrawerOverlay />
-                <DrawerContent>
-                  <DrawerCloseButton />
-                  <DrawerHeader>Create your account</DrawerHeader>
-                </DrawerContent>
-              </Drawer> */}
             </Flex>
             <AgencyCard agency={selectedAgency} />
           </Box>
