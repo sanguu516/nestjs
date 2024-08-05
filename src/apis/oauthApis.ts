@@ -16,7 +16,7 @@ type OauthSignupParmas = OauthLoginParmas & {
 }
 
 export async function oauthSignup(oauthSignupParams: OauthSignupParmas): Promise<SignInResponse> {
-  return fetchHandler('social-account/kakao/registration/', {
+  return fetchHandler('social-account/kakao/registration', {
     method: 'POST',
     body: JSON.stringify(oauthSignupParams),
   })

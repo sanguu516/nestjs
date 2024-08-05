@@ -78,18 +78,17 @@ const Home = () => {
       ) : (
         <AgencyListView agencies={agencies} />
       )}
-      <Box position="absolute" bottom={selectedAgency ? 0 : 4} left={0} width="100%" zIndex={200}>
+      <Box position="absolute" left={0} bottom="20px" width="100%" zIndex={200}>
         {selectedAgency ? (
           <Box
-            p={4}
+            mx={4}
+            px={4}
+            py={3}
             bgColor={Colors.white}
-            borderRadius="20px 20px 0px 0px"
+            borderRadius="8px"
             overflow="hidden"
             boxShadow="box-shadow: 0px 2px 6px -1px #0000001F;"
           >
-            <Flex justifyContent={'center'} mt={-3} ref={btnRef} onClick={onOpen}>
-              <IconBottomSheet width={40} height={8} />
-            </Flex>
             <AgencyCard agency={selectedAgency} />
           </Box>
         ) : (

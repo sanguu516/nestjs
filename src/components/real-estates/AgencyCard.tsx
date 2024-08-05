@@ -13,8 +13,7 @@ interface Props extends SpaceProps {
 
 export default function AgencyCard({ agency, ...rest }: Props) {
   const { name, id, seo_key, representative_name, address_short, average_rating, images } = agency
-  const image =
-    images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image ?? '/placeholder-image.png'
+  const image = images.find(($0) => !isEmpty($0.thumbnail_image))?.thumbnail_image
 
   return (
     <Box as={Link} href={`/real-estate/${id}/${seo_key}`} width="100%" {...rest}>
@@ -59,14 +58,16 @@ export default function AgencyCard({ agency, ...rest }: Props) {
             >{`리뷰 2`}</Text>
           </Flex>
         </Box>
-        <Image
-          alt={name}
-          src={image}
-          width={96}
-          height={73}
-          loading="lazy"
-          style={{ borderRadius: 6, flexShrink: 0, width: '96px', height: '73px' }}
-        />
+        {image && (
+          <Image
+            alt={name}
+            src={image}
+            width={96}
+            height={73}
+            loading="lazy"
+            style={{ borderRadius: 6, flexShrink: 0, width: '96px', height: '73px' }}
+          />
+        )}
       </Flex>
     </Box>
   )

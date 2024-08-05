@@ -6,9 +6,9 @@ import { fontStyles } from '@/styles/font'
 import { QueryKeys } from '@/utils/queryUtil'
 import { Box, Button, Divider, Flex, IconButton, Input, Text, VStack } from '@chakra-ui/react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash-es'
+import { isEmpty, debounce } from 'lodash-es'
 import Link from 'next/link'
-import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import InfiniteScroll from '../InfiniteScroll'
 import AgencyCard from '../real-estates/AgencyCard'
 import SearchNoData from './SearchNoData'
@@ -16,13 +16,24 @@ import SearchMain from './SearchMain'
 
 function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }) {
   const [query, setQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
 
-  const deferredQuery = useDeferredValue(query)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+    debouncedSetQuery(e.target.value)
+  }
+
+  const debouncedSetQuery = useCallback(
+    debounce((newQuery) => {
+      setDebouncedQuery(newQuery)
+    }, 300),
+    []
+  )
 
   const { data: locationData } = useQuery({
-    queryKey: QueryKeys.searchLocation(deferredQuery),
-    queryFn: () => searchLocation({ query: deferredQuery }),
-    enabled: deferredQuery !== '',
+    queryKey: QueryKeys.searchLocation(debouncedQuery),
+    queryFn: () => searchLocation({ query: debouncedQuery }),
+    enabled: debouncedQuery !== '',
   })
 
   const {
@@ -31,9 +42,9 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
     isFetching,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: QueryKeys.agenciesByQuery(deferredQuery),
+    queryKey: QueryKeys.agenciesByQuery(debouncedQuery),
     queryFn: ({ pageParam }) =>
-      searchAgenciesByName({ name: deferredQuery, pageParams: pageParam }),
+      searchAgenciesByName({ name: debouncedQuery, pageParams: pageParam }),
     initialPageParam: { page: 1, page_size: 15 },
     getNextPageParam: (lastPage) => {
       if (lastPage.page * lastPage.page_size < lastPage.total_count) {
@@ -41,7 +52,7 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
       }
       return undefined
     },
-    enabled: deferredQuery !== '',
+    enabled: debouncedQuery !== '',
   })
 
   const agencyData = useMemo(
@@ -53,10 +64,10 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
   const agencyCount = agencyPaginatedResult?.pages?.[0]?.total_count
 
   const handleLoadMoreAgencies = useCallback(() => {
-    if (deferredQuery !== '') {
+    if (debouncedQuery !== '') {
       void fetchMoreAgencies()
     }
-  }, [deferredQuery, fetchMoreAgencies])
+  }, [debouncedQuery, fetchMoreAgencies])
 
   return (
     <>
@@ -75,12 +86,12 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
           variant="none"
           placeholder="지역, 중개인명, 중개사무소명"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleInputChange}
           zIndex={200}
           ml={-5}
         />
         <Flex align="center">
-          {!isEmpty(deferredQuery) && (
+          {!isEmpty(debouncedQuery) && (
             <Button flexShrink={0} width={12} height={12} variant="none" aria-label="search">
               {
                 <IconDeleteCircle
@@ -153,7 +164,8 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
                 </VStack>
               </Box>
             ) : (
-              query !== '' && (
+              query !== '' ||
+              (locationCount !== undefined && locationCount > 0 && (
                 <Flex
                   position="absolute"
                   top="50%"
@@ -165,7 +177,7 @@ function SearchBar({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }
                 >
                   <SearchNoData title="검색 결과가 없어요" content="다른 검색어를 입력해보세요" />
                 </Flex>
-              )
+              ))
             )}
           </VStack>
         </InfiniteScroll>

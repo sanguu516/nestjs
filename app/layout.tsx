@@ -11,6 +11,11 @@ import GoogleAnalytics from './googleAnalytics'
 
 const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
 const kakaoMapSdkSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=clusterer`
+// Google Analytics key
+const GaApikey =
+  process.env.NODE_ENV !== 'production'
+    ? process.env.NEXT_PUBLIC_GA_DEV_ID
+    : process.env.NEXT_PUBLIC_GA_PROD_ID
 
 export const metadata: Metadata = {
   title: '별별부동산 | 솔직하고 간편한 공인중개사 리뷰 서비스',
@@ -40,7 +45,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body>
-        <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID} />
+        <GoogleAnalytics GA_TRACKING_ID={GaApikey} />
         <Chakra>
           <QueryProvider>
             <HydrationProvider>
