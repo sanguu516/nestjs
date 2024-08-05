@@ -14,10 +14,6 @@ export default function GoogleAnalytics({ GA_TRACKING_ID }: { GA_TRACKING_ID?: s
     }
   }, [pathname])
 
-  // if(process.env.NODE_ENV !== 'production') {
-  //   return null
-  // }
-
   return (
     <>
       <Script
