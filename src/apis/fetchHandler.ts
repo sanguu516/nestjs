@@ -56,7 +56,7 @@ async function fetchApi(pathname: string, requestInit?: RequestInit) {
           throw new NeedSignInError()
         }
 
-        const refreshResult = await fetch(baseUrl + 'auth/token/refresh/', {
+        const refreshResult = await fetch(baseUrl + 'auth/token/refresh', {
           method: 'POST',
           body: JSON.stringify({ refresh: refreshToken }),
           headers: {

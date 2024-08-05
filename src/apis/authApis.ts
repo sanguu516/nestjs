@@ -27,7 +27,7 @@ export type ISignupForm = {
 }
 
 export async function signIn({ email, password }: ISigninForm): Promise<SignInResponse> {
-  return fetchHandler('auth/login/', {
+  return fetchHandler('auth/login', {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -42,7 +42,7 @@ export async function signUp({
   password,
   passwordConfirm,
 }: ISignupForm): Promise<SignInResponse> {
-  return fetchHandler('auth/registration/', {
+  return fetchHandler('auth/registration', {
     method: 'POST',
     body: JSON.stringify({
       username,
@@ -60,7 +60,7 @@ export function changePassword({
   newPassword: string
   newPasswordConfirm: string
 }) {
-  return fetchHandler('auth/password/change/', {
+  return fetchHandler('auth/password/change', {
     method: 'POST',
     body: JSON.stringify({
       new_password1: newPassword,
@@ -70,11 +70,11 @@ export function changePassword({
 }
 
 export function signOut() {
-  return fetchHandler('auth/logout/', {
+  return fetchHandler('auth/logout', {
     method: 'POST',
   })
 }
 
 export function getMe(): Promise<User> {
-  return fetchHandler('user/user/me/')
+  return fetchHandler('user/user/me')
 }

@@ -8,7 +8,7 @@ interface KeywordData {
 }
 
 export async function getKeywordData(): Promise<KeywordData[]> {
-  return fetchHandler('review/agency-review/keyword/', {
+  return fetchHandler('review/agency-review/keyword', {
     method: 'GET',
   })
 }
@@ -88,7 +88,7 @@ export interface PostReviewParmas {
 export type PostReviewResponse = PostReviewParmas | { id: number }
 
 export async function postReview(params: PostReviewParmas): Promise<PostReviewResponse> {
-  return fetchHandler('review/agency-review/review/', {
+  return fetchHandler('review/agency-review/review', {
     method: 'POST',
     body: JSON.stringify(params),
   })
