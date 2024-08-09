@@ -4,6 +4,7 @@ import { signOut } from '@/apis/authApis'
 import { ImageUser } from '@/assets/icons'
 
 import CustomButton from '@/components/CustomButton'
+import { useUserStore } from '@/store/user'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { StorageKey } from '@/utils/localStorageUtil'
@@ -53,11 +54,12 @@ const InfoRow = ({
 }
 
 const MyPage = () => {
-  const { user, setUser, isCheckingAuth } = useAuth()
+  const { user, isCheckingAuth } = useAuth()
+  const { setUser } = useUserStore()
   const router = useRouter()
 
   if (!user) {
-    // TODO: 이 로직 다시 체크 
+    // TODO: 이 로직 다시 체크
     return null
   }
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { Center, Divider, Flex, FormControl, Box, Link } from '@chakra-ui/react'
+import { Box, Center, Divider, Flex, FormControl, Link } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import NextLink from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
 import CustomButton from '@/components/CustomButton'
 
@@ -16,7 +16,7 @@ import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { validateAuth } from '@/utils/validate'
 
-import UserContext from '@/providers/UserProvider'
+import { useUserStore } from '@/store/user'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 
@@ -30,7 +30,7 @@ export default function Signin() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useUserStore()
   const toast = useCustomToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {

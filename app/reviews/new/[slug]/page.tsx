@@ -20,10 +20,10 @@ import { Box, Flex, Heading, Text, Textarea } from '@chakra-ui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { debounce } from 'lodash-es'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { getRealEstateData } from '@/apis/realEstateApis'
-import UserContext from '@/providers/UserProvider'
+import { useUserStore } from '@/store/user'
 
 const MAX_TEXT_NUM = 500
 const feedbackQuestion = (userName: string) => `${userName} 님,\n 공인중개사는 어떠셨어요?`
@@ -61,7 +61,7 @@ function NewReviewPage() {
   })
 
   const [reviewForm, setReviewForm] = useState<PostReviewParmas>(initReviewForm)
-  const { user } = useContext(UserContext)
+  const { user } = useUserStore()
 
   useEffect(() => {
     if (agencyId) {
