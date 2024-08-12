@@ -1,13 +1,13 @@
 'use client'
-import { IconSearch, IconProfile, IconTitle, ImageUser } from '@/assets/icons'
+import { IconSearch, ImageUser } from '@/assets/icons'
 
-import UserContext from '@/providers/UserProvider'
+import { useUserStore } from '@/store/user'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { Box, Flex, IconButton, Link, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import SearchBar from './search/SearchBar'
 
 export default function Header() {
@@ -17,7 +17,7 @@ export default function Header() {
 
   const needSearchBar = pathname === '/' || pathname === '/real-estates'
 
-  const { user } = useContext(UserContext)
+  const { user } = useUserStore()
 
   return (
     <Box as="header" top={0} zIndex={100} w="100%" maxW="inherit" bg={Colors.white}>

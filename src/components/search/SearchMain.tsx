@@ -2,19 +2,18 @@
 
 import { getMe } from '@/apis/authApis'
 import { getTrendingReviews } from '@/apis/reviewApis'
-import ReviewCard from '@/components/home/ReviewCard'
+import { IconLocationSoild } from '@/assets/icons'
 import { popularLocations } from '@/constants'
-import UserContext from '@/providers/UserProvider'
+import { useUserStore } from '@/store/user'
 import { Colors } from '@/styles/colors'
 import { fontStyles } from '@/styles/font'
 import { LocalStorageManager, StorageKey } from '@/utils/localStorageUtil'
 import { QueryKeys } from '@/utils/queryUtil'
-import { Center, Divider, Flex, Text, VStack } from '@chakra-ui/react'
+import { Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
-import { useContext, useEffect } from 'react'
-import { IconLocationSoild } from '@/assets/icons'
+import { useEffect } from 'react'
 
 function SectionContainer({ title, children }: PropsWithChildren<{ title: string }>) {
   return (
@@ -28,7 +27,7 @@ function SectionContainer({ title, children }: PropsWithChildren<{ title: string
 }
 
 export default function SearchMain({ setIsSearch }: { setIsSearch: (isSearch: boolean) => void }) {
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useUserStore()
   const { data } = useQuery({
     queryKey: [QueryKeys.getTrendingReviews],
     queryFn: getTrendingReviews,

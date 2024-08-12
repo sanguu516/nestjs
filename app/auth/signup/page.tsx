@@ -1,6 +1,8 @@
 'use client'
 import { type ISignupForm, type SignInResponse, signUp } from '@/apis/authApis'
 import CustomButton from '@/components/CustomButton'
+import SignupForm from '@/components/SignUpForm'
+import { useUserStore } from '@/store/user'
 import { SIGNUP_FORM } from '@/utils/inputFormUtil'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
@@ -8,9 +10,7 @@ import { validateAuth } from '@/utils/validate'
 import { Box, FormControl, Grid, Heading } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useContext, useState } from 'react'
-import UserContext from '@/providers/UserProvider'
-import SignupForm from '@/components/SignUpForm'
+import React, { useState } from 'react'
 
 const LOGIN_TITLE = '회원정보를 입력해주세요!'
 
@@ -29,7 +29,7 @@ export default function Signup() {
   })
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useUserStore()
   const toast = useCustomToast()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {

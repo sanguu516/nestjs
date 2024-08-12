@@ -1,16 +1,16 @@
 'use client'
 
 import { oauthSignup } from '@/apis/oauthApis'
-import UserContext from '@/providers/UserProvider'
+import { useUserStore } from '@/store/user'
 import { StorageKey } from '@/utils/localStorageUtil'
 import useCustomToast from '@/utils/useCustomToast'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
 const OAuth = () => {
   const router = useRouter()
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useUserStore()
   const toast = useCustomToast()
   const searchParams = useSearchParams()
 
