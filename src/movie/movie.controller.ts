@@ -5,6 +5,7 @@ import {
   Body,
   Patch,
   Param,
+  Query,
   Delete,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
@@ -17,12 +18,13 @@ export class MovieController {
 
   @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
+    console.log('>>', createMovieDto);
     return this.movieService.create(createMovieDto);
   }
 
   @Get()
-  findAll() {
-    return this.movieService.findAll();
+  findAll(@Query('title') title?: string) {
+    return this.movieService.findAll(title);
   }
 
   @Get(':id')
