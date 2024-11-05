@@ -19,12 +19,15 @@ export class MovieService {
     return movie;
   }
 
-  findAll(title?: string) {
+  async findAll(title?: string) {
     if (!title) {
-      return this.movieRepository.find();
+      return [
+        await this.movieRepository.find(),
+        await this.movieRepository.count(),
+      ];
     }
     if (title) {
-      return this.movieRepository.find({
+      return await this.movieRepository.findAndCount({
         where: { title: Like(`%${title}%`) },
       });
     }
