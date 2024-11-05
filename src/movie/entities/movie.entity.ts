@@ -2,10 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { MovieDetail } from './movie-detail.entity';
 
 export class BaseEntity {
   @CreateDateColumn()
@@ -37,6 +40,12 @@ export class Movie {
 
   @VersionColumn()
   version: number;
+
+  @OneToOne(() => MovieDetail, (movieDetail) => movieDetail.id, {
+    cascade: true,
+  })
+  @JoinColumn()
+  detail: MovieDetail;
 
   //   @Column(() => BaseEntity)
   //   base: BaseEntity;

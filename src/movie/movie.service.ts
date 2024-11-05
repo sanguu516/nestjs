@@ -4,6 +4,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
+import { MovieDetail } from './entities/movie-detail.entity';
 
 @Injectable()
 export class MovieService {
@@ -11,10 +12,20 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private movieRepository: Repository<Movie>,
+    @InjectRepository(MovieDetail)
+    private movieDetailRepository: Repository<MovieDetail>,
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
-    const movie = await this.movieRepository.save(createMovieDto);
+    const movieDetail = await this.movieDetailRepository.save({
+      detail: createMovieDto.detail,
+    });
+
+    const movie = await this.movieRepository.save({
+      title: createMovieDto.title,
+      genre: createMovieDto.genre,
+      detail: movieDetail,
+    });
 
     return movie;
   }
@@ -36,6 +47,7 @@ export class MovieService {
   async findOne(id: number) {
     const movie = await this.movieRepository.findOne({
       where: { id },
+      relations: ['detail'],
     });
     if (!movie) {
       throw new NotFoundException('존재하지 않는 id 입니다.');
@@ -46,15 +58,26 @@ export class MovieService {
   async update(id: number, updateMovieDto: UpdateMovieDto) {
     const movie = await this.movieRepository.findOne({
       where: { id },
+      relations: ['detail'],
     });
     if (!movie) {
       throw new NotFoundException('존재하지 않는 id 입니다.');
     }
 
-    await this.movieRepository.update({ id }, updateMovieDto);
+    const { detail, ...rest } = updateMovieDto;
+
+    await this.movieRepository.update({ id }, rest);
+
+    if (detail) {
+      await this.movieDetailRepository.update(
+        { id: movie.detail.id },
+        { detail },
+      );
+    }
 
     const newMovie = await this.movieRepository.findOne({
       where: { id },
+      relations: ['detail'],
     });
 
     return newMovie;
@@ -63,11 +86,14 @@ export class MovieService {
   async remove(id: number) {
     const movie = await this.movieRepository.findOne({
       where: { id },
+      relations: ['detail'],
     });
     if (!movie) {
       throw new NotFoundException('존재하지 않는 id 입니다.');
     }
-    await this.movieRepository.remove(movie);
+    await this.movieRepository.delete(id);
+    await this.movieDetailRepository.delete(movie.detail.id);
+
     return { message: 'Movie removed successfully' };
   }
 }
